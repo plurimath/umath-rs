@@ -522,3 +522,21 @@ fn expand_u_escapes(text: &str) -> String {
     }
     out
 }
+
+/// Label returned by the stage's protected split; trailing empty parts are dropped.
+pub fn umath_label(input: &str) -> Option<String> {
+    let text = input
+        .split('\n')
+        .map(protect_pen_group)
+        .collect::<Vec<_>>()
+        .join("\n");
+    let mut parts = text.split('#').collect::<Vec<_>>();
+    while parts.last() == Some(&"") {
+        parts.pop();
+    }
+    if parts.len() > 1 {
+        parts.last().map(|v| v.to_string())
+    } else {
+        None
+    }
+}

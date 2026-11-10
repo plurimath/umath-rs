@@ -6,8 +6,29 @@ rust-version = "1.86"
 description = "Shared-PARG unicode raw parser for Rust"
 license = "BSD-2-Clause"
 readme = "README.md"
-include = ["src/**", "tests/**", "examples/**", "artifacts/**", "README.md", "LICENSE", "UPSTREAM.json", "Cargo.toml"]
+include = ["src/**", "include/**", "tests/**", "examples/**", "artifacts/**", "README.md", "LICENSE", "UPSTREAM.json", "Cargo.toml"]
 
 [dependencies]
 parsanol = "=0.20.7"
-serde_json = "=1.0.154"
+serde_json = { version = "=1.0.140", features = ["arbitrary_precision", "preserve_order"] }
+
+[features]
+default = []
+models = ["dep:serde", "dep:lutaml_rs"]
+ffi = ["models"]
+
+[dependencies.serde]
+version = "=1.0.219"
+features = ["derive"]
+optional = true
+
+[dependencies.lutaml_rs]
+package = "lutaml-rs"
+git = "https://github.com/lutaml/lutaml-rs"
+rev = "945e6ada11f52f77b959a5df1f05fdbd23092939"
+default-features = false
+features = ["runtime"]
+optional = true
+
+[lib]
+crate-type = ["rlib", "cdylib"]

@@ -1,6 +1,13 @@
 //! Parse shared PARG artifacts to raw stage trees. No typed model or writer API.
 mod languages;
+#[cfg(feature="models")]
+#[rustfmt::skip]
+pub mod generated;
+#[cfg(feature = "ffi")]
+pub mod ffi;
 mod replay;
+#[cfg(feature = "models")]
+pub mod typed;
 use parsanol::parg::bindings_artifact::PargBindingsArtifact;
 use parsanol::{PargArtifact, PargError};
 use serde_json::Value;
@@ -51,6 +58,8 @@ pub struct Parsed {
     pub parsed_input: String,
     pub decimal: String,
     pub tree: Value,
+    /// Declared binding output; normalized JSON rather than a typed model.
+    pub bound: Value,
 }
 impl Parsed {
     /// Canonical tagged stage JSON, preserving UTF-8 byte and character offsets.
@@ -119,6 +128,7 @@ impl Parser {
             parsed_input,
             decimal: decimal.to_string(),
             tree,
+            bound,
         })
     }
 }
