@@ -39,5 +39,14 @@
   "model_generator": {
     "repository": "lutaml/lutaml-rs",
     "commit": "945e6ada11f52f77b959a5df1f05fdbd23092939"
+  },
+  "compatibility_runtime": {
+    "repository": "https://github.com/parsanol/parsanol-rs",
+    "commit": "4b8351aae8e403e73aaa306111250ebd56c12e0f",
+    "version": "0.20.12",
+    "release_status": "unreleased source candidate",
+    "strict_api": "parse/parse_with_decimal and model JSON unchanged",
+    "legacy_api": "parse_legacy/parse_legacy_with_decimal",
+    "policy": "explicit Parslet execution, raw errors in preprocessed input"
   }
 }

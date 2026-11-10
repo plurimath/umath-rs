@@ -11,7 +11,7 @@ println!("{}", parsed.canonical());
 ```
 
 `parse_with_decimal(input, decimal)` accepts `.`, `,`, and `٫`. The native
-Parsanol engine is pinned to 0.20.7. Unicode preprocessing and stage transforms
+Parsanol engine uses the immutable source candidate recorded in `UPSTREAM.json`. Unicode preprocessing and stage transforms
 are reused from the pinned shared testsuite, with attribution in UPSTREAM.json.
 Errors preserve the native error and expose UTF-8 byte offsets relative to the
 preprocessed grammar input. Parsed slices reference `parsed_input`; caller offsets
@@ -35,3 +35,9 @@ roundtrip and wire idempotence are not guaranteed.
 Native refusal offsets use the Rust engine's farthest-error position and may differ
 from Ruby's deepest-error selection. Offsets refer to the preprocessed grammar
 input; caller-coordinate remapping is not inferred.
+
+`Parser::parse_legacy(input)` and `parse_legacy_with_decimal(input, decimal)`
+expose the legacy stage policy. Existing `parse`, `parse_with_decimal` and model
+JSON APIs preserve strict native behavior. Legacy errors still refer to
+preprocessed input, and slices reference `Parsed::parsed_input`.
+UnicodeMath explicitly selects the producer's Parslet execution policy.
