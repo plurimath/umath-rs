@@ -1,0 +1,27 @@
+{
+  "stage": {
+    "commit": "0fca02275435c47799d67c970ce2ad9f726d3a70",
+    "artifacts": {
+      "artifacts/umath.json": "703824533584b29e17ee807a30868c9f6923e26d0ee40c9a0a7b6c7de793220f",
+      "artifacts/umath.bindings.rs.json": "7ae9040bdb7b558ec5d50d4f4fb7c1d8aea9f8a380041eb2da519d4837c2b807",
+      "grammars/umath.wrappers.json": "7b4136a18c86a56c4253f31d8ca479085f87b0e3dd319f6c989c69505b157b2c"
+    }
+  },
+  "transforms": {
+    "repository": "plurimath/plurimath-testsuite",
+    "commit": "0d50db714d75e3883a507fbc47022eb547fb027f",
+    "files": {
+      "languages.rs": "1f0b0f6a987cc2112d9074fa9a2516f9f18c21ba68885c68c0f2c3b83112af40",
+      "replay.rs": "158978bc23644a5c6028d667ac47bdcd693a6899151504fa2f01ce81c3026287"
+    }
+  },
+  "runtime": {
+    "crate": "parsanol",
+    "version": "0.20.7",
+    "cache_source_commit": "18c8a083dc58ce5f875b5649d5af98b94d84a0a2"
+  },
+  "stage_transforms": {
+    "source": "stage Ruby raw_tree.rb / parser/unwrap.rb",
+    "policy": "shared Rust unwrap reused with current wrapper table before stage renesting"
+  }
+}

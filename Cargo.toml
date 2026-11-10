@@ -1,0 +1,13 @@
+[package]
+name = "umath"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.86"
+description = "Shared-PARG unicode raw parser for Rust"
+license = "BSD-2-Clause"
+readme = "README.md"
+include = ["src/**", "tests/**", "examples/**", "artifacts/**", "README.md", "LICENSE", "UPSTREAM.json", "Cargo.toml"]
+
+[dependencies]
+parsanol = "=0.20.7"
+serde_json = "=1.0.154"
