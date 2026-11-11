@@ -1,0 +1,414 @@
+{
+  "generation": {
+    "language": "unicode",
+    "generation": 4,
+    "path": "stages/unicode/generations/000004",
+    "snapshot_digest": "sha256:cc02870fb6ee5a46c64271733b716f00469d0af46847851ad3db9249ad2571ed",
+    "payloads": 15,
+    "rows": 216,
+    "ledger_sha256": "e83a88949b859ecdc84321e9456d29a8296d3af4fb3ea9a0c69b1b16ea52657d",
+    "provenance_sha256": "61a4bd545cfff46dee3df2cf4ca1299c7658bf228dd183dd1b7a43abd3ceec91",
+    "producers": {
+      "legacy-oracle": {
+        "kind": "legacy-oracle",
+        "repository": "https://github.com/plurimath/plurimath",
+        "commit": "ed048ee2d39cb3b2f13c83c6fdf536e77e63f650",
+        "version": "0.11.12",
+        "generator": {
+          "repository": "https://github.com/plurimath/plurimath-testsuite",
+          "commit": "fef72bd82d15e094d3435ff4c9e0f1065fb80804",
+          "path": "scripts/generate-corpus.rb",
+          "sha256": "13f2d4292967aa6af018f3701ca0eb6930e3e7892dbc0d7a340b29fde0391756"
+        },
+        "inputs": [
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "fef72bd82d15e094d3435ff4c9e0f1065fb80804",
+            "path": "scripts/seeds/mathml.yaml",
+            "sha256": "d2d68fb1f0b560d1529a6e7f70701e766d5bedefcb65ecc18b2cb82b3ed804b7"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "fef72bd82d15e094d3435ff4c9e0f1065fb80804",
+            "path": "scripts/seeds/omml.yaml",
+            "sha256": "fb0647fa360f1cf69d76c097da249a1d255730f8b3a976b906f2ca47880f00d5"
+          }
+        ],
+        "environment": {
+          "ruby": {
+            "engine": "ruby",
+            "version": "4.0.1"
+          },
+          "xml_engine": "Plurimath::XmlEngine::OxEngine",
+          "lockfile": {
+            "path": "Gemfile.lock",
+            "sha256": "7efc064f84e8bb7d079dabac664c349d77a5403b99610cebac2463a916fd4e04",
+            "resolved_gems": 81,
+            "platforms": [
+              "aarch64-linux",
+              "aarch64-linux-gnu",
+              "aarch64-linux-musl",
+              "arm-linux",
+              "arm-linux-eabihf",
+              "arm-linux-gnu",
+              "arm-linux-musl",
+              "arm-linux-musleabihf",
+              "arm64-darwin",
+              "x86_64-darwin",
+              "x86_64-linux-gnu",
+              "x86_64-linux-musl"
+            ],
+            "bundler": "4.0.3"
+          },
+          "dependencies": {
+            "bigdecimal": "4.1.3",
+            "htmlentities": "4.4.2",
+            "lutaml-model": "0.8.126",
+            "mml": "2.4.3",
+            "omml": "0.2.6",
+            "ostruct": "0.6.3",
+            "ox": "2.14.29",
+            "parslet": "2.0.0",
+            "thor": "1.5.0",
+            "unitsml": "0.6.9"
+          },
+          "compiler": null,
+          "binding": null,
+          "lml": null
+        },
+        "semantic_boundary": "facade-outputs",
+        "configuration": {}
+      },
+      "unicodemath-model": {
+        "kind": "stage-gem",
+        "repository": "https://github.com/plurimath/unicodemath",
+        "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+        "version": "0.1.0",
+        "generator": {
+          "repository": "https://github.com/plurimath/unicodemath",
+          "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+          "path": "scripts/stage_cases.rb",
+          "sha256": "33091581d2adb8beaf3c26a50217265aa0b700e0444095149a9a4e7898a95e24"
+        },
+        "inputs": [
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/provenance.yaml",
+            "sha256": "09754ef193b4330a5d807f740d865d837d7b0befdf25545be7467772da018dfb"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/payloads/fences.yaml",
+            "sha256": "c9477714fddf180345561275215b7f8be30291e07b70ba3bf491b9d2445806b8"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/payloads/numbers.yaml",
+            "sha256": "78e73dc4c8bd75bcef0dcae6b16f50cbe01f72e460bc2a751bb156e7ea0133f8"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/payloads/operators.yaml",
+            "sha256": "be84f090f4673bfadc88c0d46511888adf6101cd0f72b5b4ed127bec8110a5ea"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/payloads/rejections.yaml",
+            "sha256": "406b178dc37b4a4011090327e26c95936493f837404252b03259fe765402f85a"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "path": "stages/unicode/generations/000002/payloads/symbols.yaml",
+            "sha256": "1d8ddd2b56f26c0ae80fb5673d363b41a4717d37202ef9aa1b66b9bb1789de6c"
+          }
+        ],
+        "environment": {
+          "ruby": {
+            "engine": "ruby",
+            "version": "4.0.1"
+          },
+          "xml_engine": null,
+          "lockfile": {
+            "path": "Gemfile.lock",
+            "committed": false,
+            "sha256": "24ab798430f79abfadbe6f1df1cb807da887aac3f34a673bda53e48aba52e3cf",
+            "bundler": "4.0.3",
+            "resolved": {
+              "base64": "0.3.0",
+              "bigdecimal": "4.1.3",
+              "canon": "0.3.123",
+              "concurrent-ruby": "1.3.8",
+              "csv": "3.3.7",
+              "diff-lcs": "1.6.2",
+              "ffi": "1.17.4",
+              "json": "3.1.0",
+              "leptris": "1.9.406.1",
+              "liquid": "5.14.0",
+              "lutaml-model": "0.8.164",
+              "memo_wise": "1.13.0",
+              "moxml": "0.6.2",
+              "ostruct": "0.6.3",
+              "paint": "2.3.0",
+              "parsanol": "1.3.133",
+              "rainbow": "3.1.1",
+              "rake": "13.4.2",
+              "rspec": "3.13.2",
+              "rspec-core": "3.13.6",
+              "rspec-expectations": "3.13.5",
+              "rspec-mocks": "3.13.8",
+              "rspec-support": "3.13.7",
+              "rubyzip": "3.7.0",
+              "strscan": "3.1.8",
+              "table_tennis": "1.0.0",
+              "thor": "1.5.0",
+              "unicode-display_width": "3.3.0",
+              "unicode-emoji": "4.3.0",
+              "unicode-name": "1.15.1",
+              "unicode-types": "1.12.0",
+              "unicodemath": "0.1.0",
+              "yeptris": "0.6.60.1"
+            }
+          },
+          "dependencies": {
+            "lutaml-model": "0.8.164",
+            "parsanol": "1.3.133"
+          },
+          "compiler": {
+            "name": "parsanol",
+            "version": "1.3.131",
+            "edition": "2",
+            "artifact_checksum": "sha256:5af336c0d33c8d27633d861834e1115f4b09212ff954e1a947a788cc6a8be3ee",
+            "source_hash": "sha256:d9f7e226918fd63bda8c0d799c69b3db5a74e7de95feefd6270509e0613a0bcd",
+            "grammar": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "grammars/unicodemath.parg",
+              "sha256": "d9f7e226918fd63bda8c0d799c69b3db5a74e7de95feefd6270509e0613a0bcd"
+            },
+            "artifact": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "artifacts/unicodemath.json",
+              "sha256": "41faae82dd5f88d80046e1aab2ad68c4f6b859e44dac3cd38f4cfb3e75e3c02b"
+            }
+          },
+          "binding": {
+            "ruby_checksum": "sha256:8591a9f42f0992cd9dd65ee0840793b931a8452d4a881d0a9bedd893e6fafcc0",
+            "artifact": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "artifacts/unicodemath.bindings.ruby.json",
+              "sha256": "dfb37a0ab8a7f9e27d1ec327b6f7f57fcdb62622cc9ce09c7ed590cb0640b4e2"
+            }
+          },
+          "lml": {
+            "format": "unicodemath-lml/1",
+            "root": "Unicodemath::Model::Document",
+            "checksum": "sha256:e441417cdef4d4b4411bdc5cfc0e1dda9280d433c3bd7b46c19781928700d3a7",
+            "models": 75,
+            "export": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "model/unicodemath.lml.json",
+              "sha256": "e441417cdef4d4b4411bdc5cfc0e1dda9280d433c3bd7b46c19781928700d3a7"
+            },
+            "checksums": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "model/unicodemath.lml.checksums.txt",
+              "sha256": "62c02e620e557118aef8af1a820589e83d71147c35c84a6af97f635b4776aee0"
+            }
+          }
+        },
+        "semantic_boundary": "typed-model",
+        "configuration": {
+          "decimal": ".",
+          "engines": [
+            "native",
+            "ruby"
+          ],
+          "entry_point": "Unicodemath.parse",
+          "source_generation": {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "5e328516995cbf2917b6968eae627d377fbfa373",
+            "language": "unicode",
+            "generation": 2,
+            "snapshot_digest": "sha256:0a6f19b9a7836e71544d1a027e3f3ea2397dc5e9a1aba8b7834079b1dc91593d"
+          },
+          "engine_agreement": "required",
+          "native_divergences": {
+            "list": {
+              "repository": "https://github.com/plurimath/unicodemath",
+              "commit": "c319cf6675fd8a88830f61178d63bc36352728ab",
+              "path": "spec/parser/fixtures/oracle/native-divergences.yml",
+              "sha256": "52a437033a205bb075a9e6292d7fd7fda17774a064e0bf4bfc58d3ada0f1e461"
+            },
+            "rule": "as spec/parser/oracle_parity_spec.rb: a listed id is a known Parsanol native-engine divergence; its Ruby outcome is written and the native outcome must still differ",
+            "excluded": []
+          }
+        }
+      },
+      "umath-raw": {
+        "kind": "stage-gem",
+        "repository": "https://github.com/plurimath/umath",
+        "commit": "0302568ef9446b1b099d15a56445ed7624816462",
+        "version": "0.1.0",
+        "generator": {
+          "repository": "https://github.com/plurimath/umath",
+          "commit": "0302568ef9446b1b099d15a56445ed7624816462",
+          "path": "scripts/stage_cases.rb",
+          "sha256": "833c2cbeb7cb7b8bd468b85184cdb260f441b66cd2aa62df03104ba10bb40900"
+        },
+        "inputs": [
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/provenance.yaml",
+            "sha256": "84ca236e154aa57d4dff1c2381683427c81b311e9a518e15078945ad43fd9e1b"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/payloads/fences.yaml",
+            "sha256": "c9477714fddf180345561275215b7f8be30291e07b70ba3bf491b9d2445806b8"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/payloads/numbers.yaml",
+            "sha256": "78e73dc4c8bd75bcef0dcae6b16f50cbe01f72e460bc2a751bb156e7ea0133f8"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/payloads/operators.yaml",
+            "sha256": "be84f090f4673bfadc88c0d46511888adf6101cd0f72b5b4ed127bec8110a5ea"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/payloads/rejections.yaml",
+            "sha256": "406b178dc37b4a4011090327e26c95936493f837404252b03259fe765402f85a"
+          },
+          {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "path": "stages/unicode/generations/000001/payloads/symbols.yaml",
+            "sha256": "1d8ddd2b56f26c0ae80fb5673d363b41a4717d37202ef9aa1b66b9bb1789de6c"
+          }
+        ],
+        "environment": {
+          "ruby": {
+            "engine": "ruby",
+            "version": "4.0.1"
+          },
+          "xml_engine": null,
+          "lockfile": {
+            "path": "Gemfile.lock",
+            "committed": false,
+            "sha256": "0160c9161fdc94f1ebcc1b83af284d98d987dcd037303673df8b79142beb533a",
+            "bundler": "4.0.3",
+            "resolved": {
+              "base64": "0.3.0",
+              "bigdecimal": "4.1.3",
+              "canon": "0.3.123",
+              "concurrent-ruby": "1.3.8",
+              "csv": "3.3.7",
+              "diff-lcs": "1.6.2",
+              "ffi": "1.17.4",
+              "json": "3.1.0",
+              "leptris": "1.9.410.0",
+              "liquid": "5.14.0",
+              "lutaml-model": "0.8.169",
+              "memo_wise": "1.13.0",
+              "moxml": "0.6.3",
+              "ostruct": "0.6.3",
+              "paint": "2.3.0",
+              "parsanol": "1.3.134",
+              "rainbow": "3.1.1",
+              "rake": "13.4.2",
+              "rspec": "3.13.2",
+              "rspec-core": "3.13.6",
+              "rspec-expectations": "3.13.5",
+              "rspec-mocks": "3.13.8",
+              "rspec-support": "3.13.7",
+              "rubyzip": "3.7.0",
+              "strscan": "3.1.8",
+              "table_tennis": "1.0.0",
+              "thor": "1.5.0",
+              "umath": "0.1.0",
+              "unicode-display_width": "3.3.0",
+              "unicode-emoji": "4.3.0",
+              "unicode-name": "1.15.1",
+              "unicode-types": "1.12.0",
+              "yeptris": "0.6.60.1"
+            }
+          },
+          "dependencies": {
+            "parsanol": "1.3.134"
+          },
+          "compiler": {
+            "name": "parsanol",
+            "version": "1.3.134",
+            "edition": "2",
+            "artifact_checksum": "sha256:a58c0bb7778b56b503d6b0aaf1a8d3a1c171de7e509dcaa0e655b59088657c2f",
+            "source_hash": "sha256:8fbf980d93a4e7a47638c795ae86c519626956b6a68a65d1e36b610587602fcc",
+            "grammar": {
+              "repository": "https://github.com/plurimath/umath",
+              "commit": "0302568ef9446b1b099d15a56445ed7624816462",
+              "path": "grammars/umath.parg",
+              "sha256": "8fbf980d93a4e7a47638c795ae86c519626956b6a68a65d1e36b610587602fcc"
+            },
+            "artifact": {
+              "repository": "https://github.com/plurimath/umath",
+              "commit": "0302568ef9446b1b099d15a56445ed7624816462",
+              "path": "artifacts/umath.json",
+              "sha256": "703824533584b29e17ee807a30868c9f6923e26d0ee40c9a0a7b6c7de793220f"
+            }
+          },
+          "binding": {
+            "ruby_checksum": "sha256:3410be351c44092001c7154e2083f03c5bed917d5ceca5b9ced07cc3c542c7f9",
+            "artifact": {
+              "repository": "https://github.com/plurimath/umath",
+              "commit": "0302568ef9446b1b099d15a56445ed7624816462",
+              "path": "artifacts/umath.bindings.ruby.json",
+              "sha256": "a67723f9e0ad9444df1f4a6b70bd0180c3d4a68b2cc1f17d6f1bfb5706bcdeb7"
+            }
+          },
+          "lml": null
+        },
+        "semantic_boundary": "raw-tree",
+        "configuration": {
+          "decimal": ".",
+          "engines": [
+            "native",
+            "ruby"
+          ],
+          "entry_point": "Umath::RawParser.parse",
+          "source_generation": {
+            "repository": "https://github.com/plurimath/plurimath-testsuite",
+            "commit": "b4520d8041efe8546aa10d6ce4b59d56b8d9ffac",
+            "language": "unicode",
+            "generation": 1,
+            "snapshot_digest": "sha256:ff4c7b0ad7cbb0014e514efd24f9cae4df641cbec4a7d5ba6d3f8301374e3ac4"
+          }
+        }
+      }
+    },
+    "comparison_contract": "/home/apple/projects/plurimath-org/workspace/math/plurimath-testsuite/docs/stage-corpus-contract.adoc"
+  },
+  "payload_sha256": {
+    "raw-fences.yaml": "bbd957bca74cb024c65306ffa3ab3814fd66e74556aff2863d80b8a167cbf7e6",
+    "raw-numbers.yaml": "5ec2ab14150bce3f54b2a290f516b77ffca21cc0d2a4b76f02d2a988bb250f67",
+    "raw-operators.yaml": "878d21c51bca45b14b5f05972f0001221acbbdde96429bfb86d09750c43979af",
+    "raw-rejections.yaml": "e5f7d306132ad2d7aa9a4aa68f5751d02c90289bd3e0b8cb6c8c50c5e1229a26",
+    "raw-symbols.yaml": "5cba1e063d7e85a696ce6ded3597ae961dccd34c0482b8d49cf21d6bbbd3fe78"
+  },
+  "sample_count": 8
+}
