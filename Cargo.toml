@@ -12,6 +12,11 @@ include = ["src/**", "include/**", "tests/**", "examples/**", "artifacts/**", "R
 parsanol = { git = "https://github.com/parsanol/parsanol-rs", rev = "5206a33b5417b4ecd3a601930461ed2967c871e7" }
 serde_json = { version = "=1.0.140", features = ["arbitrary_precision", "preserve_order"] }
 
+[dev-dependencies]
+# The pinned corpus replay reads raw trees nested deeper than 128.
+serde = "=1.0.219"
+serde_json = { version = "=1.0.140", features = ["unbounded_depth"] }
+
 [features]
 default = []
 models = ["dep:serde", "dep:lutaml_rs"]
