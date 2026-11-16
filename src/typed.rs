@@ -3,6 +3,7 @@ use crate::{
     generated::{json_codecs, models::Umath_Model_Document},
     Error, Parser,
 };
+use parsanol::portable::parser::ParserCompatibility;
 use serde_json::{json, Value};
 use std::{collections::HashMap, fmt};
 #[derive(Debug)]
@@ -19,6 +20,19 @@ impl fmt::Display for ModelError {
     }
 }
 impl std::error::Error for ModelError {}
+impl ModelError {
+    /// UTF-8 byte offset of a parse refusal in the caller's `input`, moved
+    /// from the grammar input like the producer's public parser
+    /// (`Umath::SourceMap`). `input` must be the text given to the parse.
+    pub fn caller_byte_offset(&self, input: &str) -> Option<usize> {
+        match self {
+            Self::Parse(error) => error
+                .byte_offset()
+                .map(|offset| crate::languages::umath_caller_byte_offset(input, offset)),
+            Self::Codec(_) => None,
+        }
+    }
+}
 fn strings(value: &Value, source: &str, catalog: &HashMap<String, Value>) -> Value {
     match value {
         Value::Array(a) => Value::Array(a.iter().map(|v| strings(v, source, catalog)).collect()),
@@ -65,10 +79,30 @@ fn strings(value: &Value, source: &str, catalog: &HashMap<String, Value>) -> Val
     }
 }
 impl Parser {
+    /// Typed model of the public strict parse ([`Parser::parse_with_decimal`]).
     pub fn parse_model(
         &self,
         input: &str,
         decimal: &str,
+    ) -> Result<Umath_Model_Document, ModelError> {
+        self.parse_model_with_policy(input, decimal, ParserCompatibility::Strict)
+    }
+    /// Typed model of the stage producer's legacy raw parse
+    /// ([`Parser::parse_legacy_with_decimal`]), the route the producer's
+    /// models come from. [`ModelError::caller_byte_offset`] gives a refusal's
+    /// position in the caller's text, as the producer reports it.
+    pub fn parse_model_legacy(
+        &self,
+        input: &str,
+        decimal: &str,
+    ) -> Result<Umath_Model_Document, ModelError> {
+        self.parse_model_with_policy(input, decimal, ParserCompatibility::Parslet)
+    }
+    fn parse_model_with_policy(
+        &self,
+        input: &str,
+        decimal: &str,
+        policy: ParserCompatibility,
     ) -> Result<Umath_Model_Document, ModelError> {
         if ![".", ",", "٫"].contains(&decimal) {
             return Err(ModelError::Parse(Error::UnsupportedDecimal(decimal.into())));
@@ -80,7 +114,7 @@ impl Parser {
         }
         if crate::languages::umath_preprocess(input).is_some() {
             let parsed = self
-                .parse_with_decimal(input, decimal)
+                .parse_with_policy(input, decimal, policy)
                 .map_err(ModelError::Parse)?;
             let catalog = serde_json::from_str(include_str!("../artifacts/catalog.json"))
                 .expect("embedded stage catalog");

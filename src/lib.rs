@@ -142,7 +142,25 @@ impl Parser {
         };
         let shape = self
             .artifact
-            .parse_shape_with_compatibility(entry, &parsed_input, policy)?;
+            .parse_shape_with_compatibility(entry, &parsed_input, policy)
+            .or_else(|error| {
+                if policy != parsanol::portable::parser::ParserCompatibility::Parslet
+                    || !matches!(error, parsanol::parg::PargError::ParseWire { .. })
+                {
+                    return Err(error);
+                }
+                // The source Umath wrapper reruns refusals with Ruby Deepest.
+                // Acceptance/tree selection always comes from the first pass.
+                match self.artifact.parse_shape_with_reporter(
+                    entry,
+                    &parsed_input,
+                    policy,
+                    parsanol::portable::parser::FailureReporter::Deepest,
+                ) {
+                    Err(reported @ parsanol::parg::PargError::ParseWire { .. }) => Err(reported),
+                    _ => Err(error),
+                }
+            })?;
         // Apply authoritative bindings even for the asciimath root mapping.
         let bound = self.bindings.apply(&self.artifact, entry, &shape)?;
         let tree = bound

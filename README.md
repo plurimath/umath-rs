@@ -41,3 +41,14 @@ expose the legacy stage policy. Existing `parse`, `parse_with_decimal` and model
 JSON APIs preserve strict native behavior. Legacy errors still refer to
 preprocessed input, and slices reference `Parsed::parsed_input`.
 UnicodeMath explicitly selects the producer's Parslet execution policy.
+
+CI also replays unicode generation 5 of plurimath/plurimath-testsuite, pinned in
+`tests/fixtures/corpus-pin-5.json` by commit, provenance SHA-256 and the expected
+row IDs of each boundary. `.github/scripts/extract-corpus.py` checks the pin and
+every payload checksum, and `tests/corpus_replay.rs` replays all 747 raw-tree rows
+through the legacy raw parser and all 747 typed-model rows through `parse_model`.
+Both counts include the 675 rows from the upstream UnicodeMathML tests (MIT,
+Noah Doersing 2019; notice and provenance are in the testsuite). Typed rows are
+compared as generated Rust models: the expected Ruby model is decoded by the
+generated codec, which keeps the declared class of every field but not the Ruby
+class names themselves.

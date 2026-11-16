@@ -11,6 +11,12 @@ uint32_t umath_abi_version(void);
    Free every result exactly once with umath_free_json_v1. */
 char *umath_parse_model_json_v1(const uint8_t *input, size_t input_len,
                               const uint8_t *decimal, size_t decimal_len);
+/* Additive legacy-route endpoint (the stage producer's route). Same envelope
+   and memory contract. Refusals: error.byte_offset is a UTF-8 offset in the
+   caller's text, offset_source "caller_input", error.grammar_byte_offset the
+   raw grammar-input offset. */
+char *umath_parse_model_legacy_json_v1(const uint8_t *input, size_t input_len,
+                                       const uint8_t *decimal, size_t decimal_len);
 void umath_free_json_v1(char *result);
 #ifdef __cplusplus
 }

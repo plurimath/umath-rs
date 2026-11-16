@@ -22,14 +22,19 @@ unsafe fn text<'a>(ptr: *const u8, len: usize) -> Result<&'a str, &'static str> 
     };
     str::from_utf8(bytes).map_err(|_| "input must be valid UTF-8")
 }
-fn response(input: &str, decimal: &str) -> Value {
+fn response(input: &str, decimal: &str, legacy: bool) -> Value {
     let parser = match crate::Parser::new() {
         Ok(p) => p,
         Err(e) => {
             return json!({"abi_version":1,"ok":false,"error":{"category":"artifact_error","message":e.to_string()}})
         }
     };
-    match parser.parse_model(input, decimal) {
+    let parsed = if legacy {
+        parser.parse_model_legacy(input, decimal)
+    } else {
+        parser.parse_model(input, decimal)
+    };
+    match parsed {
         Ok(model) => match crate::typed::to_portable_json(&model) {
             Ok(model) => {
                 json!({"abi_version":1,"ok":true,"model":serde_json::from_str::<Value>(&model).expect("generated JSON codec")})
@@ -51,6 +56,21 @@ fn response(input: &str, decimal: &str) -> Value {
             if let Some((category, depth, max_depth)) = resource {
                 return json!({"abi_version":1,"ok":false,"error":{"category":category,"depth":depth,"max_depth":max_depth,"message":e.to_string(),"byte_offset":null,"offset_source":"preprocessed_input"}});
             }
+            if legacy {
+                // The producer's route reports caller-text positions.
+                let (category, caller, grammar) = match &e {
+                    crate::typed::ModelError::Parse(crate::Error::UnsupportedDecimal(_)) => {
+                        ("invalid_argument", None, None)
+                    }
+                    crate::typed::ModelError::Parse(error) => (
+                        "parse_error",
+                        e.caller_byte_offset(input),
+                        error.byte_offset(),
+                    ),
+                    _ => ("model_error", None, None),
+                };
+                return json!({"abi_version":1,"ok":false,"error":{"category":category,"message":e.to_string(),"byte_offset":caller,"offset_source":"caller_input","grammar_byte_offset":grammar}});
+            }
             let (category, offset) = match &e {
                 crate::typed::ModelError::Parse(crate::Error::UnsupportedDecimal(_)) => {
                     ("invalid_argument", None)
@@ -62,6 +82,25 @@ fn response(input: &str, decimal: &str) -> Value {
         }
     }
 }
+unsafe fn entry(
+    input: *const u8,
+    input_len: usize,
+    decimal: *const u8,
+    decimal_len: usize,
+    legacy: bool,
+) -> *mut c_char {
+    let reply=catch_unwind(AssertUnwindSafe(||{
+        match(text(input,input_len),text(decimal,decimal_len)){
+            (Ok(input),Ok(decimal))=>response(input,decimal,legacy),
+            _=>json!({"abi_version":1,"ok":false,"error":{"category":"invalid_argument","message":"null buffer or invalid UTF-8"}}),
+        }
+    })).unwrap_or_else(|_|json!({"abi_version":1,"ok":false,"error":{"category":"internal_error","message":"native operation panicked"}}));
+    CString::new(reply.to_string())
+        .expect("JSON escapes NUL")
+        .into_raw()
+}
+/// Strict public route (unchanged). Offsets are in the preprocessed grammar input.
+///
 /// # Safety
 /// Each nonempty buffer must point to readable memory of its declared length.
 #[no_mangle]
@@ -71,15 +110,23 @@ pub unsafe extern "C" fn umath_parse_model_json_v1(
     decimal: *const u8,
     decimal_len: usize,
 ) -> *mut c_char {
-    let reply=catch_unwind(AssertUnwindSafe(||{
-        match(text(input,input_len),text(decimal,decimal_len)){
-            (Ok(input),Ok(decimal))=>response(input,decimal),
-            _=>json!({"abi_version":1,"ok":false,"error":{"category":"invalid_argument","message":"null buffer or invalid UTF-8"}}),
-        }
-    })).unwrap_or_else(|_|json!({"abi_version":1,"ok":false,"error":{"category":"internal_error","message":"native operation panicked"}}));
-    CString::new(reply.to_string())
-        .expect("JSON escapes NUL")
-        .into_raw()
+    entry(input, input_len, decimal, decimal_len, false)
+}
+/// Additive: the stage producer's legacy route (`Parser::parse_model_legacy`).
+/// Same envelope and memory contract as the strict endpoint; refusals carry
+/// `byte_offset` in the caller's UTF-8 text (`offset_source:"caller_input"`)
+/// and the raw `grammar_byte_offset`.
+///
+/// # Safety
+/// Each nonempty buffer must point to readable memory of its declared length.
+#[no_mangle]
+pub unsafe extern "C" fn umath_parse_model_legacy_json_v1(
+    input: *const u8,
+    input_len: usize,
+    decimal: *const u8,
+    decimal_len: usize,
+) -> *mut c_char {
+    entry(input, input_len, decimal, decimal_len, true)
 }
 /// # Safety
 /// `ptr` must be null or an unfreed pointer returned by this library's ABI v1.
