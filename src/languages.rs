@@ -540,3 +540,180 @@ pub fn umath_label(input: &str) -> Option<String> {
         None
     }
 }
+
+/// Caller UTF-8 byte offset of grammar-input byte `grammar_offset`, like the
+/// producer's `Umath::SourceMap#caller_position` (lib/umath/source_map.rb):
+/// each `umath_preprocess` step is repeated while every produced character
+/// keeps the caller character it came from; a replaced match gives all its
+/// characters the position of the match's first character. The end of the
+/// grammar input maps to the end of the caller's formula part.
+pub fn umath_caller_byte_offset(input: &str, grammar_offset: usize) -> usize {
+    let (text, origins, text_end) = umath_source_map(input);
+    let char_offset = text
+        .char_indices()
+        .take_while(|(i, _)| *i < grammar_offset)
+        .count();
+    let char = if char_offset < origins.len() {
+        origins[char_offset]
+    } else if origins.is_empty() {
+        text_end.unwrap_or(0)
+    } else {
+        origins[origins.len() - 1] + 1
+    };
+    input.chars().take(char).map(char::len_utf8).sum()
+}
+
+type Mapped = (Vec<char>, Vec<usize>);
+
+fn umath_source_map(input: &str) -> (String, Vec<usize>, Option<usize>) {
+    // formula: the protected split with "#" inside ✎(...) undone by position.
+    let (mut chars, mut origins) = (Vec::new(), Vec::new());
+    let mut position = 0;
+    for (index, line) in input.split('\n').enumerate() {
+        if index > 0 {
+            chars.push('\n');
+            origins.push(position - 1);
+        }
+        let line_chars: Vec<char> = line.chars().collect();
+        if protect_pen_group(line) == line {
+            for (offset, c) in line_chars.iter().enumerate() {
+                chars.push(*c);
+                origins.push(position + offset);
+            }
+        } else {
+            let start = line[..line.find(PEN_OPEN).unwrap()].chars().count();
+            let close = line[..line.rfind(')').unwrap()].chars().count();
+            for (offset, c) in line_chars.iter().enumerate() {
+                if *c == '#' && offset > start && offset < close {
+                    for p in PROTECTED_HASH.chars() {
+                        chars.push(p);
+                        origins.push(position + offset);
+                    }
+                } else {
+                    chars.push(*c);
+                    origins.push(position + offset);
+                }
+            }
+        }
+        position += line_chars.len() + 1;
+    }
+    let cut = chars.iter().position(|c| *c == '#').unwrap_or(chars.len());
+    chars.truncate(cut);
+    origins.truncate(cut);
+    let mut text_end = (cut == 0).then_some(0);
+    let mapped = replace_literal((chars, origins), PROTECTED_HASH, "#");
+    // encode: the characters encode_entities replaces.
+    let (mut chars, mut origins) = (Vec::new(), Vec::new());
+    for (c, origin) in mapped.0.iter().zip(&mapped.1) {
+        if matches!(c, '<' | '>' | '\'' | '"' | '&') || !(' '..='~').contains(c) {
+            for p in format!("&#x{:x};", *c as u32).chars() {
+                chars.push(p);
+                origins.push(*origin);
+            }
+        } else {
+            chars.push(*c);
+            origins.push(*origin);
+        }
+    }
+    let mut mapped = replace_literal((chars, origins), "&#x26;", "&");
+    mapped = replace_literal(mapped, "&#x22;", "\"");
+    mapped = remove_comment_mapped(mapped);
+    mapped = replace_literal(mapped, "\\\\", "\\");
+    mapped = expand_u_escapes_mapped(mapped);
+    // String#strip: only spaces can lead or trail by now.
+    let (chars, origins) = mapped;
+    let lead = chars.iter().take_while(|c| **c == ' ').count();
+    let trail = chars[lead..]
+        .iter()
+        .rev()
+        .take_while(|c| **c == ' ')
+        .count();
+    let end = chars.len() - trail;
+    if lead == end && text_end.is_none() {
+        text_end = origins.get(lead).copied();
+    }
+    (
+        chars[lead..end].iter().collect(),
+        origins[lead..end].to_vec(),
+        text_end,
+    )
+}
+
+fn push_piece(out: &mut Mapped, piece: &str, origin: usize) {
+    for p in piece.chars() {
+        out.0.push(p);
+        out.1.push(origin);
+    }
+}
+
+fn replace_literal((chars, origins): Mapped, pattern: &str, piece: &str) -> Mapped {
+    let pattern: Vec<char> = pattern.chars().collect();
+    let mut out: Mapped = (Vec::new(), Vec::new());
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i..].starts_with(&pattern) {
+            push_piece(&mut out, piece, origins[i]);
+            i += pattern.len();
+        } else {
+            out.0.push(chars[i]);
+            out.1.push(origins[i]);
+            i += 1;
+        }
+    }
+    out
+}
+
+fn remove_comment_mapped((chars, origins): Mapped) -> Mapped {
+    let find = |pattern: &str, last: bool| {
+        let pattern: Vec<char> = pattern.chars().collect();
+        let mut hits = (0..chars.len()).filter(|i| chars[*i..].starts_with(&pattern));
+        if last {
+            hits.last()
+        } else {
+            hits.next()
+        }
+    };
+    let open = COMMENT_OPEN.chars().count();
+    match (find(COMMENT_OPEN, false), find(COMMENT_CLOSE, true)) {
+        (Some(start), Some(close)) if close >= start + open => {
+            let stop = close + COMMENT_CLOSE.chars().count();
+            let mut kept = (chars[..start].to_vec(), origins[..start].to_vec());
+            kept.0.extend_from_slice(&chars[stop..]);
+            kept.1.extend_from_slice(&origins[stop..]);
+            kept
+        }
+        _ => (chars, origins),
+    }
+}
+
+/// expand_u_escapes, keeping the origin of each escape's backslash.
+fn expand_u_escapes_mapped((chars, origins): Mapped) -> Mapped {
+    let mut out: Mapped = (Vec::new(), Vec::new());
+    let mut i = 0;
+    while i < chars.len() {
+        if chars[i] == '\\' && chars.get(i + 1) == Some(&'u') {
+            let hex_start = i + 2;
+            let mut j = hex_start;
+            while j < chars.len() && j - hex_start < 5 && chars[j].is_ascii_hexdigit() {
+                j += 1;
+            }
+            if j > hex_start {
+                let hex: String = chars[hex_start..j].iter().collect();
+                let mut k = j;
+                while k < chars.len()
+                    && k - j < 5
+                    && (chars[k].is_ascii_alphanumeric() || chars[k] == '_')
+                {
+                    k += 1;
+                }
+                push_piece(&mut out, &format!("&#x{hex};"), origins[i]);
+                i = k;
+                continue;
+            }
+        }
+        out.0.push(chars[i]);
+        out.1.push(origins[i]);
+        i += 1;
+    }
+    out
+}

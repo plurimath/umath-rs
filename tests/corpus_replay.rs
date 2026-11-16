@@ -5,7 +5,9 @@
 //! Raw-tree rows compare the legacy raw parser's preprocessing, canonical tree
 //! and refusal offsets (preprocessed basis). Typed-model rows (feature
 //! `models`) decode the expected Ruby model through the generated codec and
-//! compare it with `Parser::parse_model` as typed values. The expected class
+//! compare it with `Parser::parse_model_legacy` (the producer's route) as
+//! typed values; typed refusal offsets are caller positions, as the
+//! producer's public parser reports them. The expected class
 //! names are dropped by that projection: every model field has one declared
 //! class, so the generated struct types carry the class identity.
 use serde::Deserialize;
@@ -74,13 +76,18 @@ fn typed_failure(parser: &Parser, row: &Value) -> Option<String> {
     use umath::typed::ModelError;
     let input = row["input"]["str"].as_str().unwrap();
     let decimal = row["options"]["decimal"].as_str().unwrap_or(".");
-    let result = parser.parse_model(input, decimal);
+    let result = parser.parse_model_legacy(input, decimal);
     if let Some(refusal) = row["expected"].get("refusal") {
         let expected = refusal["byte_offset"].as_u64().map(|v| v as usize);
         return match result {
             Ok(model) => Some(format!("accepted: {model:?}")),
-            Err(ModelError::Parse(error)) if error.byte_offset() == expected => None,
-            Err(error) => Some(format!("refusal {error} (expected offset {expected:?})")),
+            Err(error @ ModelError::Parse(_)) if error.caller_byte_offset(input) == expected => {
+                None
+            }
+            Err(error) => Some(format!(
+                "refusal {error} (caller offset {:?}, expected {expected:?})",
+                error.caller_byte_offset(input)
+            )),
         };
     }
     let expected =
