@@ -81,3 +81,18 @@ fn typed_structs_keep_empty_markers_that_the_wire_omits() {
     let wire = umath::typed::to_portable_json(&model).unwrap();
     assert!(!wire.contains("\"empty\""), "{wire}");
 }
+
+/// Legacy refusals report the Deepest position the Ruby producer reports.
+#[test]
+fn broken_bar_refusals_report_deepest_offsets() {
+    let parser = Parser::new().unwrap();
+    for (input, grammar) in [("\u{a6}", 1), ("a\u{a6}", 7), ("\u{3b1}\u{a6}", 13)] {
+        let raw = parser.parse_legacy_with_decimal(input, ".").unwrap_err();
+        assert_eq!(raw.byte_offset(), Some(grammar), "{input:?} raw");
+        let typed = parser.parse_model_legacy(input, ".").unwrap_err();
+        let umath::typed::ModelError::Parse(error) = &typed else {
+            panic!("{input:?}: {typed}")
+        };
+        assert_eq!(error.byte_offset(), Some(grammar), "{input:?} typed");
+    }
+}
