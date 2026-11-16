@@ -66,3 +66,18 @@ fn caller_offsets_skip_label_comment_and_escapes() {
     assert_eq!(a.byte_offset(), b.byte_offset());
     assert_eq!(spaced.caller_byte_offset("  \u{3b1}&b#(1)"), Some(5));
 }
+
+/// Ruby models keep `empty: ""` / `present: ""` markers in memory, while the
+/// declared lutaml mapping (render_empty default false) omits empty values on
+/// serialization. The typed structs must retain the marker; only the JSON wire
+/// omits it, so a wire consumer cannot read it back.
+#[test]
+fn typed_structs_keep_empty_markers_that_the_wire_omits() {
+    let parser = Parser::new().unwrap();
+    let input = "\u{25ad}(4&\u{270e}(#e01f32&\u{3b1}))";
+    let model = parser.parse_model_legacy(input, ".").unwrap();
+    let debug = format!("{model:?}");
+    assert!(debug.contains("empty: Value(\"\")"), "{debug}");
+    let wire = umath::typed::to_portable_json(&model).unwrap();
+    assert!(!wire.contains("\"empty\""), "{wire}");
+}
