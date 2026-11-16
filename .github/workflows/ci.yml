@@ -22,7 +22,7 @@ jobs:
   test:
     name: ${{ matrix.os }} / Rust ${{ matrix.rust }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -79,7 +79,9 @@ jobs:
         env:
           UMATH_CORPUS_CASES: target/corpus-5.json
           UMATH_CORPUS_REPORT: target/corpus-5-report.json
-        run: cargo +${{ matrix.rust }} test --locked --all-features --test corpus_replay -- --ignored
+        # Release profile: the Parslet-policy engine is orders of magnitude slower
+        # unoptimized (a debug replay of the 1494 rows ran past 30 minutes).
+        run: cargo +${{ matrix.rust }} test --release --locked --all-features --test corpus_replay -- --ignored --nocapture
       - name: Upload the replay report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

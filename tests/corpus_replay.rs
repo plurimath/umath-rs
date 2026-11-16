@@ -111,14 +111,19 @@ fn replay() {
     let mut outcomes = Vec::new();
     let mut failures = 0usize;
     for row in corpus["cases"].as_array().unwrap() {
+        let started = std::time::Instant::now();
         let failure = match row["boundary"].as_str().unwrap() {
             "raw-tree" => raw_failure(&parser, row),
             "typed-model" => typed_failure(&parser, row),
             other => panic!("{}: undeclared boundary {other}", row["id"]),
         };
+        let millis = started.elapsed().as_millis() as u64;
+        if millis >= 2000 {
+            eprintln!("slow row {} [{}]: {millis} ms", row["id"], row["boundary"]);
+        }
         failures += usize::from(failure.is_some());
         let failure = failure.map(|f| f.chars().take(800).collect::<String>());
-        outcomes.push(json!({"id": row["id"], "boundary": row["boundary"], "failure": failure}));
+        outcomes.push(json!({"id": row["id"], "boundary": row["boundary"], "failure": failure, "millis": millis}));
     }
     let report = json!({
         "generation": corpus["generation"],
