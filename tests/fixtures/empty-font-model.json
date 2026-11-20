@@ -1,0 +1,8 @@
+{
+  "id": "unicode-external-167.model",
+  "input": "I(x,x') = g(x,x') [ε(x,x') + ∫_S▒ρ(x,x',x'')I(x',x'')ⅆx'']",
+  "options": {
+    "decimal": "."
+  },
+  "source_sha256": "6b5586ec964eb0891b6f242a4f23620b64ca454531c52a324ada2431eb1b16dd"
+}
