@@ -173,7 +173,7 @@ if empty(&v){continue;}
 wire.insert("empty".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -235,21 +235,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_AccentsSubsup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::AccentsSubsup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -277,7 +277,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ArgArguments(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ArgArguments@default")?;let mut wire=Map::new();
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -313,14 +313,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ArrayNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ArrayNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("tr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tr(v)?;
 }
 wire.insert("tr".into(),v);}
 for mut v in data.remove("trs").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Trs(v)?;
 }
@@ -374,21 +374,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Atom(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Atom@default")?;let mut wire=Map::new();
 for mut v in data.remove("alphanumeric").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("alphanumeric".into(),v);}
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
@@ -432,14 +432,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Atoms(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Atoms@default")?;let mut wire=Map::new();
 for mut v in data.remove("atom").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atom(v)?;
 }
 wire.insert("atom".into(),v);}
 for mut v in data.remove("atoms").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atoms(v)?;
 }
@@ -476,7 +476,7 @@ if empty(&v){continue;}
 wire.insert("backcolor_value".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -504,7 +504,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_BelowAfter(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::BelowAfter@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_belows").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -532,7 +532,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_BelowBefore(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::BelowBefore@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_belows").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -560,7 +560,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Char(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Char@default")?;let mut wire=Map::new();
 for mut v in data.remove("unicode_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -626,21 +626,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Closer(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Closer@default")?;let mut wire=Map::new();
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -677,7 +677,7 @@ if empty(&v){continue;}
 wire.insert("color_value".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -722,14 +722,14 @@ if empty(&v){continue;}
 wire.insert("decimal".into(),v);}
 for mut v in data.remove("fractional").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fractional(v)?;
 }
 wire.insert("fractional".into(),v);}
 for mut v in data.remove("whole").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Whole(v)?;
 }
@@ -765,14 +765,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Diacritics(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Diacritics@default")?;let mut wire=Map::new();
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
@@ -832,35 +832,35 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_DiacriticsAccents(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::DiacriticsAccents@default")?;let mut wire=Map::new();
 for mut v in data.remove("below_after").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_BelowAfter(v)?;
 }
 wire.insert("below_after".into(),v);}
 for mut v in data.remove("below_before").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_BelowBefore(v)?;
 }
 wire.insert("below_before".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("overlay_after").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OverlayAfter(v)?;
 }
 wire.insert("overlay_after".into(),v);}
 for mut v in data.remove("overlay_before").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OverlayBefore(v)?;
 }
@@ -920,7 +920,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Document(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Document@default")?;let mut wire=Map::new();
 for mut v in data.remove("expression").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -996,42 +996,42 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ExpIteration(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ExpIteration@default")?;let mut wire=Map::new();
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -1913,21 +1913,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Expression(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Expression@default")?;let mut wire=Map::new();
 for mut v in data.remove("accents").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Accents(v)?;
 }
 wire.insert("accents".into(),v);}
 for mut v in data.remove("accents_subsup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_AccentsSubsup(v)?;
 }
 wire.insert("accents_subsup".into(),v);}
 for mut v in data.remove("alphanumeric").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -1938,42 +1938,42 @@ if empty(&v){continue;}
 wire.insert("arg".into(),v);}
 for mut v in data.remove("arg_arguments").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ArgArguments(v)?;
 }
 wire.insert("arg_arguments".into(),v);}
 for mut v in data.remove("atom").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atom(v)?;
 }
 wire.insert("atom".into(),v);}
 for mut v in data.remove("atoms").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atoms(v)?;
 }
 wire.insert("atoms".into(),v);}
 for mut v in data.remove("backcolor").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Backcolor(v)?;
 }
 wire.insert("backcolor".into(),v);}
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("binary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -1984,77 +1984,77 @@ if empty(&v){continue;}
 wire.insert("binary_number".into(),v);}
 for mut v in data.remove("binary_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("binary_symbols".into(),v);}
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("color").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Color(v)?;
 }
 wire.insert("color".into(),v);}
 for mut v in data.remove("combined_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("combined_symbols".into(),v);}
 for mut v in data.remove("comma").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("comma".into(),v);}
 for mut v in data.remove("decimal_number").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DecimalNumber(v)?;
 }
 wire.insert("decimal_number".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
 wire.insert("diacritics".into(),v);}
 for mut v in data.remove("diacritics_accents").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DiacriticsAccents(v)?;
 }
 wire.insert("diacritics_accents".into(),v);}
 for mut v in data.remove("digit").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Digit(v)?;
 }
@@ -2065,77 +2065,77 @@ if empty(&v){continue;}
 wire.insert("empty".into(),v);}
 for mut v in data.remove("exclamation_symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("exclamation_symbol".into(),v);}
 for mut v in data.remove("exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("exp".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("expression").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expression".into(),v);}
 for mut v in data.remove("factor").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("factor".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("fonts").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fonts(v)?;
 }
 wire.insert("fonts".into(),v);}
 for mut v in data.remove("frac").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Frac(v)?;
 }
 wire.insert("frac".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 for mut v in data.remove("hbrack").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Hbrack(v)?;
 }
@@ -2150,14 +2150,14 @@ if empty(&v){continue;}
 wire.insert("hex_number".into(),v);}
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("infty".into(),v);}
 for mut v in data.remove("int_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_IntExp(v)?;
 }
@@ -2168,28 +2168,28 @@ if empty(&v){continue;}
 wire.insert("intent".into(),v);}
 for mut v in data.remove("intent_arguments").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_IntentArguments(v)?;
 }
 wire.insert("intent_arguments".into(),v);}
 for mut v in data.remove("intent_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("intent_expr".into(),v);}
 for mut v in data.remove("intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("intermediate_exp".into(),v);}
 for mut v in data.remove("left_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_LeftValue(v)?;
 }
@@ -2204,84 +2204,84 @@ if empty(&v){continue;}
 wire.insert("literal_2".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mid_symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("mid_symbol".into(),v);}
 for mut v in data.remove("mini_base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniBase(v)?;
 }
 wire.insert("mini_base".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("monospace").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Monospace(v)?;
 }
 wire.insert("monospace".into(),v);}
 for mut v in data.remove("nary").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Nary(v)?;
 }
 wire.insert("nary".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("naryand_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("naryand_recursion".into(),v);}
 for mut v in data.remove("negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -2296,49 +2296,49 @@ if empty(&v){continue;}
 wire.insert("octal_number".into(),v);}
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
 wire.insert("operand".into(),v);}
 for mut v in data.remove("operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("operator".into(),v);}
 for mut v in data.remove("ordinary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_negated_operator".into(),v);}
 for mut v in data.remove("ordinary_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_symbols".into(),v);}
 for mut v in data.remove("other").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Other(v)?;
 }
@@ -2349,112 +2349,112 @@ if empty(&v){continue;}
 wire.insert("over".into(),v);}
 for mut v in data.remove("override_subsup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("override_subsup".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_close_prefix".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_open_prefix".into(),v);}
 for mut v in data.remove("phantom").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Phantom(v)?;
 }
 wire.insert("phantom".into(),v);}
 for mut v in data.remove("pre_override_subsup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_PreOverrideSubsup(v)?;
 }
 wire.insert("pre_override_subsup".into(),v);}
 for mut v in data.remove("pre_script").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_script".into(),v);}
 for mut v in data.remove("pre_subscript").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_subscript".into(),v);}
 for mut v in data.remove("pre_supscript").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_supscript".into(),v);}
 for mut v in data.remove("rect").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Rect(v)?;
 }
 wire.insert("rect".into(),v);}
 for mut v in data.remove("recursive_denominator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("recursive_denominator".into(),v);}
 for mut v in data.remove("recursive_numerator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("recursive_numerator".into(),v);}
 for mut v in data.remove("relational_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("relational_symbols".into(),v);}
 for mut v in data.remove("right_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RightValue(v)?;
 }
 wire.insert("right_value".into(),v);}
 for mut v in data.remove("root").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootNode(v)?;
 }
 wire.insert("root".into(),v);}
 for mut v in data.remove("root_first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootFirstValue(v)?;
 }
 wire.insert("root_first_value".into(),v);}
 for mut v in data.remove("root_second_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootSecondValue(v)?;
 }
@@ -2465,21 +2465,21 @@ if empty(&v){continue;}
 wire.insert("size_overrides".into(),v);}
 for mut v in data.remove("slashed_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SlashedValue(v)?;
 }
 wire.insert("slashed_value".into(),v);}
 for mut v in data.remove("spaces").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("spaces".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2494,7 +2494,7 @@ if empty(&v){continue;}
 wire.insert("sub_digits".into(),v);}
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
@@ -2505,49 +2505,49 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubParen(v)?;
 }
 wire.insert("sub_paren".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursions".into(),v);}
 for mut v in data.remove("sub_script").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_script".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2562,7 +2562,7 @@ if empty(&v){continue;}
 wire.insert("sup_digits".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
@@ -2573,49 +2573,49 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupParen(v)?;
 }
 wire.insert("sup_paren".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 for mut v in data.remove("sup_script").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_script".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
 wire.insert("symbol".into(),v);}
 for mut v in data.remove("table").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Table(v)?;
 }
@@ -2626,7 +2626,7 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 for mut v in data.remove("unary_function").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnaryFunction(v)?;
 }
@@ -2637,7 +2637,7 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_subsup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnarySubsup(v)?;
 }
@@ -2652,7 +2652,7 @@ if empty(&v){continue;}
 wire.insert("unicode_fractions".into(),v);}
 for mut v in data.remove("unicode_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -2720,7 +2720,7 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -2731,7 +2731,7 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 for mut v in data.remove("unicoded_font_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnicodedFontClass(v)?;
 }
@@ -2820,7 +2820,7 @@ if empty(&v){continue;}
 wire.insert("choose".into(),v);}
 for mut v in data.remove("denominator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2831,14 +2831,14 @@ if empty(&v){continue;}
 wire.insert("ldiv".into(),v);}
 for mut v in data.remove("mini_denominator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniDenominator(v)?;
 }
 wire.insert("mini_denominator".into(),v);}
 for mut v in data.remove("mini_numerator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniNumerator(v)?;
 }
@@ -2849,7 +2849,7 @@ if empty(&v){continue;}
 wire.insert("no_display_style".into(),v);}
 for mut v in data.remove("numerator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2907,14 +2907,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_FuncExpr(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::FuncExpr@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
@@ -2955,7 +2955,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Hbrack(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Hbrack@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2966,7 +2966,7 @@ if empty(&v){continue;}
 wire.insert("hbracket_class".into(),v);}
 for mut v in data.remove("scripted_first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -3010,21 +3010,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_IntExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::IntExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("closer").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Closer(v)?;
 }
 wire.insert("closer".into(),v);}
 for mut v in data.remove("opener").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Opener(v)?;
 }
 wire.insert("opener".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
@@ -3105,7 +3105,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_LeftValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::LeftValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3121,7 +3121,7 @@ v=encode_Umath_Model_ListItem(v)?;
 wire.insert("list".into(),v);}
 for mut v in data.remove("negative").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3132,7 +3132,7 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("positive").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3173,7 +3173,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ListItem(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ListItem@default")?;let mut wire=Map::new();
 for mut v in data.remove("accent_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3184,7 +3184,7 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -3239,14 +3239,14 @@ if empty(&v){continue;}
 wire.insert("binary_number".into(),v);}
 for mut v in data.remove("decimal_number").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DecimalNumber(v)?;
 }
 wire.insert("decimal_number".into(),v);}
 for mut v in data.remove("digit").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Digit(v)?;
 }
@@ -3436,14 +3436,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniDenominator(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniDenominator@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3462,21 +3462,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3618,21 +3618,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniExpression(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniExpression@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3659,21 +3659,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3700,21 +3700,21 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3789,14 +3789,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniNumerator(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniNumerator@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3815,21 +3815,21 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3935,28 +3935,28 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSub(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSub@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -3975,21 +3975,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -4045,21 +4045,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4165,21 +4165,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -4198,7 +4198,7 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4217,21 +4217,21 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -4281,7 +4281,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Monospace(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Monospace@default")?;let mut wire=Map::new();
 for mut v in data.remove("monospace_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4325,21 +4325,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Nary(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Nary@default")?;let mut wire=Map::new();
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("nary_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_NarySubSup(v)?;
 }
 wire.insert("nary_sub_sup".into(),v);}
 for mut v in data.remove("naryand").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4383,21 +4383,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_NarySubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::NarySubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
 wire.insert("sub_exp".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
@@ -4463,21 +4463,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Opener(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Opener@default")?;let mut wire=Map::new();
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -4598,84 +4598,84 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Operand(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Operand@default")?;let mut wire=Map::new();
 for mut v in data.remove("accents").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Accents(v)?;
 }
 wire.insert("accents".into(),v);}
 for mut v in data.remove("binary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("binary_negated_operator".into(),v);}
 for mut v in data.remove("factor").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("factor".into(),v);}
 for mut v in data.remove("fonts").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fonts(v)?;
 }
 wire.insert("fonts".into(),v);}
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("infty".into(),v);}
 for mut v in data.remove("negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("negated_operator".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
 wire.insert("operand".into(),v);}
 for mut v in data.remove("operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("operator".into(),v);}
 for mut v in data.remove("ordinary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_negated_operator".into(),v);}
 for mut v in data.remove("phantom").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Phantom(v)?;
 }
 wire.insert("phantom".into(),v);}
 for mut v in data.remove("rect").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Rect(v)?;
 }
 wire.insert("rect".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -4707,7 +4707,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Other(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Other@default")?;let mut wire=Map::new();
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -4735,7 +4735,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_OverlayAfter(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::OverlayAfter@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_overlays").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -4763,7 +4763,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_OverlayBefore(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::OverlayBefore@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_overlays").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -4846,42 +4846,42 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Paren(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Paren@default")?;let mut wire=Map::new();
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_close_prefix".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -4926,7 +4926,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Phantom(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Phantom@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4985,14 +4985,14 @@ if empty(&v){continue;}
 wire.insert("over".into(),v);}
 for mut v in data.remove("pre_subscript").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_subscript".into(),v);}
 for mut v in data.remove("pre_supscript").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5043,7 +5043,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_PrimeAccentSymbolsItem(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::PrimeAccentSymbolsItem@default")?;let mut wire=Map::new();
 for mut v in data.remove("prefixed_prime").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5088,7 +5088,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Rect(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Rect@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5151,7 +5151,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RightValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RightValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5167,7 +5167,7 @@ v=encode_Umath_Model_ListItem(v)?;
 wire.insert("list".into(),v);}
 for mut v in data.remove("negative").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5178,7 +5178,7 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("positive").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5214,14 +5214,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootFirstValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootFirstValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
@@ -5265,21 +5265,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("root_symbol").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("root_symbol".into(),v);}
 for mut v in data.remove("second_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SecondValue(v)?;
 }
@@ -5315,14 +5315,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootSecondValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootSecondValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
@@ -5358,14 +5358,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SecondValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SecondValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
@@ -5545,70 +5545,70 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5627,21 +5627,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -5716,14 +5716,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubParen(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubParen@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -5742,21 +5742,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -5816,35 +5816,35 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubsupExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubsupExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5983,70 +5983,70 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SupExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SupExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6065,21 +6065,21 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -6154,14 +6154,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SupParen(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SupParen@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -6180,21 +6180,21 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -6237,7 +6237,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SymbolNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SymbolNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("ldots").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -6287,7 +6287,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Table(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Table@default")?;let mut wire=Map::new();
 for mut v in data.remove("array").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ArrayNode(v)?;
 }
@@ -6336,14 +6336,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Td(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Td@default")?;let mut wire=Map::new();
 for mut v in data.remove("exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("exp".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6383,14 +6383,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Tds(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Tds@default")?;let mut wire=Map::new();
 for mut v in data.remove("td").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Td(v)?;
 }
 wire.insert("td".into(),v);}
 for mut v in data.remove("tds").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tds(v)?;
 }
@@ -6435,14 +6435,14 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 for mut v in data.remove("td").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Td(v)?;
 }
 wire.insert("td".into(),v);}
 for mut v in data.remove("tds").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tds(v)?;
 }
@@ -6478,14 +6478,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Trs(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Trs@default")?;let mut wire=Map::new();
 for mut v in data.remove("tr").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tr(v)?;
 }
 wire.insert("tr".into(),v);}
 for mut v in data.remove("trs").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Trs(v)?;
 }
@@ -6531,7 +6531,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnaryFunction(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnaryFunction@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6546,7 +6546,7 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_symbols").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -6614,42 +6614,42 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnarySubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnarySubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
 wire.insert("sub_exp".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
@@ -6690,7 +6690,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnarySubsup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnarySubsup@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6701,7 +6701,7 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnarySubSup(v)?;
 }
@@ -6738,7 +6738,7 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 for mut v in data.remove("mitBbb").into_iter(){
 if v.is_null(){continue;}
-if empty(&v){continue;}
+if !v.is_object() && empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MitBbb(v)?;
 }

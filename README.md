@@ -29,8 +29,10 @@ buffer once through the same library's `umath_free_json_v1` function.
 
 Typed construction and symbolic/decimal/label cases were exercised locally.
 Full typed equivalence, Plurimath facade and math-writer coverage are separate.
-The declared portable JSON writer omits empty/nil members, so lossless model
-roundtrip and wire idempotence are not guaranteed.
+The declared portable JSON writer omits empty scalar/container and nil members.
+Present child model objects remain present even when their members serialize to
+`{}`, preserving markers such as `mitBbb` across portable JSON roundtrips.
+Empty string markers inside those models may still be omitted.
 
 Native refusal offsets use the Rust engine's farthest-error position and may differ
 from Ruby's deepest-error selection. Offsets refer to the preprocessed grammar
@@ -79,8 +81,8 @@ try {
 `parseRaw` returns JSON with `preprocessed` and a canonical tagged `tree`,
 including the existing byte and character offsets. Pass `'.'` or `','` as
 the decimal option. `serialize` reads and validates portable model JSON and
-writes it through the generated codec; empty members may be omitted, as on
-the native surface. It does not write source notation. Errors throw strings
+writes it through the generated codec using the native empty-member policies
+described above. It does not write source notation. Errors throw strings
 containing the native parser or codec diagnostic.
 
 For a browser module, build with `--target web --out-dir wasm-web` and initialize
@@ -90,3 +92,12 @@ raw rows and five native byte references, and uploads `stage-wasm-node-web`.
 It does not publish to npm. The smoke also checks decimal options, empty input,
 invalid models, parse refusals and parser reuse; it is not a full WASM conformance
 or browser-runtime claim.
+
+## Model generation
+
+`model/umath.bundle.json` is the frozen producer bundle identified in
+`UPSTREAM.json`. CI checks out the exact generator revision recorded there and
+runs `.github/scripts/check-generated-models.py` to reproduce the committed
+models, codecs and manifest byte for byte. The current generator fix is tracked
+in [lutaml-rs#11](https://github.com/lutaml/lutaml-rs/pull/11) and requires its
+owner's approval before this dependent change can be qualified for merge.
