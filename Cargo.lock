@@ -286,6 +286,7 @@ dependencies = [
  "parsanol",
  "serde",
  "serde_json",
+ "wasm-bindgen",
 ]
 
 [[package]]
