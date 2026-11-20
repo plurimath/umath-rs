@@ -1,0 +1,22 @@
+[
+  {
+    "input": "α+1",
+    "decimal": "."
+  },
+  {
+    "input": "(a)/(b)",
+    "decimal": "."
+  },
+  {
+    "input": "√x",
+    "decimal": "."
+  },
+  {
+    "input": "1,5",
+    "decimal": ","
+  },
+  {
+    "input": "",
+    "decimal": "."
+  }
+]

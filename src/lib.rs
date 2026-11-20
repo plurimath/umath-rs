@@ -1,5 +1,7 @@
 //! Parse shared PARG artifacts to raw stage trees. No typed model or writer API.
 mod languages;
+#[cfg(feature = "wasm")]
+pub mod wasm;
 #[cfg(feature="models")]
 #[rustfmt::skip]
 pub mod generated;
