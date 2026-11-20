@@ -17,6 +17,7 @@
   },
   {
     "input": "",
-    "decimal": "."
+    "decimal": ".",
+    "raw_error": "input has no formula"
   }
 ]

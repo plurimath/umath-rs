@@ -9,14 +9,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for case in cases.as_array().unwrap() {
         let input = case["input"].as_str().unwrap();
         let decimal = case["decimal"].as_str().unwrap();
-        let parsed = parser.parse_with_decimal(input, decimal)?;
-        let raw =
-            json!({"preprocessed": parsed.parsed_input, "tree": parsed.canonical()}).to_string();
+        // Empty input has a valid model, but the raw Umath API has no formula.
+        // Record only the fixture's declared refusal; other errors still fail CI.
+        let raw = match parser.parse_with_decimal(input, decimal) {
+            Ok(parsed) => {
+                assert!(
+                    case.get("raw_error").is_none(),
+                    "expected raw refusal: {input:?}"
+                );
+                Some(
+                    json!({"preprocessed": parsed.parsed_input, "tree": parsed.canonical()})
+                        .to_string(),
+                )
+            }
+            Err(umath::Error::NoFormula) if case["raw_error"] == "input has no formula" => None,
+            Err(error) => return Err(error.into()),
+        };
         let model = typed::to_portable_json(&parser.parse_model(input, decimal)?)?;
         let decoded = json_codecs::read_Umath_Model_Document_json(&model)?;
         let serialized = typed::to_portable_json(&decoded)?;
-        rows.push(json!({"input": input, "decimal": decimal, "raw": raw,
-            "model": model, "serialized": serialized}));
+        rows.push(
+            json!({"input": input, "decimal": decimal, "raw": raw, "raw_error": case["raw_error"],
+            "model": model, "serialized": serialized}),
+        );
     }
     println!("{}", serde_json::to_string(&rows)?);
     Ok(())

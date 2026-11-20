@@ -38,11 +38,21 @@ try {
   const references = read('../../target/wasm-reference.json');
   assert.equal(references.length, 5);
   for (const row of references) {
-    assert.equal(parser.parseRaw(row.input, row.decimal), row.raw, `${row.input} native raw bytes`);
+    if (row.raw_error) {
+      assert.equal(row.raw, null);
+      assert.throws(() => parser.parseRaw(row.input, row.decimal),
+        (error) => String(error) === row.raw_error, `${row.input} native raw refusal`);
+    } else {
+      assert.equal(parser.parseRaw(row.input, row.decimal), row.raw, `${row.input} native raw bytes`);
+    }
     const model = parser.parse(row.input, row.decimal);
     assert.equal(model, row.model, `${row.input} native model bytes`);
     assert.equal(parser.serialize(model), row.serialized, `${row.input} native writer bytes`);
     assert.equal(JSON.parse(model).decimal, row.decimal);
+    if (row.input === '') {
+      assert.equal(row.raw_error, 'input has no formula');
+      assert.equal(JSON.parse(model).expression, undefined);
+    }
   }
 
   for (const input of ['{', 'null', '[]']) {
