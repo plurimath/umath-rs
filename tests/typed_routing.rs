@@ -9,6 +9,17 @@ use umath::Parser;
 /// serializes to `{}` and must survive reading and writing that portable JSON.
 #[test]
 fn empty_font_model_survives_portable_roundtrip() {
+    // This frozen row has deeply nested model JSON, like the corpus replay.
+    // Keep its read/write/drop work off the test harness's small default stack.
+    std::thread::Builder::new()
+        .stack_size(64 << 20)
+        .spawn(empty_font_model_roundtrip)
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
+fn empty_font_model_roundtrip() {
     use umath::generated::json_codecs::{
         read_Umath_Model_Document_json, write_Umath_Model_Document_json,
     };
