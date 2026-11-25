@@ -25,7 +25,7 @@
     "policy": "shared Rust unwrap reused with current wrapper table before stage renesting"
   },
   "model_producer": {
-    "bundle": "/home/apple/projects/plurimath-org/workspace/core/stages/umath-ts/model/umath.bundle.json",
+    "bundle": "model/umath.bundle.json",
     "sha256": "0d14e7e8c5971c9bb304f14362784bbb49baa1a208195c4151090524cd425d8b",
     "models": 75,
     "source_repository": "https://github.com/plurimath/umath",
@@ -37,8 +37,10 @@
     "command_evidence": "evidence/checks/check-pphz03hs/result.json"
   },
   "model_generator": {
-    "repository": "lutaml/lutaml-rs",
-    "commit": "945e6ada11f52f77b959a5df1f05fdbd23092939"
+    "repository": "suleman-uzair/lutaml-rs",
+    "commit": "d4fcee002fd8b51776f2476a2aea289a43729146",
+    "pull_request": "https://github.com/lutaml/lutaml-rs/pull/11",
+    "merge_policy": "owner approval required; draft only"
   },
   "compatibility_runtime": {
     "repository": "https://github.com/parsanol/parsanol-rs",

@@ -5,6 +5,40 @@
 #![cfg(feature = "models")]
 use umath::Parser;
 
+/// Frozen generation-5 unicode-external-167.model: a present font model
+/// serializes to `{}` and must survive reading and writing that portable JSON.
+#[test]
+fn empty_font_model_survives_portable_roundtrip() {
+    // This frozen row has deeply nested model JSON, like the corpus replay.
+    // Keep its read/write/drop work off the test harness's small default stack.
+    std::thread::Builder::new()
+        .stack_size(64 << 20)
+        .spawn(empty_font_model_roundtrip)
+        .unwrap()
+        .join()
+        .unwrap();
+}
+
+fn empty_font_model_roundtrip() {
+    use umath::generated::json_codecs::{
+        read_Umath_Model_Document_json, write_Umath_Model_Document_json,
+    };
+    let row: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/empty-font-model.json")).unwrap();
+    let parser = Parser::new().unwrap();
+    let model = parser
+        .parse_model(row["input"].as_str().unwrap(), ".")
+        .unwrap();
+    let once = umath::typed::to_portable_json(&model).unwrap();
+    assert!(once.contains("\"mitBbb\":{}"), "{once}");
+    let decoded = read_Umath_Model_Document_json(&once).unwrap();
+    let twice = write_Umath_Model_Document_json(&decoded).unwrap();
+    assert_eq!(
+        serde_json::from_str::<serde_json::Value>(&twice).unwrap(),
+        serde_json::from_str::<serde_json::Value>(&once).unwrap()
+    );
+}
+
 // (input, raw grammar byte offset, typed caller byte offset)
 const REFUSALS: &[(&str, usize, usize)] = &[
     ("\u{3b1}&b", 8, 3),
