@@ -31,8 +31,8 @@ optional = true
 [dependencies.lutaml_rs]
 package = "lutaml-rs"
 version = "=0.1.0"
-git = "https://github.com/suleman-uzair/lutaml-rs"
-rev = "d4fcee002fd8b51776f2476a2aea289a43729146"
+git = "https://github.com/lutaml/lutaml-rs"
+rev = "1f826b7dd0ba1545479df8a4ba715d67e2985b32"
 default-features = false
 features = ["runtime"]
 optional = true

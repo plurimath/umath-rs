@@ -54,8 +54,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          repository: suleman-uzair/lutaml-rs
-          ref: d4fcee002fd8b51776f2476a2aea289a43729146
+          repository: lutaml/lutaml-rs
+          ref: 1f826b7dd0ba1545479df8a4ba715d67e2985b32
           path: .model-generator
           persist-credentials: false
       - name: Reproduce committed model codecs and manifest

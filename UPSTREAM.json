@@ -37,8 +37,8 @@
     "command_evidence": "evidence/checks/check-pphz03hs/result.json"
   },
   "model_generator": {
-    "repository": "suleman-uzair/lutaml-rs",
-    "commit": "d4fcee002fd8b51776f2476a2aea289a43729146",
+    "repository": "lutaml/lutaml-rs",
+    "commit": "1f826b7dd0ba1545479df8a4ba715d67e2985b32",
     "pull_request": "https://github.com/lutaml/lutaml-rs/pull/11",
     "merge_policy": "owner approval required; draft only"
   },
