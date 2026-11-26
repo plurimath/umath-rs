@@ -179,16 +179,26 @@ pub enum ContentToken {
  Element { attribute: String, index: u64 },
  Text { #[serde(flatten)] source: TextSource },
  Cdata { #[serde(flatten)] source: TextSource },
+ Comment { literal: String },
+ ProcessingInstruction { target: String, data: String },
+ Attribute { attribute: String, index: u64 },
 }
 // serde cannot combine deny_unknown_fields with flatten, so tokens are read
 // through one closed wire shape and then checked against the token kind.
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
-struct ContentTokenWire { kind: String, attribute: Option<String>, index: Option<u64>, literal: Option<String> }
+struct ContentTokenWire { kind: String, attribute: Option<String>, index: Option<u64>, literal: Option<String>, target: Option<String>, data: Option<String> }
 impl<'de> Deserialize<'de> for ContentToken {
  fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
   let w = ContentTokenWire::deserialize(d)?;
   let bad = |m: &str| serde::de::Error::custom(m);
+  if w.kind == "processing_instruction" {
+   return match (w.attribute, w.index, w.literal, w.target, w.data) {
+    (None, None, None, Some(target), Some(data)) => Ok(Self::ProcessingInstruction { target, data }),
+    _ => Err(bad("processing_instruction token needs target and data only")),
+   };
+  }
+  if w.target.is_some() || w.data.is_some() { return Err(bad("only processing_instruction tokens carry target and data")); }
   let source = match (w.attribute, w.index, w.literal) {
    (Some(attribute), Some(index), None) => TextSource::Member { attribute, index },
    (None, None, Some(literal)) => TextSource::Literal { literal },
@@ -199,13 +209,17 @@ impl<'de> Deserialize<'de> for ContentToken {
    ("element", _) => Err(bad("element token needs attribute and index only")),
    ("text", source) => Ok(Self::Text { source }),
    ("cdata", source) => Ok(Self::Cdata { source }),
+   ("comment", TextSource::Literal { literal }) => Ok(Self::Comment { literal }),
+   ("comment", _) => Err(bad("comment token needs literal only")),
+   ("attribute", TextSource::Member { attribute, index: 0 }) => Ok(Self::Attribute { attribute, index: 0 }),
+   ("attribute", _) => Err(bad("attribute token needs attribute and index 0 only")),
    _ => Err(bad("unknown content token kind")),
   }
  }
 }
 impl ContentToken {
  pub fn reference(&self) -> Option<(&str,u64)> { match self {
- Self::Element { attribute,index } | Self::Text { source: TextSource::Member { attribute,index } } | Self::Cdata { source: TextSource::Member { attribute,index } } => Some((attribute,*index)),
+ Self::Element { attribute,index } | Self::Attribute { attribute,index } | Self::Text { source: TextSource::Member { attribute,index } } | Self::Cdata { source: TextSource::Member { attribute,index } } => Some((attribute,*index)),
  _ => None,
  } }
 }
@@ -230,11 +244,28 @@ prime_accent_symbols: Presence::Absent,
 } } }
 impl Umath_Model_Accents {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(list)=&mut self.list { for v in list { v.apply_defaults()?; } }
+if let Presence::Value(list)=&mut self.prime_accent_symbols { for v in list { v.apply_defaults()?; } }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(values)=&self.list { for v in values { v.validate()?; } }
-if let Presence::Value(values)=&self.prime_accent_symbols { for v in values { v.validate()?; } }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Accents, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Accents::__lml_validate_field_1, Umath_Model_Accents::__lml_validate_field_2, Umath_Model_Accents::__lml_validate_field_3];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(values)=&self.list { for v in values { v.validate_phase(choices)?; } }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(values)=&self.prime_accent_symbols { for v in values { v.validate_phase(choices)?; } }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -255,11 +286,28 @@ sup: Presence::Absent,
 } } }
 impl Umath_Model_AccentsSubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_AccentsSubsup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_AccentsSubsup::__lml_validate_field_0, Umath_Model_AccentsSubsup::__lml_validate_field_1, Umath_Model_AccentsSubsup::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -274,9 +322,18 @@ symbol: Presence::Absent,
 } } }
 impl Umath_Model_ArgArguments {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_ArgArguments, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_ArgArguments::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -294,10 +351,23 @@ trs: Presence::Absent,
 } } }
 impl Umath_Model_ArrayNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.tr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.trs { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.tr { v.validate()?; }
-if let Presence::Value(v)=&self.trs { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_ArrayNode, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_ArrayNode::__lml_validate_field_0, Umath_Model_ArrayNode::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.tr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.trs { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -324,11 +394,28 @@ number: Presence::Absent,
 } } }
 impl Umath_Model_Atom {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.alphanumeric { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.char { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.diacritics { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.alphanumeric { v.validate()?; }
-if let Presence::Value(v)=&self.char { v.validate()?; }
-if let Presence::Value(v)=&self.diacritics { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Atom, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Atom::__lml_validate_field_0, Umath_Model_Atom::__lml_validate_field_1, Umath_Model_Atom::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.alphanumeric { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.char { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritics { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -346,10 +433,23 @@ atoms: Presence::Absent,
 } } }
 impl Umath_Model_Atoms {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.atom { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.atoms { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.atom { v.validate()?; }
-if let Presence::Value(v)=&self.atoms { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Atoms, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Atoms::__lml_validate_field_0, Umath_Model_Atoms::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.atom { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.atoms { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -367,9 +467,18 @@ first_value: Presence::Absent,
 } } }
 impl Umath_Model_Backcolor {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Backcolor, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Backcolor::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -384,9 +493,18 @@ diacritic_belows: Presence::Absent,
 } } }
 impl Umath_Model_BelowAfter {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.diacritic_belows { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.diacritic_belows { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_BelowAfter, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_BelowAfter::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritic_belows { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -401,9 +519,18 @@ diacritic_belows: Presence::Absent,
 } } }
 impl Umath_Model_BelowBefore {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.diacritic_belows { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.diacritic_belows { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_BelowBefore, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_BelowBefore::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritic_belows { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -418,9 +545,18 @@ unicode_symbols: Presence::Absent,
 } } }
 impl Umath_Model_Char {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.unicode_symbols { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.unicode_symbols { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Char, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Char::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unicode_symbols { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -436,7 +572,9 @@ number: Presence::Absent,
 impl Umath_Model_CloseParenMask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -457,11 +595,28 @@ paren_close_prefix: Presence::Absent,
 } } }
 impl Umath_Model_Closer {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.close_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.close_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_close_prefix { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.close_paren { v.validate()?; }
-if let Presence::Value(v)=&self.close_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.paren_close_prefix { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Closer, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Closer::__lml_validate_field_0, Umath_Model_Closer::__lml_validate_field_1, Umath_Model_Closer::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_close_prefix { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -479,9 +634,18 @@ first_value: Presence::Absent,
 } } }
 impl Umath_Model_Color {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Color, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Color::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -502,10 +666,23 @@ whole: Presence::Absent,
 } } }
 impl Umath_Model_DecimalNumber {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.fractional { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.whole { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.fractional { v.validate()?; }
-if let Presence::Value(v)=&self.whole { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_DecimalNumber, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_DecimalNumber::__lml_validate_field_1, Umath_Model_DecimalNumber::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.fractional { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.whole { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -523,10 +700,23 @@ diacritics: Presence::Absent,
 } } }
 impl Umath_Model_Diacritics {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.char { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.diacritics { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.char { v.validate()?; }
-if let Presence::Value(v)=&self.diacritics { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Diacritics, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Diacritics::__lml_validate_field_0, Umath_Model_Diacritics::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.char { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritics { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -553,13 +743,38 @@ overlay_before: Presence::Absent,
 } } }
 impl Umath_Model_DiacriticsAccents {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.below_after { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.below_before { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.overlay_after { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.overlay_before { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.below_after { v.validate()?; }
-if let Presence::Value(v)=&self.below_before { v.validate()?; }
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.overlay_after { v.validate()?; }
-if let Presence::Value(v)=&self.overlay_before { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_DiacriticsAccents, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_DiacriticsAccents::__lml_validate_field_0, Umath_Model_DiacriticsAccents::__lml_validate_field_1, Umath_Model_DiacriticsAccents::__lml_validate_field_2, Umath_Model_DiacriticsAccents::__lml_validate_field_3, Umath_Model_DiacriticsAccents::__lml_validate_field_4];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.below_after { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.below_before { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.overlay_after { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.overlay_before { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -575,7 +790,9 @@ number: Presence::Absent,
 impl Umath_Model_Digit {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -596,9 +813,18 @@ decimal: Presence::Absent,
 } } }
 impl Umath_Model_Document {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expression { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expression { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Document, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Document::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expression { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -628,14 +854,43 @@ sup_recursion: Presence::Absent,
 } } }
 impl Umath_Model_ExpIteration {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.exp_iteration { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.exp_iteration { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sup { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_ExpIteration, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_ExpIteration::__lml_validate_field_0, Umath_Model_ExpIteration::__lml_validate_field_1, Umath_Model_ExpIteration::__lml_validate_field_2, Umath_Model_ExpIteration::__lml_validate_field_3, Umath_Model_ExpIteration::__lml_validate_field_4, Umath_Model_ExpIteration::__lml_validate_field_5];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp_iteration { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -995,102 +1250,483 @@ unicode_symbols: Presence::Absent,
 } } }
 impl Umath_Model_Expression {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.accents { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.accents_subsup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.alphanumeric { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.arg_arguments { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.atom { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.atoms { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.backcolor { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.binary_negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.binary_symbols { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.char { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.close_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.close_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.color { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.combined_symbols { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.comma { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.decimal_number { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.diacritics { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.diacritics_accents { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.digit { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.exclamation_symbol { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.exp_iteration { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expression { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.factor { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.fonts { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.frac { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.func_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.hbrack { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.infty { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.int_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.intent_arguments { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.intent_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.left_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mid_symbol { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.monospace { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary_class { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.naryand_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.operand { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.ordinary_negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.ordinary_symbols { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.other { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.override_subsup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_close_prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_open_prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.phantom { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.pre_override_subsup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.pre_script { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.pre_subscript { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.pre_supscript { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.rect { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.recursive_denominator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.recursive_numerator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.relational_symbols { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.right_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.root { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.root_first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.root_second_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.slashed_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.spaces { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_script { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.subsup_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_script { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.table { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unary_function { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unary_subsup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unicode_symbols { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.accents { v.validate()?; }
-if let Presence::Value(v)=&self.accents_subsup { v.validate()?; }
-if let Presence::Value(v)=&self.alphanumeric { v.validate()?; }
-if let Presence::Value(v)=&self.arg_arguments { v.validate()?; }
-if let Presence::Value(v)=&self.atom { v.validate()?; }
-if let Presence::Value(v)=&self.atoms { v.validate()?; }
-if let Presence::Value(v)=&self.backcolor { v.validate()?; }
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.binary_negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.binary_symbols { v.validate()?; }
-if let Presence::Value(v)=&self.char { v.validate()?; }
-if let Presence::Value(v)=&self.close_paren { v.validate()?; }
-if let Presence::Value(v)=&self.close_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.color { v.validate()?; }
-if let Presence::Value(v)=&self.combined_symbols { v.validate()?; }
-if let Presence::Value(v)=&self.comma { v.validate()?; }
-if let Presence::Value(v)=&self.decimal_number { v.validate()?; }
-if let Presence::Value(v)=&self.diacritics { v.validate()?; }
-if let Presence::Value(v)=&self.diacritics_accents { v.validate()?; }
-if let Presence::Value(v)=&self.digit { v.validate()?; }
-if let Presence::Value(v)=&self.exclamation_symbol { v.validate()?; }
-if let Presence::Value(v)=&self.exp { v.validate()?; }
-if let Presence::Value(v)=&self.exp_iteration { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.expression { v.validate()?; }
-if let Presence::Value(v)=&self.factor { v.validate()?; }
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.fonts { v.validate()?; }
-if let Presence::Value(v)=&self.frac { v.validate()?; }
-if let Presence::Value(v)=&self.func_expr { v.validate()?; }
-if let Presence::Value(v)=&self.hbrack { v.validate()?; }
-if let Presence::Value(v)=&self.infty { v.validate()?; }
-if let Presence::Value(v)=&self.int_exp { v.validate()?; }
-if let Presence::Value(v)=&self.intent_arguments { v.validate()?; }
-if let Presence::Value(v)=&self.intent_expr { v.validate()?; }
-if let Presence::Value(v)=&self.intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.left_value { v.validate()?; }
-if let Presence::Value(v)=&self.mask { v.validate()?; }
-if let Presence::Value(v)=&self.mid_symbol { v.validate()?; }
-if let Presence::Value(v)=&self.mini_base { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sup { v.validate()?; }
-if let Presence::Value(v)=&self.monospace { v.validate()?; }
-if let Presence::Value(v)=&self.nary { v.validate()?; }
-if let Presence::Value(v)=&self.nary_class { v.validate()?; }
-if let Presence::Value(v)=&self.naryand_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.operand { v.validate()?; }
-if let Presence::Value(v)=&self.operator { v.validate()?; }
-if let Presence::Value(v)=&self.ordinary_negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.ordinary_symbols { v.validate()?; }
-if let Presence::Value(v)=&self.other { v.validate()?; }
-if let Presence::Value(v)=&self.override_subsup { v.validate()?; }
-if let Presence::Value(v)=&self.paren_close_prefix { v.validate()?; }
-if let Presence::Value(v)=&self.paren_open_prefix { v.validate()?; }
-if let Presence::Value(v)=&self.phantom { v.validate()?; }
-if let Presence::Value(v)=&self.pre_override_subsup { v.validate()?; }
-if let Presence::Value(v)=&self.pre_script { v.validate()?; }
-if let Presence::Value(v)=&self.pre_subscript { v.validate()?; }
-if let Presence::Value(v)=&self.pre_supscript { v.validate()?; }
-if let Presence::Value(v)=&self.rect { v.validate()?; }
-if let Presence::Value(v)=&self.recursive_denominator { v.validate()?; }
-if let Presence::Value(v)=&self.recursive_numerator { v.validate()?; }
-if let Presence::Value(v)=&self.relational_symbols { v.validate()?; }
-if let Presence::Value(v)=&self.right_value { v.validate()?; }
-if let Presence::Value(v)=&self.root { v.validate()?; }
-if let Presence::Value(v)=&self.root_first_value { v.validate()?; }
-if let Presence::Value(v)=&self.root_second_value { v.validate()?; }
-if let Presence::Value(v)=&self.slashed_value { v.validate()?; }
-if let Presence::Value(v)=&self.spaces { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sub_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sub_paren { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
-if let Presence::Value(v)=&self.sub_script { v.validate()?; }
-if let Presence::Value(v)=&self.subsup_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
-if let Presence::Value(v)=&self.sup_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup_paren { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
-if let Presence::Value(v)=&self.sup_script { v.validate()?; }
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
-if let Presence::Value(v)=&self.table { v.validate()?; }
-if let Presence::Value(v)=&self.unary_function { v.validate()?; }
-if let Presence::Value(v)=&self.unary_subsup { v.validate()?; }
-if let Presence::Value(v)=&self.unicode_symbols { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Expression, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Expression::__lml_validate_field_0, Umath_Model_Expression::__lml_validate_field_1, Umath_Model_Expression::__lml_validate_field_2, Umath_Model_Expression::__lml_validate_field_4, Umath_Model_Expression::__lml_validate_field_5, Umath_Model_Expression::__lml_validate_field_6, Umath_Model_Expression::__lml_validate_field_7, Umath_Model_Expression::__lml_validate_field_8, Umath_Model_Expression::__lml_validate_field_9, Umath_Model_Expression::__lml_validate_field_11, Umath_Model_Expression::__lml_validate_field_12, Umath_Model_Expression::__lml_validate_field_13, Umath_Model_Expression::__lml_validate_field_14, Umath_Model_Expression::__lml_validate_field_15, Umath_Model_Expression::__lml_validate_field_16, Umath_Model_Expression::__lml_validate_field_17, Umath_Model_Expression::__lml_validate_field_18, Umath_Model_Expression::__lml_validate_field_19, Umath_Model_Expression::__lml_validate_field_20, Umath_Model_Expression::__lml_validate_field_21, Umath_Model_Expression::__lml_validate_field_23, Umath_Model_Expression::__lml_validate_field_24, Umath_Model_Expression::__lml_validate_field_25, Umath_Model_Expression::__lml_validate_field_26, Umath_Model_Expression::__lml_validate_field_27, Umath_Model_Expression::__lml_validate_field_28, Umath_Model_Expression::__lml_validate_field_29, Umath_Model_Expression::__lml_validate_field_30, Umath_Model_Expression::__lml_validate_field_31, Umath_Model_Expression::__lml_validate_field_32, Umath_Model_Expression::__lml_validate_field_33, Umath_Model_Expression::__lml_validate_field_36, Umath_Model_Expression::__lml_validate_field_37, Umath_Model_Expression::__lml_validate_field_39, Umath_Model_Expression::__lml_validate_field_40, Umath_Model_Expression::__lml_validate_field_41, Umath_Model_Expression::__lml_validate_field_42, Umath_Model_Expression::__lml_validate_field_45, Umath_Model_Expression::__lml_validate_field_46, Umath_Model_Expression::__lml_validate_field_47, Umath_Model_Expression::__lml_validate_field_48, Umath_Model_Expression::__lml_validate_field_49, Umath_Model_Expression::__lml_validate_field_50, Umath_Model_Expression::__lml_validate_field_51, Umath_Model_Expression::__lml_validate_field_52, Umath_Model_Expression::__lml_validate_field_53, Umath_Model_Expression::__lml_validate_field_54, Umath_Model_Expression::__lml_validate_field_55, Umath_Model_Expression::__lml_validate_field_56, Umath_Model_Expression::__lml_validate_field_59, Umath_Model_Expression::__lml_validate_field_60, Umath_Model_Expression::__lml_validate_field_61, Umath_Model_Expression::__lml_validate_field_62, Umath_Model_Expression::__lml_validate_field_63, Umath_Model_Expression::__lml_validate_field_64, Umath_Model_Expression::__lml_validate_field_65, Umath_Model_Expression::__lml_validate_field_67, Umath_Model_Expression::__lml_validate_field_68, Umath_Model_Expression::__lml_validate_field_69, Umath_Model_Expression::__lml_validate_field_70, Umath_Model_Expression::__lml_validate_field_71, Umath_Model_Expression::__lml_validate_field_72, Umath_Model_Expression::__lml_validate_field_73, Umath_Model_Expression::__lml_validate_field_74, Umath_Model_Expression::__lml_validate_field_75, Umath_Model_Expression::__lml_validate_field_76, Umath_Model_Expression::__lml_validate_field_77, Umath_Model_Expression::__lml_validate_field_78, Umath_Model_Expression::__lml_validate_field_79, Umath_Model_Expression::__lml_validate_field_80, Umath_Model_Expression::__lml_validate_field_81, Umath_Model_Expression::__lml_validate_field_82, Umath_Model_Expression::__lml_validate_field_84, Umath_Model_Expression::__lml_validate_field_85, Umath_Model_Expression::__lml_validate_field_86, Umath_Model_Expression::__lml_validate_field_89, Umath_Model_Expression::__lml_validate_field_91, Umath_Model_Expression::__lml_validate_field_92, Umath_Model_Expression::__lml_validate_field_93, Umath_Model_Expression::__lml_validate_field_94, Umath_Model_Expression::__lml_validate_field_95, Umath_Model_Expression::__lml_validate_field_96, Umath_Model_Expression::__lml_validate_field_97, Umath_Model_Expression::__lml_validate_field_100, Umath_Model_Expression::__lml_validate_field_102, Umath_Model_Expression::__lml_validate_field_103, Umath_Model_Expression::__lml_validate_field_104, Umath_Model_Expression::__lml_validate_field_105, Umath_Model_Expression::__lml_validate_field_106, Umath_Model_Expression::__lml_validate_field_107, Umath_Model_Expression::__lml_validate_field_108, Umath_Model_Expression::__lml_validate_field_110, Umath_Model_Expression::__lml_validate_field_112, Umath_Model_Expression::__lml_validate_field_115];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.accents { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.accents_subsup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.alphanumeric { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.arg_arguments { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.atom { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.atoms { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.backcolor { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.binary_negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_11(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.binary_symbols { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_12(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.char { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_13(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_14(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_15(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.color { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_16(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.combined_symbols { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_17(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.comma { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_18(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.decimal_number { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_19(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritics { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_20(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritics_accents { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_21(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.digit { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_23(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exclamation_symbol { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_24(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_25(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp_iteration { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_26(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_27(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expression { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_28(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.factor { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_29(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_30(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.fonts { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_31(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.frac { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_32(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.func_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_33(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.hbrack { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_36(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.infty { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_37(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.int_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_39(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.intent_arguments { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_40(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.intent_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_41(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_42(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.left_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_45(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_46(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mid_symbol { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_47(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_48(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_49(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_50(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_51(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_52(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.monospace { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_53(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_54(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_class { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_55(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.naryand_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_56(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_59(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_60(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_61(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.operand { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_62(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_63(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.ordinary_negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_64(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.ordinary_symbols { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_65(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.other { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_67(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.override_subsup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_68(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_close_prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_69(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_open_prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_70(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.phantom { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_71(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_override_subsup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_72(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_script { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_73(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_subscript { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_74(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_supscript { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_75(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.rect { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_76(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.recursive_denominator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_77(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.recursive_numerator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_78(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.relational_symbols { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_79(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.right_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_80(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.root { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_81(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.root_first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_82(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.root_second_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_84(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.slashed_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_85(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.spaces { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_86(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_89(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_91(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_92(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_93(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_94(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_95(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_script { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_96(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.subsup_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_97(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_100(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_102(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_103(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_104(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_105(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_106(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_script { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_107(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_108(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.table { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_110(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unary_function { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_112(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unary_subsup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_115(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unicode_symbols { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1120,10 +1756,23 @@ unicoded_font_class: Presence::Absent,
 } } }
 impl Umath_Model_Fonts {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unicoded_font_class { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
-if let Presence::Value(v)=&self.unicoded_font_class { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Fonts, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Fonts::__lml_validate_field_3, Umath_Model_Fonts::__lml_validate_field_5];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unicoded_font_class { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1162,12 +1811,33 @@ numerator: Presence::Absent,
 } } }
 impl Umath_Model_Frac {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.denominator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_denominator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_numerator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.numerator { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.denominator { v.validate()?; }
-if let Presence::Value(v)=&self.mini_denominator { v.validate()?; }
-if let Presence::Value(v)=&self.mini_numerator { v.validate()?; }
-if let Presence::Value(v)=&self.numerator { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Frac, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Frac::__lml_validate_field_3, Umath_Model_Frac::__lml_validate_field_5, Umath_Model_Frac::__lml_validate_field_6, Umath_Model_Frac::__lml_validate_field_8];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.denominator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_denominator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_numerator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.numerator { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1183,7 +1853,9 @@ number: Presence::Absent,
 impl Umath_Model_Fractional {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1201,10 +1873,23 @@ func_expr: Presence::Absent,
 } } }
 impl Umath_Model_FuncExpr {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.func_expr { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.func_expr { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_FuncExpr, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_FuncExpr::__lml_validate_field_0, Umath_Model_FuncExpr::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.func_expr { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1225,10 +1910,23 @@ scripted_first_value: Presence::Absent,
 } } }
 impl Umath_Model_Hbrack {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.scripted_first_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.scripted_first_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Hbrack, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Hbrack::__lml_validate_field_0, Umath_Model_Hbrack::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.scripted_first_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1249,11 +1947,28 @@ operand: Presence::Absent,
 } } }
 impl Umath_Model_IntExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.closer { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.opener { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.operand { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.closer { v.validate()?; }
-if let Presence::Value(v)=&self.opener { v.validate()?; }
-if let Presence::Value(v)=&self.operand { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_IntExp, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_IntExp::__lml_validate_field_0, Umath_Model_IntExp::__lml_validate_field_1, Umath_Model_IntExp::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.closer { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.opener { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.operand { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1269,7 +1984,9 @@ text: Presence::Absent,
 impl Umath_Model_IntentArguments {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1296,12 +2013,33 @@ positive: Presence::Absent,
 } } }
 impl Umath_Model_LeftValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.infty { v.apply_defaults()?; }
+if let Presence::Value(list)=&mut self.list { for v in list { v.apply_defaults()?; } }
+if let Presence::Value(v)=&mut self.negative { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.positive { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.infty { v.validate()?; }
-if let Presence::Value(values)=&self.list { for v in values { v.validate()?; } }
-if let Presence::Value(v)=&self.negative { v.validate()?; }
-if let Presence::Value(v)=&self.positive { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_LeftValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_LeftValue::__lml_validate_field_0, Umath_Model_LeftValue::__lml_validate_field_1, Umath_Model_LeftValue::__lml_validate_field_2, Umath_Model_LeftValue::__lml_validate_field_4];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.infty { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(values)=&self.list { for v in values { v.validate_phase(choices)?; } }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.negative { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.positive { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1322,10 +2060,23 @@ symbol: Presence::Absent,
 } } }
 impl Umath_Model_ListItem {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.accent_symbols { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.accent_symbols { v.validate()?; }
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_ListItem, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_ListItem::__lml_validate_field_0, Umath_Model_ListItem::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.accent_symbols { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1352,10 +2103,23 @@ octal_number: Presence::Absent,
 } } }
 impl Umath_Model_Mask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.decimal_number { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.digit { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.decimal_number { v.validate()?; }
-if let Presence::Value(v)=&self.digit { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Mask, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Mask::__lml_validate_field_1, Umath_Model_Mask::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.decimal_number { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.digit { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types)]
@@ -1394,7 +2158,9 @@ kind: Presence::Absent,
 impl Umath_Model_MathSymbol {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1425,7 +2191,9 @@ sup_operators: Presence::Absent,
 impl Umath_Model_MiniBase {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1461,13 +2229,38 @@ sub_recursions: Presence::Absent,
 } } }
 impl Umath_Model_MiniDenominator {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniDenominator, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniDenominator::__lml_validate_field_0, Umath_Model_MiniDenominator::__lml_validate_field_1, Umath_Model_MiniDenominator::__lml_validate_field_5, Umath_Model_MiniDenominator::__lml_validate_field_6, Umath_Model_MiniDenominator::__lml_validate_field_7];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1536,17 +2329,58 @@ sup_recursions: Presence::Absent,
 } } }
 impl Umath_Model_MiniExpression {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniExpression, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniExpression::__lml_validate_field_0, Umath_Model_MiniExpression::__lml_validate_field_1, Umath_Model_MiniExpression::__lml_validate_field_2, Umath_Model_MiniExpression::__lml_validate_field_8, Umath_Model_MiniExpression::__lml_validate_field_9, Umath_Model_MiniExpression::__lml_validate_field_10, Umath_Model_MiniExpression::__lml_validate_field_16, Umath_Model_MiniExpression::__lml_validate_field_17, Umath_Model_MiniExpression::__lml_validate_field_18];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_10(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_16(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_17(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_18(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1582,13 +2416,38 @@ sup_recursions: Presence::Absent,
 } } }
 impl Umath_Model_MiniNumerator {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniNumerator, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniNumerator::__lml_validate_field_0, Umath_Model_MiniNumerator::__lml_validate_field_1, Umath_Model_MiniNumerator::__lml_validate_field_5, Umath_Model_MiniNumerator::__lml_validate_field_6, Umath_Model_MiniNumerator::__lml_validate_field_7];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1639,15 +2498,48 @@ sup_operators: Presence::Absent,
 } } }
 impl Umath_Model_MiniSub {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniSub, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniSub::__lml_validate_field_0, Umath_Model_MiniSub::__lml_validate_field_1, Umath_Model_MiniSub::__lml_validate_field_2, Umath_Model_MiniSub::__lml_validate_field_3, Umath_Model_MiniSub::__lml_validate_field_7, Umath_Model_MiniSub::__lml_validate_field_8, Umath_Model_MiniSub::__lml_validate_field_9];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1668,11 +2560,28 @@ sup: Presence::Absent,
 } } }
 impl Umath_Model_MiniSubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniSubSup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniSubSup::__lml_validate_field_0, Umath_Model_MiniSubSup::__lml_validate_field_1, Umath_Model_MiniSubSup::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1723,15 +2632,48 @@ sup_recursions: Presence::Absent,
 } } }
 impl Umath_Model_MiniSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_MiniSup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_MiniSup::__lml_validate_field_0, Umath_Model_MiniSup::__lml_validate_field_1, Umath_Model_MiniSup::__lml_validate_field_2, Umath_Model_MiniSup::__lml_validate_field_6, Umath_Model_MiniSup::__lml_validate_field_10, Umath_Model_MiniSup::__lml_validate_field_11, Umath_Model_MiniSup::__lml_validate_field_12];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_10(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_11(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_12(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1747,7 +2689,9 @@ present: Presence::Absent,
 impl Umath_Model_MitBbb {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1762,9 +2706,18 @@ monospace_value: Presence::Absent,
 } } }
 impl Umath_Model_Monospace {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.monospace_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.monospace_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Monospace, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Monospace::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.monospace_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1785,11 +2738,28 @@ naryand: Presence::Absent,
 } } }
 impl Umath_Model_Nary {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.nary_class { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.naryand { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.nary_class { v.validate()?; }
-if let Presence::Value(v)=&self.nary_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.naryand { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Nary, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Nary::__lml_validate_field_0, Umath_Model_Nary::__lml_validate_field_1, Umath_Model_Nary::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_class { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.naryand { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1810,11 +2780,28 @@ sup_exp: Presence::Absent,
 } } }
 impl Umath_Model_NarySubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.sub_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.subsup_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_exp { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.sub_exp { v.validate()?; }
-if let Presence::Value(v)=&self.subsup_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup_exp { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_NarySubSup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_NarySubSup::__lml_validate_field_0, Umath_Model_NarySubSup::__lml_validate_field_1, Umath_Model_NarySubSup::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.subsup_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_exp { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1830,7 +2817,9 @@ number: Presence::Absent,
 impl Umath_Model_OpenParenMask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1851,11 +2840,28 @@ paren_open_prefix: Presence::Absent,
 } } }
 impl Umath_Model_Opener {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.open_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_open_prefix { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.open_paren { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.paren_open_prefix { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Opener, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Opener::__lml_validate_field_0, Umath_Model_Opener::__lml_validate_field_1, Umath_Model_Opener::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_open_prefix { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1906,20 +2912,73 @@ text: Presence::Absent,
 } } }
 impl Umath_Model_Operand {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.accents { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.binary_negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.factor { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.fonts { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.infty { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.operand { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.ordinary_negated_operator { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.phantom { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.rect { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.accents { v.validate()?; }
-if let Presence::Value(v)=&self.binary_negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.factor { v.validate()?; }
-if let Presence::Value(v)=&self.fonts { v.validate()?; }
-if let Presence::Value(v)=&self.infty { v.validate()?; }
-if let Presence::Value(v)=&self.negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.operand { v.validate()?; }
-if let Presence::Value(v)=&self.operator { v.validate()?; }
-if let Presence::Value(v)=&self.ordinary_negated_operator { v.validate()?; }
-if let Presence::Value(v)=&self.phantom { v.validate()?; }
-if let Presence::Value(v)=&self.rect { v.validate()?; }
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Operand, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Operand::__lml_validate_field_0, Umath_Model_Operand::__lml_validate_field_1, Umath_Model_Operand::__lml_validate_field_2, Umath_Model_Operand::__lml_validate_field_3, Umath_Model_Operand::__lml_validate_field_4, Umath_Model_Operand::__lml_validate_field_5, Umath_Model_Operand::__lml_validate_field_6, Umath_Model_Operand::__lml_validate_field_7, Umath_Model_Operand::__lml_validate_field_8, Umath_Model_Operand::__lml_validate_field_9, Umath_Model_Operand::__lml_validate_field_10, Umath_Model_Operand::__lml_validate_field_11];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.accents { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.binary_negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.factor { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.fonts { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.infty { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.operand { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.ordinary_negated_operator { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.phantom { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_10(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.rect { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_11(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1934,9 +2993,18 @@ symbol: Presence::Absent,
 } } }
 impl Umath_Model_Other {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.symbol { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.symbol { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Other, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Other::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.symbol { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1951,9 +3019,18 @@ diacritic_overlays: Presence::Absent,
 } } }
 impl Umath_Model_OverlayAfter {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.diacritic_overlays { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.diacritic_overlays { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_OverlayAfter, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_OverlayAfter::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritic_overlays { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -1968,9 +3045,18 @@ diacritic_overlays: Presence::Absent,
 } } }
 impl Umath_Model_OverlayBefore {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.diacritic_overlays { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.diacritic_overlays { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_OverlayBefore, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_OverlayBefore::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.diacritic_overlays { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types)]
@@ -2026,14 +3112,43 @@ kind: Presence::Absent,
 } } }
 impl Umath_Model_Paren {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.close_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.close_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.open_paren_mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_close_prefix { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.paren_open_prefix { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.close_paren { v.validate()?; }
-if let Presence::Value(v)=&self.close_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren { v.validate()?; }
-if let Presence::Value(v)=&self.open_paren_mask { v.validate()?; }
-if let Presence::Value(v)=&self.paren_close_prefix { v.validate()?; }
-if let Presence::Value(v)=&self.paren_open_prefix { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Paren, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Paren::__lml_validate_field_0, Umath_Model_Paren::__lml_validate_field_1, Umath_Model_Paren::__lml_validate_field_2, Umath_Model_Paren::__lml_validate_field_3, Umath_Model_Paren::__lml_validate_field_4, Umath_Model_Paren::__lml_validate_field_5];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.close_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.open_paren_mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_close_prefix { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.paren_open_prefix { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2051,9 +3166,18 @@ phantom_value: Presence::Absent,
 } } }
 impl Umath_Model_Phantom {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Phantom, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Phantom::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2080,10 +3204,23 @@ under: Presence::Absent,
 } } }
 impl Umath_Model_PreOverrideSubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.pre_subscript { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.pre_supscript { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.pre_subscript { v.validate()?; }
-if let Presence::Value(v)=&self.pre_supscript { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_PreOverrideSubsup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_PreOverrideSubsup::__lml_validate_field_1, Umath_Model_PreOverrideSubsup::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_subscript { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.pre_supscript { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types)]
@@ -2124,9 +3261,18 @@ kind: Presence::Absent,
 } } }
 impl Umath_Model_PrimeAccentSymbolsItem {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.prefixed_prime { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.prefixed_prime { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_PrimeAccentSymbolsItem, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_PrimeAccentSymbolsItem::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.prefixed_prime { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2144,9 +3290,18 @@ rect_value: Presence::Absent,
 } } }
 impl Umath_Model_Rect {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Rect, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Rect::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2173,12 +3328,33 @@ positive: Presence::Absent,
 } } }
 impl Umath_Model_RightValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.infty { v.apply_defaults()?; }
+if let Presence::Value(list)=&mut self.list { for v in list { v.apply_defaults()?; } }
+if let Presence::Value(v)=&mut self.negative { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.positive { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.infty { v.validate()?; }
-if let Presence::Value(values)=&self.list { for v in values { v.validate()?; } }
-if let Presence::Value(v)=&self.negative { v.validate()?; }
-if let Presence::Value(v)=&self.positive { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_RightValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_RightValue::__lml_validate_field_0, Umath_Model_RightValue::__lml_validate_field_1, Umath_Model_RightValue::__lml_validate_field_2, Umath_Model_RightValue::__lml_validate_field_4];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.infty { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(values)=&self.list { for v in values { v.validate_phase(choices)?; } }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.negative { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.positive { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2196,10 +3372,23 @@ func_expr: Presence::Absent,
 } } }
 impl Umath_Model_RootFirstValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.func_expr { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.func_expr { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_RootFirstValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_RootFirstValue::__lml_validate_field_0, Umath_Model_RootFirstValue::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.func_expr { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2220,11 +3409,28 @@ second_value: Presence::Absent,
 } } }
 impl Umath_Model_RootNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.root_symbol { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.second_value { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.root_symbol { v.validate()?; }
-if let Presence::Value(v)=&self.second_value { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_RootNode, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_RootNode::__lml_validate_field_0, Umath_Model_RootNode::__lml_validate_field_1, Umath_Model_RootNode::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.root_symbol { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.second_value { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2242,10 +3448,23 @@ func_expr: Presence::Absent,
 } } }
 impl Umath_Model_RootSecondValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.func_expr { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.func_expr { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_RootSecondValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_RootSecondValue::__lml_validate_field_0, Umath_Model_RootSecondValue::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.func_expr { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2263,10 +3482,23 @@ func_expr: Presence::Absent,
 } } }
 impl Umath_Model_SecondValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.func_expr { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.func_expr { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SecondValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SecondValue::__lml_validate_field_0, Umath_Model_SecondValue::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.func_expr { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2284,9 +3516,18 @@ literal: Presence::Absent,
 } } }
 impl Umath_Model_SlashedValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(list)=&mut self.list { for v in list { v.apply_defaults()?; } }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(values)=&self.list { for v in values { v.validate()?; } }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SlashedValue, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SlashedValue::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(values)=&self.list { for v in values { v.validate_phase(choices)?; } }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2346,21 +3587,78 @@ sub_recursions: Presence::Absent,
 } } }
 impl Umath_Model_SubExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.exp_iteration { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary_class { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.exp_iteration { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mask { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sup { v.validate()?; }
-if let Presence::Value(v)=&self.nary_class { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SubExp, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SubExp::__lml_validate_field_0, Umath_Model_SubExp::__lml_validate_field_1, Umath_Model_SubExp::__lml_validate_field_2, Umath_Model_SubExp::__lml_validate_field_3, Umath_Model_SubExp::__lml_validate_field_4, Umath_Model_SubExp::__lml_validate_field_5, Umath_Model_SubExp::__lml_validate_field_6, Umath_Model_SubExp::__lml_validate_field_7, Umath_Model_SubExp::__lml_validate_field_8, Umath_Model_SubExp::__lml_validate_field_9, Umath_Model_SubExp::__lml_validate_field_13, Umath_Model_SubExp::__lml_validate_field_14, Umath_Model_SubExp::__lml_validate_field_15];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp_iteration { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_class { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_13(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_14(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_15(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2396,13 +3694,38 @@ sub_recursions: Presence::Absent,
 } } }
 impl Umath_Model_SubParen {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sub_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SubParen, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SubParen::__lml_validate_field_0, Umath_Model_SubParen::__lml_validate_field_1, Umath_Model_SubParen::__lml_validate_field_5, Umath_Model_SubParen::__lml_validate_field_6, Umath_Model_SubParen::__lml_validate_field_7];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2429,13 +3752,38 @@ sup: Presence::Absent,
 } } }
 impl Umath_Model_SubsupExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary_class { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.mask { v.validate()?; }
-if let Presence::Value(v)=&self.nary_class { v.validate()?; }
-if let Presence::Value(v)=&self.sub { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SubsupExp, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SubsupExp::__lml_validate_field_0, Umath_Model_SubsupExp::__lml_validate_field_1, Umath_Model_SubsupExp::__lml_validate_field_2, Umath_Model_SubsupExp::__lml_validate_field_3, Umath_Model_SubsupExp::__lml_validate_field_4];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_class { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2495,21 +3843,78 @@ sup_recursions: Presence::Absent,
 } } }
 impl Umath_Model_SupExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.base { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.exp_iteration { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mask { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.nary_class { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.base { v.validate()?; }
-if let Presence::Value(v)=&self.exp_iteration { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mask { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sup { v.validate()?; }
-if let Presence::Value(v)=&self.nary_class { v.validate()?; }
-if let Presence::Value(v)=&self.sup { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SupExp, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SupExp::__lml_validate_field_0, Umath_Model_SupExp::__lml_validate_field_1, Umath_Model_SupExp::__lml_validate_field_2, Umath_Model_SupExp::__lml_validate_field_3, Umath_Model_SupExp::__lml_validate_field_4, Umath_Model_SupExp::__lml_validate_field_5, Umath_Model_SupExp::__lml_validate_field_6, Umath_Model_SupExp::__lml_validate_field_7, Umath_Model_SupExp::__lml_validate_field_8, Umath_Model_SupExp::__lml_validate_field_9, Umath_Model_SupExp::__lml_validate_field_13, Umath_Model_SupExp::__lml_validate_field_14, Umath_Model_SupExp::__lml_validate_field_15];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.base { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp_iteration { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mask { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_8(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.nary_class { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_9(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_13(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_14(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_15(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2545,13 +3950,38 @@ sup_recursions: Presence::Absent,
 } } }
 impl Umath_Model_SupParen {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_intermediate_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursion_expr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_recursions { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.expr { v.validate()?; }
-if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursion_expr { v.validate()?; }
-if let Presence::Value(v)=&self.sup_recursions { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SupParen, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SupParen::__lml_validate_field_0, Umath_Model_SupParen::__lml_validate_field_1, Umath_Model_SupParen::__lml_validate_field_5, Umath_Model_SupParen::__lml_validate_field_6, Umath_Model_SupParen::__lml_validate_field_7];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_intermediate_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_6(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursion_expr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_7(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_recursions { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types)]
@@ -2592,9 +4022,18 @@ kind: Presence::Absent,
 } } }
 impl Umath_Model_SymbolNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.ldots { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.ldots { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_SymbolNode, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_SymbolNode::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.ldots { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2615,9 +4054,18 @@ matrixs: Presence::Absent,
 } } }
 impl Umath_Model_Table {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.array { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.array { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Table, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Table::__lml_validate_field_0];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.array { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2638,10 +4086,23 @@ literal: Presence::Absent,
 } } }
 impl Umath_Model_Td {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.expr { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.exp { v.validate()?; }
-if let Presence::Value(v)=&self.expr { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Td, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Td::__lml_validate_field_0, Umath_Model_Td::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.expr { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2659,10 +4120,23 @@ tds: Presence::Absent,
 } } }
 impl Umath_Model_Tds {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.td { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.tds { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.td { v.validate()?; }
-if let Presence::Value(v)=&self.tds { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Tds, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Tds::__lml_validate_field_0, Umath_Model_Tds::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.td { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.tds { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2683,10 +4157,23 @@ tds: Presence::Absent,
 } } }
 impl Umath_Model_Tr {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.td { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.tds { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.td { v.validate()?; }
-if let Presence::Value(v)=&self.tds { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Tr, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Tr::__lml_validate_field_1, Umath_Model_Tr::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.td { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.tds { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2704,10 +4191,23 @@ trs: Presence::Absent,
 } } }
 impl Umath_Model_Trs {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.tr { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.trs { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.tr { v.validate()?; }
-if let Presence::Value(v)=&self.trs { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_Trs, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_Trs::__lml_validate_field_0, Umath_Model_Trs::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.tr { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.trs { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2731,10 +4231,23 @@ unary_symbols: Presence::Absent,
 } } }
 impl Umath_Model_UnaryFunction {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unary_symbols { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.unary_symbols { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_UnaryFunction, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_UnaryFunction::__lml_validate_field_0, Umath_Model_UnaryFunction::__lml_validate_field_3];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unary_symbols { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2764,14 +4277,43 @@ sup_exp: Presence::Absent,
 } } }
 impl Umath_Model_UnarySubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.mini_sub { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sub_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.mini_sup { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sub_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.subsup_exp { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.sup_exp { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.mini_sub { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sub_sup { v.validate()?; }
-if let Presence::Value(v)=&self.mini_sup { v.validate()?; }
-if let Presence::Value(v)=&self.sub_exp { v.validate()?; }
-if let Presence::Value(v)=&self.subsup_exp { v.validate()?; }
-if let Presence::Value(v)=&self.sup_exp { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_UnarySubSup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_UnarySubSup::__lml_validate_field_0, Umath_Model_UnarySubSup::__lml_validate_field_1, Umath_Model_UnarySubSup::__lml_validate_field_2, Umath_Model_UnarySubSup::__lml_validate_field_3, Umath_Model_UnarySubSup::__lml_validate_field_4, Umath_Model_UnarySubSup::__lml_validate_field_5];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sub_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mini_sup { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_3(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sub_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_4(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.subsup_exp { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_5(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.sup_exp { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2792,10 +4334,23 @@ unary_sub_sup: Presence::Absent,
 } } }
 impl Umath_Model_UnarySubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.first_value { v.apply_defaults()?; }
+if let Presence::Value(v)=&mut self.unary_sub_sup { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.first_value { v.validate()?; }
-if let Presence::Value(v)=&self.unary_sub_sup { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_UnarySubsup, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_UnarySubsup::__lml_validate_field_0, Umath_Model_UnarySubsup::__lml_validate_field_2];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_0(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.first_value { v.validate_phase(choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_2(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.unary_sub_sup { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2813,9 +4368,18 @@ mitBbb: Presence::Absent,
 } } }
 impl Umath_Model_UnicodedFontClass {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
+if let Presence::Value(v)=&mut self.mitBbb { v.apply_defaults()?; }
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
-if let Presence::Value(v)=&self.mitBbb { v.validate()?; }
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, choices:bool)->Result<(),ValidationError>{
+type __LmlFieldCheck = fn(&Umath_Model_UnicodedFontClass, bool)->Result<(),ValidationError>;
+const __LML_FIELDS: &[__LmlFieldCheck] = &[Umath_Model_UnicodedFontClass::__lml_validate_field_1];
+for field in __LML_FIELDS { field(self, choices)?; }
+Ok(()) }
+#[inline(never)]
+fn __lml_validate_field_1(&self, choices:bool)->Result<(),ValidationError>{
+if let Presence::Value(v)=&self.mitBbb { v.validate_phase(choices)?; }
 Ok(()) }
 }
 #[allow(non_camel_case_types, non_snake_case)]
@@ -2831,6 +4395,8 @@ number: Presence::Absent,
 impl Umath_Model_Whole {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
 Ok(()) }
-pub fn validate(&self)->Result<(),ValidationError>{
+pub fn validate(&self)->Result<(),ValidationError>{self.validate_phase(true)}
+pub fn validate_shape(&self)->Result<(),ValidationError>{self.validate_phase(false)}
+fn validate_phase(&self, _choices:bool)->Result<(),ValidationError>{
 Ok(()) }
 }

@@ -123,9 +123,9 @@ fn put_path(v:&mut Value,path:&[&str],value:Value,id:&str)->ContractResult<()>{
 }
 const NEUTRAL_NUMBERS: bool = false;
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Accents_json(input:&str)->ContractResult<Umath_Model_Accents>{let data=decode_Umath_Model_Accents(parse_json(input,"Umath::Model::Accents@default")?)?; let model:Umath_Model_Accents=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Accents_json(input:&str)->ContractResult<Umath_Model_Accents>{let data=decode_Umath_Model_Accents(parse_json(input,"Umath::Model::Accents@default")?)?; let model:Umath_Model_Accents=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Accents_json(model:&Umath_Model_Accents)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Accents(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/output",e))}
+pub fn write_Umath_Model_Accents_json(model:&Umath_Model_Accents)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Accents(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Accents@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Accents(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Accents@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -173,7 +173,7 @@ if empty(&v){continue;}
 wire.insert("empty".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -198,9 +198,9 @@ v=encode_Umath_Model_PrimeAccentSymbolsItem(v)?;
 wire.insert("prime_accent_symbols".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_AccentsSubsup_json(input:&str)->ContractResult<Umath_Model_AccentsSubsup>{let data=decode_Umath_Model_AccentsSubsup(parse_json(input,"Umath::Model::AccentsSubsup@default")?)?; let model:Umath_Model_AccentsSubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_AccentsSubsup_json(input:&str)->ContractResult<Umath_Model_AccentsSubsup>{let data=decode_Umath_Model_AccentsSubsup(parse_json(input,"Umath::Model::AccentsSubsup@default")?)?; let model:Umath_Model_AccentsSubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_AccentsSubsup_json(model:&Umath_Model_AccentsSubsup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_AccentsSubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/output",e))}
+pub fn write_Umath_Model_AccentsSubsup_json(model:&Umath_Model_AccentsSubsup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_AccentsSubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::AccentsSubsup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_AccentsSubsup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::AccentsSubsup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -235,30 +235,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_AccentsSubsup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::AccentsSubsup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_ArgArguments_json(input:&str)->ContractResult<Umath_Model_ArgArguments>{let data=decode_Umath_Model_ArgArguments(parse_json(input,"Umath::Model::ArgArguments@default")?)?; let model:Umath_Model_ArgArguments=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_ArgArguments_json(input:&str)->ContractResult<Umath_Model_ArgArguments>{let data=decode_Umath_Model_ArgArguments(parse_json(input,"Umath::Model::ArgArguments@default")?)?; let model:Umath_Model_ArgArguments=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_ArgArguments_json(model:&Umath_Model_ArgArguments)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ArgArguments(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/output",e))}
+pub fn write_Umath_Model_ArgArguments_json(model:&Umath_Model_ArgArguments)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ArgArguments(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArgArguments@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_ArgArguments(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::ArgArguments@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -277,16 +277,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ArgArguments(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ArgArguments@default")?;let mut wire=Map::new();
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
 wire.insert("symbol".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_ArrayNode_json(input:&str)->ContractResult<Umath_Model_ArrayNode>{let data=decode_Umath_Model_ArrayNode(parse_json(input,"Umath::Model::ArrayNode@default")?)?; let model:Umath_Model_ArrayNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_ArrayNode_json(input:&str)->ContractResult<Umath_Model_ArrayNode>{let data=decode_Umath_Model_ArrayNode(parse_json(input,"Umath::Model::ArrayNode@default")?)?; let model:Umath_Model_ArrayNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_ArrayNode_json(model:&Umath_Model_ArrayNode)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ArrayNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/output",e))}
+pub fn write_Umath_Model_ArrayNode_json(model:&Umath_Model_ArrayNode)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ArrayNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ArrayNode@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_ArrayNode(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::ArrayNode@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -313,23 +313,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ArrayNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ArrayNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("tr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tr(v)?;
 }
 wire.insert("tr".into(),v);}
 for mut v in data.remove("trs").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Trs(v)?;
 }
 wire.insert("trs".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Atom_json(input:&str)->ContractResult<Umath_Model_Atom>{let data=decode_Umath_Model_Atom(parse_json(input,"Umath::Model::Atom@default")?)?; let model:Umath_Model_Atom=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Atom_json(input:&str)->ContractResult<Umath_Model_Atom>{let data=decode_Umath_Model_Atom(parse_json(input,"Umath::Model::Atom@default")?)?; let model:Umath_Model_Atom=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Atom_json(model:&Umath_Model_Atom)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Atom(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/output",e))}
+pub fn write_Umath_Model_Atom_json(model:&Umath_Model_Atom)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Atom(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atom@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Atom(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Atom@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -374,21 +374,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Atom(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Atom@default")?;let mut wire=Map::new();
 for mut v in data.remove("alphanumeric").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("alphanumeric".into(),v);}
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
@@ -403,9 +403,9 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Atoms_json(input:&str)->ContractResult<Umath_Model_Atoms>{let data=decode_Umath_Model_Atoms(parse_json(input,"Umath::Model::Atoms@default")?)?; let model:Umath_Model_Atoms=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Atoms_json(input:&str)->ContractResult<Umath_Model_Atoms>{let data=decode_Umath_Model_Atoms(parse_json(input,"Umath::Model::Atoms@default")?)?; let model:Umath_Model_Atoms=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Atoms_json(model:&Umath_Model_Atoms)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Atoms(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/output",e))}
+pub fn write_Umath_Model_Atoms_json(model:&Umath_Model_Atoms)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Atoms(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Atoms@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Atoms(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Atoms@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -432,23 +432,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Atoms(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Atoms@default")?;let mut wire=Map::new();
 for mut v in data.remove("atom").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atom(v)?;
 }
 wire.insert("atom".into(),v);}
 for mut v in data.remove("atoms").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atoms(v)?;
 }
 wire.insert("atoms".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Backcolor_json(input:&str)->ContractResult<Umath_Model_Backcolor>{let data=decode_Umath_Model_Backcolor(parse_json(input,"Umath::Model::Backcolor@default")?)?; let model:Umath_Model_Backcolor=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Backcolor_json(input:&str)->ContractResult<Umath_Model_Backcolor>{let data=decode_Umath_Model_Backcolor(parse_json(input,"Umath::Model::Backcolor@default")?)?; let model:Umath_Model_Backcolor=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Backcolor_json(model:&Umath_Model_Backcolor)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Backcolor(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/output",e))}
+pub fn write_Umath_Model_Backcolor_json(model:&Umath_Model_Backcolor)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Backcolor(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Backcolor@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Backcolor(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Backcolor@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -476,16 +476,16 @@ if empty(&v){continue;}
 wire.insert("backcolor_value".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_BelowAfter_json(input:&str)->ContractResult<Umath_Model_BelowAfter>{let data=decode_Umath_Model_BelowAfter(parse_json(input,"Umath::Model::BelowAfter@default")?)?; let model:Umath_Model_BelowAfter=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_BelowAfter_json(input:&str)->ContractResult<Umath_Model_BelowAfter>{let data=decode_Umath_Model_BelowAfter(parse_json(input,"Umath::Model::BelowAfter@default")?)?; let model:Umath_Model_BelowAfter=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_BelowAfter_json(model:&Umath_Model_BelowAfter)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_BelowAfter(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/output",e))}
+pub fn write_Umath_Model_BelowAfter_json(model:&Umath_Model_BelowAfter)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_BelowAfter(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowAfter@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_BelowAfter(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::BelowAfter@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -504,16 +504,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_BelowAfter(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::BelowAfter@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_belows").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("diacritic_belows".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_BelowBefore_json(input:&str)->ContractResult<Umath_Model_BelowBefore>{let data=decode_Umath_Model_BelowBefore(parse_json(input,"Umath::Model::BelowBefore@default")?)?; let model:Umath_Model_BelowBefore=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_BelowBefore_json(input:&str)->ContractResult<Umath_Model_BelowBefore>{let data=decode_Umath_Model_BelowBefore(parse_json(input,"Umath::Model::BelowBefore@default")?)?; let model:Umath_Model_BelowBefore=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_BelowBefore_json(model:&Umath_Model_BelowBefore)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_BelowBefore(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/output",e))}
+pub fn write_Umath_Model_BelowBefore_json(model:&Umath_Model_BelowBefore)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_BelowBefore(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::BelowBefore@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_BelowBefore(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::BelowBefore@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -532,16 +532,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_BelowBefore(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::BelowBefore@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_belows").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("diacritic_belows".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Char_json(input:&str)->ContractResult<Umath_Model_Char>{let data=decode_Umath_Model_Char(parse_json(input,"Umath::Model::Char@default")?)?; let model:Umath_Model_Char=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Char_json(input:&str)->ContractResult<Umath_Model_Char>{let data=decode_Umath_Model_Char(parse_json(input,"Umath::Model::Char@default")?)?; let model:Umath_Model_Char=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Char_json(model:&Umath_Model_Char)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Char(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/output",e))}
+pub fn write_Umath_Model_Char_json(model:&Umath_Model_Char)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Char(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Char@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Char(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Char@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -560,16 +560,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Char(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Char@default")?;let mut wire=Map::new();
 for mut v in data.remove("unicode_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("unicode_symbols".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_CloseParenMask_json(input:&str)->ContractResult<Umath_Model_CloseParenMask>{let data=decode_Umath_Model_CloseParenMask(parse_json(input,"Umath::Model::CloseParenMask@default")?)?; let model:Umath_Model_CloseParenMask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_CloseParenMask_json(input:&str)->ContractResult<Umath_Model_CloseParenMask>{let data=decode_Umath_Model_CloseParenMask(parse_json(input,"Umath::Model::CloseParenMask@default")?)?; let model:Umath_Model_CloseParenMask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_CloseParenMask_json(model:&Umath_Model_CloseParenMask)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_CloseParenMask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/output",e))}
+pub fn write_Umath_Model_CloseParenMask_json(model:&Umath_Model_CloseParenMask)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_CloseParenMask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::CloseParenMask@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_CloseParenMask(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::CloseParenMask@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -589,9 +589,9 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Closer_json(input:&str)->ContractResult<Umath_Model_Closer>{let data=decode_Umath_Model_Closer(parse_json(input,"Umath::Model::Closer@default")?)?; let model:Umath_Model_Closer=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Closer_json(input:&str)->ContractResult<Umath_Model_Closer>{let data=decode_Umath_Model_Closer(parse_json(input,"Umath::Model::Closer@default")?)?; let model:Umath_Model_Closer=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Closer_json(model:&Umath_Model_Closer)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Closer(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/output",e))}
+pub fn write_Umath_Model_Closer_json(model:&Umath_Model_Closer)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Closer(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Closer@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Closer(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Closer@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -626,30 +626,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Closer(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Closer@default")?;let mut wire=Map::new();
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_close_prefix".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Color_json(input:&str)->ContractResult<Umath_Model_Color>{let data=decode_Umath_Model_Color(parse_json(input,"Umath::Model::Color@default")?)?; let model:Umath_Model_Color=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Color_json(input:&str)->ContractResult<Umath_Model_Color>{let data=decode_Umath_Model_Color(parse_json(input,"Umath::Model::Color@default")?)?; let model:Umath_Model_Color=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Color_json(model:&Umath_Model_Color)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Color(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/output",e))}
+pub fn write_Umath_Model_Color_json(model:&Umath_Model_Color)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Color(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Color@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Color(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Color@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -677,16 +677,16 @@ if empty(&v){continue;}
 wire.insert("color_value".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_DecimalNumber_json(input:&str)->ContractResult<Umath_Model_DecimalNumber>{let data=decode_Umath_Model_DecimalNumber(parse_json(input,"Umath::Model::DecimalNumber@default")?)?; let model:Umath_Model_DecimalNumber=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_DecimalNumber_json(input:&str)->ContractResult<Umath_Model_DecimalNumber>{let data=decode_Umath_Model_DecimalNumber(parse_json(input,"Umath::Model::DecimalNumber@default")?)?; let model:Umath_Model_DecimalNumber=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_DecimalNumber_json(model:&Umath_Model_DecimalNumber)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_DecimalNumber(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/output",e))}
+pub fn write_Umath_Model_DecimalNumber_json(model:&Umath_Model_DecimalNumber)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_DecimalNumber(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DecimalNumber@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_DecimalNumber(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::DecimalNumber@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -722,23 +722,23 @@ if empty(&v){continue;}
 wire.insert("decimal".into(),v);}
 for mut v in data.remove("fractional").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fractional(v)?;
 }
 wire.insert("fractional".into(),v);}
 for mut v in data.remove("whole").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Whole(v)?;
 }
 wire.insert("whole".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Diacritics_json(input:&str)->ContractResult<Umath_Model_Diacritics>{let data=decode_Umath_Model_Diacritics(parse_json(input,"Umath::Model::Diacritics@default")?)?; let model:Umath_Model_Diacritics=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Diacritics_json(input:&str)->ContractResult<Umath_Model_Diacritics>{let data=decode_Umath_Model_Diacritics(parse_json(input,"Umath::Model::Diacritics@default")?)?; let model:Umath_Model_Diacritics=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Diacritics_json(model:&Umath_Model_Diacritics)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Diacritics(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/output",e))}
+pub fn write_Umath_Model_Diacritics_json(model:&Umath_Model_Diacritics)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Diacritics(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Diacritics@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Diacritics(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Diacritics@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -765,23 +765,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Diacritics(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Diacritics@default")?;let mut wire=Map::new();
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
 wire.insert("diacritics".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_DiacriticsAccents_json(input:&str)->ContractResult<Umath_Model_DiacriticsAccents>{let data=decode_Umath_Model_DiacriticsAccents(parse_json(input,"Umath::Model::DiacriticsAccents@default")?)?; let model:Umath_Model_DiacriticsAccents=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_DiacriticsAccents_json(input:&str)->ContractResult<Umath_Model_DiacriticsAccents>{let data=decode_Umath_Model_DiacriticsAccents(parse_json(input,"Umath::Model::DiacriticsAccents@default")?)?; let model:Umath_Model_DiacriticsAccents=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_DiacriticsAccents_json(model:&Umath_Model_DiacriticsAccents)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_DiacriticsAccents(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/output",e))}
+pub fn write_Umath_Model_DiacriticsAccents_json(model:&Umath_Model_DiacriticsAccents)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_DiacriticsAccents(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::DiacriticsAccents@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_DiacriticsAccents(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::DiacriticsAccents@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -832,44 +832,44 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_DiacriticsAccents(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::DiacriticsAccents@default")?;let mut wire=Map::new();
 for mut v in data.remove("below_after").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_BelowAfter(v)?;
 }
 wire.insert("below_after".into(),v);}
 for mut v in data.remove("below_before").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_BelowBefore(v)?;
 }
 wire.insert("below_before".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("overlay_after").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OverlayAfter(v)?;
 }
 wire.insert("overlay_after".into(),v);}
 for mut v in data.remove("overlay_before").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OverlayBefore(v)?;
 }
 wire.insert("overlay_before".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Digit_json(input:&str)->ContractResult<Umath_Model_Digit>{let data=decode_Umath_Model_Digit(parse_json(input,"Umath::Model::Digit@default")?)?; let model:Umath_Model_Digit=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Digit_json(input:&str)->ContractResult<Umath_Model_Digit>{let data=decode_Umath_Model_Digit(parse_json(input,"Umath::Model::Digit@default")?)?; let model:Umath_Model_Digit=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Digit_json(model:&Umath_Model_Digit)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Digit(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/output",e))}
+pub fn write_Umath_Model_Digit_json(model:&Umath_Model_Digit)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Digit(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Digit@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Digit(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Digit@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -889,9 +889,9 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Document_json(input:&str)->ContractResult<Umath_Model_Document>{let data=decode_Umath_Model_Document(parse_json(input,"Umath::Model::Document@default")?)?; let model:Umath_Model_Document=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Document_json(input:&str)->ContractResult<Umath_Model_Document>{let data=decode_Umath_Model_Document(parse_json(input,"Umath::Model::Document@default")?)?; let model:Umath_Model_Document=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Document_json(model:&Umath_Model_Document)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Document(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/output",e))}
+pub fn write_Umath_Model_Document_json(model:&Umath_Model_Document)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Document(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Document@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Document(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Document@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -920,7 +920,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Document(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Document@default")?;let mut wire=Map::new();
 for mut v in data.remove("expression").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -935,9 +935,9 @@ if empty(&v){continue;}
 wire.insert("decimal".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_ExpIteration_json(input:&str)->ContractResult<Umath_Model_ExpIteration>{let data=decode_Umath_Model_ExpIteration(parse_json(input,"Umath::Model::ExpIteration@default")?)?; let model:Umath_Model_ExpIteration=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_ExpIteration_json(input:&str)->ContractResult<Umath_Model_ExpIteration>{let data=decode_Umath_Model_ExpIteration(parse_json(input,"Umath::Model::ExpIteration@default")?)?; let model:Umath_Model_ExpIteration=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_ExpIteration_json(model:&Umath_Model_ExpIteration)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ExpIteration(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/output",e))}
+pub fn write_Umath_Model_ExpIteration_json(model:&Umath_Model_ExpIteration)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ExpIteration(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ExpIteration@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_ExpIteration(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::ExpIteration@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -996,51 +996,51 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ExpIteration(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ExpIteration@default")?;let mut wire=Map::new();
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Expression_json(input:&str)->ContractResult<Umath_Model_Expression>{let data=decode_Umath_Model_Expression(parse_json(input,"Umath::Model::Expression@default")?)?; let model:Umath_Model_Expression=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Expression_json(input:&str)->ContractResult<Umath_Model_Expression>{let data=decode_Umath_Model_Expression(parse_json(input,"Umath::Model::Expression@default")?)?; let model:Umath_Model_Expression=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Expression_json(model:&Umath_Model_Expression)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Expression(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/output",e))}
+pub fn write_Umath_Model_Expression_json(model:&Umath_Model_Expression)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Expression(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Expression@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Expression(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Expression@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -1913,21 +1913,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Expression(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Expression@default")?;let mut wire=Map::new();
 for mut v in data.remove("accents").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Accents(v)?;
 }
 wire.insert("accents".into(),v);}
 for mut v in data.remove("accents_subsup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_AccentsSubsup(v)?;
 }
 wire.insert("accents_subsup".into(),v);}
 for mut v in data.remove("alphanumeric").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -1938,42 +1938,42 @@ if empty(&v){continue;}
 wire.insert("arg".into(),v);}
 for mut v in data.remove("arg_arguments").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ArgArguments(v)?;
 }
 wire.insert("arg_arguments".into(),v);}
 for mut v in data.remove("atom").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atom(v)?;
 }
 wire.insert("atom".into(),v);}
 for mut v in data.remove("atoms").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Atoms(v)?;
 }
 wire.insert("atoms".into(),v);}
 for mut v in data.remove("backcolor").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Backcolor(v)?;
 }
 wire.insert("backcolor".into(),v);}
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("binary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -1984,77 +1984,77 @@ if empty(&v){continue;}
 wire.insert("binary_number".into(),v);}
 for mut v in data.remove("binary_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("binary_symbols".into(),v);}
 for mut v in data.remove("char").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Char(v)?;
 }
 wire.insert("char".into(),v);}
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("color").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Color(v)?;
 }
 wire.insert("color".into(),v);}
 for mut v in data.remove("combined_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("combined_symbols".into(),v);}
 for mut v in data.remove("comma").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("comma".into(),v);}
 for mut v in data.remove("decimal_number").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DecimalNumber(v)?;
 }
 wire.insert("decimal_number".into(),v);}
 for mut v in data.remove("diacritics").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Diacritics(v)?;
 }
 wire.insert("diacritics".into(),v);}
 for mut v in data.remove("diacritics_accents").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DiacriticsAccents(v)?;
 }
 wire.insert("diacritics_accents".into(),v);}
 for mut v in data.remove("digit").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Digit(v)?;
 }
@@ -2065,77 +2065,77 @@ if empty(&v){continue;}
 wire.insert("empty".into(),v);}
 for mut v in data.remove("exclamation_symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("exclamation_symbol".into(),v);}
 for mut v in data.remove("exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("exp".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("expression").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expression".into(),v);}
 for mut v in data.remove("factor").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("factor".into(),v);}
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("fonts").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fonts(v)?;
 }
 wire.insert("fonts".into(),v);}
 for mut v in data.remove("frac").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Frac(v)?;
 }
 wire.insert("frac".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 for mut v in data.remove("hbrack").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Hbrack(v)?;
 }
@@ -2150,14 +2150,14 @@ if empty(&v){continue;}
 wire.insert("hex_number".into(),v);}
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("infty".into(),v);}
 for mut v in data.remove("int_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_IntExp(v)?;
 }
@@ -2168,28 +2168,28 @@ if empty(&v){continue;}
 wire.insert("intent".into(),v);}
 for mut v in data.remove("intent_arguments").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_IntentArguments(v)?;
 }
 wire.insert("intent_arguments".into(),v);}
 for mut v in data.remove("intent_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("intent_expr".into(),v);}
 for mut v in data.remove("intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("intermediate_exp".into(),v);}
 for mut v in data.remove("left_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_LeftValue(v)?;
 }
@@ -2204,84 +2204,84 @@ if empty(&v){continue;}
 wire.insert("literal_2".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mid_symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("mid_symbol".into(),v);}
 for mut v in data.remove("mini_base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniBase(v)?;
 }
 wire.insert("mini_base".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("monospace").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Monospace(v)?;
 }
 wire.insert("monospace".into(),v);}
 for mut v in data.remove("nary").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Nary(v)?;
 }
 wire.insert("nary".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("naryand_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("naryand_recursion".into(),v);}
 for mut v in data.remove("negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -2296,49 +2296,49 @@ if empty(&v){continue;}
 wire.insert("octal_number".into(),v);}
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
 wire.insert("operand".into(),v);}
 for mut v in data.remove("operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("operator".into(),v);}
 for mut v in data.remove("ordinary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_negated_operator".into(),v);}
 for mut v in data.remove("ordinary_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_symbols".into(),v);}
 for mut v in data.remove("other").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Other(v)?;
 }
@@ -2349,112 +2349,112 @@ if empty(&v){continue;}
 wire.insert("over".into(),v);}
 for mut v in data.remove("override_subsup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("override_subsup".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_close_prefix".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_open_prefix".into(),v);}
 for mut v in data.remove("phantom").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Phantom(v)?;
 }
 wire.insert("phantom".into(),v);}
 for mut v in data.remove("pre_override_subsup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_PreOverrideSubsup(v)?;
 }
 wire.insert("pre_override_subsup".into(),v);}
 for mut v in data.remove("pre_script").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_script".into(),v);}
 for mut v in data.remove("pre_subscript").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_subscript".into(),v);}
 for mut v in data.remove("pre_supscript").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_supscript".into(),v);}
 for mut v in data.remove("rect").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Rect(v)?;
 }
 wire.insert("rect".into(),v);}
 for mut v in data.remove("recursive_denominator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("recursive_denominator".into(),v);}
 for mut v in data.remove("recursive_numerator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("recursive_numerator".into(),v);}
 for mut v in data.remove("relational_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("relational_symbols".into(),v);}
 for mut v in data.remove("right_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RightValue(v)?;
 }
 wire.insert("right_value".into(),v);}
 for mut v in data.remove("root").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootNode(v)?;
 }
 wire.insert("root".into(),v);}
 for mut v in data.remove("root_first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootFirstValue(v)?;
 }
 wire.insert("root_first_value".into(),v);}
 for mut v in data.remove("root_second_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_RootSecondValue(v)?;
 }
@@ -2465,21 +2465,21 @@ if empty(&v){continue;}
 wire.insert("size_overrides".into(),v);}
 for mut v in data.remove("slashed_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SlashedValue(v)?;
 }
 wire.insert("slashed_value".into(),v);}
 for mut v in data.remove("spaces").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("spaces".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2494,7 +2494,7 @@ if empty(&v){continue;}
 wire.insert("sub_digits".into(),v);}
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
@@ -2505,49 +2505,49 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubParen(v)?;
 }
 wire.insert("sub_paren".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursions".into(),v);}
 for mut v in data.remove("sub_script").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_script".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2562,7 +2562,7 @@ if empty(&v){continue;}
 wire.insert("sup_digits".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
@@ -2573,49 +2573,49 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupParen(v)?;
 }
 wire.insert("sup_paren".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 for mut v in data.remove("sup_script").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_script".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
 wire.insert("symbol".into(),v);}
 for mut v in data.remove("table").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Table(v)?;
 }
@@ -2626,7 +2626,7 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 for mut v in data.remove("unary_function").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnaryFunction(v)?;
 }
@@ -2637,7 +2637,7 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_subsup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnarySubsup(v)?;
 }
@@ -2652,16 +2652,16 @@ if empty(&v){continue;}
 wire.insert("unicode_fractions".into(),v);}
 for mut v in data.remove("unicode_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("unicode_symbols".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Fonts_json(input:&str)->ContractResult<Umath_Model_Fonts>{let data=decode_Umath_Model_Fonts(parse_json(input,"Umath::Model::Fonts@default")?)?; let model:Umath_Model_Fonts=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Fonts_json(input:&str)->ContractResult<Umath_Model_Fonts>{let data=decode_Umath_Model_Fonts(parse_json(input,"Umath::Model::Fonts@default")?)?; let model:Umath_Model_Fonts=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Fonts_json(model:&Umath_Model_Fonts)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Fonts(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/output",e))}
+pub fn write_Umath_Model_Fonts_json(model:&Umath_Model_Fonts)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Fonts(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fonts@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Fonts(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Fonts@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -2720,7 +2720,7 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -2731,16 +2731,16 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 for mut v in data.remove("unicoded_font_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnicodedFontClass(v)?;
 }
 wire.insert("unicoded_font_class".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Frac_json(input:&str)->ContractResult<Umath_Model_Frac>{let data=decode_Umath_Model_Frac(parse_json(input,"Umath::Model::Frac@default")?)?; let model:Umath_Model_Frac=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Frac_json(input:&str)->ContractResult<Umath_Model_Frac>{let data=decode_Umath_Model_Frac(parse_json(input,"Umath::Model::Frac@default")?)?; let model:Umath_Model_Frac=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Frac_json(model:&Umath_Model_Frac)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Frac(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/output",e))}
+pub fn write_Umath_Model_Frac_json(model:&Umath_Model_Frac)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Frac(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Frac@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Frac(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Frac@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -2820,7 +2820,7 @@ if empty(&v){continue;}
 wire.insert("choose".into(),v);}
 for mut v in data.remove("denominator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2831,14 +2831,14 @@ if empty(&v){continue;}
 wire.insert("ldiv".into(),v);}
 for mut v in data.remove("mini_denominator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniDenominator(v)?;
 }
 wire.insert("mini_denominator".into(),v);}
 for mut v in data.remove("mini_numerator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniNumerator(v)?;
 }
@@ -2849,16 +2849,16 @@ if empty(&v){continue;}
 wire.insert("no_display_style".into(),v);}
 for mut v in data.remove("numerator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("numerator".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Fractional_json(input:&str)->ContractResult<Umath_Model_Fractional>{let data=decode_Umath_Model_Fractional(parse_json(input,"Umath::Model::Fractional@default")?)?; let model:Umath_Model_Fractional=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Fractional_json(input:&str)->ContractResult<Umath_Model_Fractional>{let data=decode_Umath_Model_Fractional(parse_json(input,"Umath::Model::Fractional@default")?)?; let model:Umath_Model_Fractional=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Fractional_json(model:&Umath_Model_Fractional)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Fractional(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/output",e))}
+pub fn write_Umath_Model_Fractional_json(model:&Umath_Model_Fractional)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Fractional(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Fractional@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Fractional(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Fractional@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -2878,9 +2878,9 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_FuncExpr_json(input:&str)->ContractResult<Umath_Model_FuncExpr>{let data=decode_Umath_Model_FuncExpr(parse_json(input,"Umath::Model::FuncExpr@default")?)?; let model:Umath_Model_FuncExpr=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_FuncExpr_json(input:&str)->ContractResult<Umath_Model_FuncExpr>{let data=decode_Umath_Model_FuncExpr(parse_json(input,"Umath::Model::FuncExpr@default")?)?; let model:Umath_Model_FuncExpr=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_FuncExpr_json(model:&Umath_Model_FuncExpr)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_FuncExpr(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/output",e))}
+pub fn write_Umath_Model_FuncExpr_json(model:&Umath_Model_FuncExpr)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_FuncExpr(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::FuncExpr@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_FuncExpr(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::FuncExpr@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -2907,23 +2907,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_FuncExpr(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::FuncExpr@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Hbrack_json(input:&str)->ContractResult<Umath_Model_Hbrack>{let data=decode_Umath_Model_Hbrack(parse_json(input,"Umath::Model::Hbrack@default")?)?; let model:Umath_Model_Hbrack=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Hbrack_json(input:&str)->ContractResult<Umath_Model_Hbrack>{let data=decode_Umath_Model_Hbrack(parse_json(input,"Umath::Model::Hbrack@default")?)?; let model:Umath_Model_Hbrack=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Hbrack_json(model:&Umath_Model_Hbrack)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Hbrack(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/output",e))}
+pub fn write_Umath_Model_Hbrack_json(model:&Umath_Model_Hbrack)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Hbrack(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Hbrack@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Hbrack(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Hbrack@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -2955,7 +2955,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Hbrack(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Hbrack@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -2966,16 +2966,16 @@ if empty(&v){continue;}
 wire.insert("hbracket_class".into(),v);}
 for mut v in data.remove("scripted_first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("scripted_first_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_IntExp_json(input:&str)->ContractResult<Umath_Model_IntExp>{let data=decode_Umath_Model_IntExp(parse_json(input,"Umath::Model::IntExp@default")?)?; let model:Umath_Model_IntExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_IntExp_json(input:&str)->ContractResult<Umath_Model_IntExp>{let data=decode_Umath_Model_IntExp(parse_json(input,"Umath::Model::IntExp@default")?)?; let model:Umath_Model_IntExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_IntExp_json(model:&Umath_Model_IntExp)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_IntExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/output",e))}
+pub fn write_Umath_Model_IntExp_json(model:&Umath_Model_IntExp)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_IntExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntExp@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_IntExp(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::IntExp@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3010,30 +3010,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_IntExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::IntExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("closer").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Closer(v)?;
 }
 wire.insert("closer".into(),v);}
 for mut v in data.remove("opener").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Opener(v)?;
 }
 wire.insert("opener".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
 wire.insert("operand".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_IntentArguments_json(input:&str)->ContractResult<Umath_Model_IntentArguments>{let data=decode_Umath_Model_IntentArguments(parse_json(input,"Umath::Model::IntentArguments@default")?)?; let model:Umath_Model_IntentArguments=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_IntentArguments_json(input:&str)->ContractResult<Umath_Model_IntentArguments>{let data=decode_Umath_Model_IntentArguments(parse_json(input,"Umath::Model::IntentArguments@default")?)?; let model:Umath_Model_IntentArguments=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_IntentArguments_json(model:&Umath_Model_IntentArguments)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_IntentArguments(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/output",e))}
+pub fn write_Umath_Model_IntentArguments_json(model:&Umath_Model_IntentArguments)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_IntentArguments(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::IntentArguments@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_IntentArguments(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::IntentArguments@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3053,9 +3053,9 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_LeftValue_json(input:&str)->ContractResult<Umath_Model_LeftValue>{let data=decode_Umath_Model_LeftValue(parse_json(input,"Umath::Model::LeftValue@default")?)?; let model:Umath_Model_LeftValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_LeftValue_json(input:&str)->ContractResult<Umath_Model_LeftValue>{let data=decode_Umath_Model_LeftValue(parse_json(input,"Umath::Model::LeftValue@default")?)?; let model:Umath_Model_LeftValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_LeftValue_json(model:&Umath_Model_LeftValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_LeftValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/output",e))}
+pub fn write_Umath_Model_LeftValue_json(model:&Umath_Model_LeftValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_LeftValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::LeftValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_LeftValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::LeftValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3105,7 +3105,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_LeftValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::LeftValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3121,7 +3121,7 @@ v=encode_Umath_Model_ListItem(v)?;
 wire.insert("list".into(),v);}
 for mut v in data.remove("negative").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3132,16 +3132,16 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("positive").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("positive".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_ListItem_json(input:&str)->ContractResult<Umath_Model_ListItem>{let data=decode_Umath_Model_ListItem(parse_json(input,"Umath::Model::ListItem@default")?)?; let model:Umath_Model_ListItem=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_ListItem_json(input:&str)->ContractResult<Umath_Model_ListItem>{let data=decode_Umath_Model_ListItem(parse_json(input,"Umath::Model::ListItem@default")?)?; let model:Umath_Model_ListItem=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_ListItem_json(model:&Umath_Model_ListItem)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ListItem(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/output",e))}
+pub fn write_Umath_Model_ListItem_json(model:&Umath_Model_ListItem)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_ListItem(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::ListItem@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_ListItem(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::ListItem@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3173,7 +3173,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_ListItem(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::ListItem@default")?;let mut wire=Map::new();
 for mut v in data.remove("accent_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -3184,16 +3184,16 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
 wire.insert("symbol".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Mask_json(input:&str)->ContractResult<Umath_Model_Mask>{let data=decode_Umath_Model_Mask(parse_json(input,"Umath::Model::Mask@default")?)?; let model:Umath_Model_Mask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Mask_json(input:&str)->ContractResult<Umath_Model_Mask>{let data=decode_Umath_Model_Mask(parse_json(input,"Umath::Model::Mask@default")?)?; let model:Umath_Model_Mask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Mask_json(model:&Umath_Model_Mask)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Mask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/output",e))}
+pub fn write_Umath_Model_Mask_json(model:&Umath_Model_Mask)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Mask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Mask@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Mask(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Mask@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3239,14 +3239,14 @@ if empty(&v){continue;}
 wire.insert("binary_number".into(),v);}
 for mut v in data.remove("decimal_number").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_DecimalNumber(v)?;
 }
 wire.insert("decimal_number".into(),v);}
 for mut v in data.remove("digit").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Digit(v)?;
 }
@@ -3261,9 +3261,9 @@ if empty(&v){continue;}
 wire.insert("octal_number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MathSymbol_json(input:&str)->ContractResult<Umath_Model_MathSymbol>{let data=decode_Umath_Model_MathSymbol(parse_json(input,"Umath::Model::MathSymbol@default")?)?; let model:Umath_Model_MathSymbol=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MathSymbol_json(input:&str)->ContractResult<Umath_Model_MathSymbol>{let data=decode_Umath_Model_MathSymbol(parse_json(input,"Umath::Model::MathSymbol@default")?)?; let model:Umath_Model_MathSymbol=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MathSymbol_json(model:&Umath_Model_MathSymbol)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MathSymbol(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/output",e))}
+pub fn write_Umath_Model_MathSymbol_json(model:&Umath_Model_MathSymbol)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MathSymbol(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MathSymbol@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MathSymbol(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MathSymbol@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3301,9 +3301,9 @@ if empty(&v){continue;}
 wire.insert("kind".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniBase_json(input:&str)->ContractResult<Umath_Model_MiniBase>{let data=decode_Umath_Model_MiniBase(parse_json(input,"Umath::Model::MiniBase@default")?)?; let model:Umath_Model_MiniBase=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniBase_json(input:&str)->ContractResult<Umath_Model_MiniBase>{let data=decode_Umath_Model_MiniBase(parse_json(input,"Umath::Model::MiniBase@default")?)?; let model:Umath_Model_MiniBase=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniBase_json(model:&Umath_Model_MiniBase)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniBase(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniBase_json(model:&Umath_Model_MiniBase)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniBase(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniBase@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniBase(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniBase@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3368,9 +3368,9 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniDenominator_json(input:&str)->ContractResult<Umath_Model_MiniDenominator>{let data=decode_Umath_Model_MiniDenominator(parse_json(input,"Umath::Model::MiniDenominator@default")?)?; let model:Umath_Model_MiniDenominator=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniDenominator_json(input:&str)->ContractResult<Umath_Model_MiniDenominator>{let data=decode_Umath_Model_MiniDenominator(parse_json(input,"Umath::Model::MiniDenominator@default")?)?; let model:Umath_Model_MiniDenominator=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniDenominator_json(model:&Umath_Model_MiniDenominator)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniDenominator(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniDenominator_json(model:&Umath_Model_MiniDenominator)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniDenominator(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniDenominator@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniDenominator(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniDenominator@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3436,14 +3436,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniDenominator(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniDenominator@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3462,30 +3462,30 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniExpression_json(input:&str)->ContractResult<Umath_Model_MiniExpression>{let data=decode_Umath_Model_MiniExpression(parse_json(input,"Umath::Model::MiniExpression@default")?)?; let model:Umath_Model_MiniExpression=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniExpression_json(input:&str)->ContractResult<Umath_Model_MiniExpression>{let data=decode_Umath_Model_MiniExpression(parse_json(input,"Umath::Model::MiniExpression@default")?)?; let model:Umath_Model_MiniExpression=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniExpression_json(model:&Umath_Model_MiniExpression)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniExpression(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniExpression_json(model:&Umath_Model_MiniExpression)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniExpression(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniExpression@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniExpression(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniExpression@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3618,21 +3618,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniExpression(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniExpression@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3659,21 +3659,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3700,30 +3700,30 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniNumerator_json(input:&str)->ContractResult<Umath_Model_MiniNumerator>{let data=decode_Umath_Model_MiniNumerator(parse_json(input,"Umath::Model::MiniNumerator@default")?)?; let model:Umath_Model_MiniNumerator=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniNumerator_json(input:&str)->ContractResult<Umath_Model_MiniNumerator>{let data=decode_Umath_Model_MiniNumerator(parse_json(input,"Umath::Model::MiniNumerator@default")?)?; let model:Umath_Model_MiniNumerator=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniNumerator_json(model:&Umath_Model_MiniNumerator)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniNumerator(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniNumerator_json(model:&Umath_Model_MiniNumerator)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniNumerator(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniNumerator@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniNumerator(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniNumerator@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3789,14 +3789,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniNumerator(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniNumerator@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -3815,30 +3815,30 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniSub_json(input:&str)->ContractResult<Umath_Model_MiniSub>{let data=decode_Umath_Model_MiniSub(parse_json(input,"Umath::Model::MiniSub@default")?)?; let model:Umath_Model_MiniSub=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniSub_json(input:&str)->ContractResult<Umath_Model_MiniSub>{let data=decode_Umath_Model_MiniSub(parse_json(input,"Umath::Model::MiniSub@default")?)?; let model:Umath_Model_MiniSub=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniSub_json(model:&Umath_Model_MiniSub)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSub(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniSub_json(model:&Umath_Model_MiniSub)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSub(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSub@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniSub(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniSub@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -3935,28 +3935,28 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSub(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSub@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -3975,21 +3975,21 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -4008,9 +4008,9 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniSubSup_json(input:&str)->ContractResult<Umath_Model_MiniSubSup>{let data=decode_Umath_Model_MiniSubSup(parse_json(input,"Umath::Model::MiniSubSup@default")?)?; let model:Umath_Model_MiniSubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniSubSup_json(input:&str)->ContractResult<Umath_Model_MiniSubSup>{let data=decode_Umath_Model_MiniSubSup(parse_json(input,"Umath::Model::MiniSubSup@default")?)?; let model:Umath_Model_MiniSubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniSubSup_json(model:&Umath_Model_MiniSubSup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniSubSup_json(model:&Umath_Model_MiniSubSup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSubSup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniSubSup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniSubSup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4045,30 +4045,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MiniSup_json(input:&str)->ContractResult<Umath_Model_MiniSup>{let data=decode_Umath_Model_MiniSup(parse_json(input,"Umath::Model::MiniSup@default")?)?; let model:Umath_Model_MiniSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MiniSup_json(input:&str)->ContractResult<Umath_Model_MiniSup>{let data=decode_Umath_Model_MiniSup(parse_json(input,"Umath::Model::MiniSup@default")?)?; let model:Umath_Model_MiniSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MiniSup_json(model:&Umath_Model_MiniSup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/output",e))}
+pub fn write_Umath_Model_MiniSup_json(model:&Umath_Model_MiniSup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MiniSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MiniSup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MiniSup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MiniSup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4165,21 +4165,21 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_MiniSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::MiniSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -4198,7 +4198,7 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4217,30 +4217,30 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_MitBbb_json(input:&str)->ContractResult<Umath_Model_MitBbb>{let data=decode_Umath_Model_MitBbb(parse_json(input,"Umath::Model::MitBbb@default")?)?; let model:Umath_Model_MitBbb=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_MitBbb_json(input:&str)->ContractResult<Umath_Model_MitBbb>{let data=decode_Umath_Model_MitBbb(parse_json(input,"Umath::Model::MitBbb@default")?)?; let model:Umath_Model_MitBbb=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_MitBbb_json(model:&Umath_Model_MitBbb)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MitBbb(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/output",e))}
+pub fn write_Umath_Model_MitBbb_json(model:&Umath_Model_MitBbb)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_MitBbb(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::MitBbb@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_MitBbb(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::MitBbb@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4260,9 +4260,9 @@ if empty(&v){continue;}
 wire.insert("present".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Monospace_json(input:&str)->ContractResult<Umath_Model_Monospace>{let data=decode_Umath_Model_Monospace(parse_json(input,"Umath::Model::Monospace@default")?)?; let model:Umath_Model_Monospace=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Monospace_json(input:&str)->ContractResult<Umath_Model_Monospace>{let data=decode_Umath_Model_Monospace(parse_json(input,"Umath::Model::Monospace@default")?)?; let model:Umath_Model_Monospace=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Monospace_json(model:&Umath_Model_Monospace)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Monospace(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/output",e))}
+pub fn write_Umath_Model_Monospace_json(model:&Umath_Model_Monospace)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Monospace(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Monospace@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Monospace(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Monospace@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4281,16 +4281,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Monospace(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Monospace@default")?;let mut wire=Map::new();
 for mut v in data.remove("monospace_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("monospace_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Nary_json(input:&str)->ContractResult<Umath_Model_Nary>{let data=decode_Umath_Model_Nary(parse_json(input,"Umath::Model::Nary@default")?)?; let model:Umath_Model_Nary=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Nary_json(input:&str)->ContractResult<Umath_Model_Nary>{let data=decode_Umath_Model_Nary(parse_json(input,"Umath::Model::Nary@default")?)?; let model:Umath_Model_Nary=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Nary_json(model:&Umath_Model_Nary)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Nary(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/output",e))}
+pub fn write_Umath_Model_Nary_json(model:&Umath_Model_Nary)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Nary(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Nary@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Nary(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Nary@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4325,30 +4325,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Nary(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Nary@default")?;let mut wire=Map::new();
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("nary_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_NarySubSup(v)?;
 }
 wire.insert("nary_sub_sup".into(),v);}
 for mut v in data.remove("naryand").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("naryand".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_NarySubSup_json(input:&str)->ContractResult<Umath_Model_NarySubSup>{let data=decode_Umath_Model_NarySubSup(parse_json(input,"Umath::Model::NarySubSup@default")?)?; let model:Umath_Model_NarySubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_NarySubSup_json(input:&str)->ContractResult<Umath_Model_NarySubSup>{let data=decode_Umath_Model_NarySubSup(parse_json(input,"Umath::Model::NarySubSup@default")?)?; let model:Umath_Model_NarySubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_NarySubSup_json(model:&Umath_Model_NarySubSup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_NarySubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/output",e))}
+pub fn write_Umath_Model_NarySubSup_json(model:&Umath_Model_NarySubSup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_NarySubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::NarySubSup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_NarySubSup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::NarySubSup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4383,30 +4383,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_NarySubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::NarySubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
 wire.insert("sub_exp".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
 wire.insert("sup_exp".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_OpenParenMask_json(input:&str)->ContractResult<Umath_Model_OpenParenMask>{let data=decode_Umath_Model_OpenParenMask(parse_json(input,"Umath::Model::OpenParenMask@default")?)?; let model:Umath_Model_OpenParenMask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_OpenParenMask_json(input:&str)->ContractResult<Umath_Model_OpenParenMask>{let data=decode_Umath_Model_OpenParenMask(parse_json(input,"Umath::Model::OpenParenMask@default")?)?; let model:Umath_Model_OpenParenMask=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_OpenParenMask_json(model:&Umath_Model_OpenParenMask)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OpenParenMask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/output",e))}
+pub fn write_Umath_Model_OpenParenMask_json(model:&Umath_Model_OpenParenMask)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OpenParenMask(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OpenParenMask@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_OpenParenMask(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::OpenParenMask@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4426,9 +4426,9 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Opener_json(input:&str)->ContractResult<Umath_Model_Opener>{let data=decode_Umath_Model_Opener(parse_json(input,"Umath::Model::Opener@default")?)?; let model:Umath_Model_Opener=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Opener_json(input:&str)->ContractResult<Umath_Model_Opener>{let data=decode_Umath_Model_Opener(parse_json(input,"Umath::Model::Opener@default")?)?; let model:Umath_Model_Opener=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Opener_json(model:&Umath_Model_Opener)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Opener(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/output",e))}
+pub fn write_Umath_Model_Opener_json(model:&Umath_Model_Opener)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Opener(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Opener@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Opener(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Opener@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4463,30 +4463,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Opener(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Opener@default")?;let mut wire=Map::new();
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_open_prefix".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Operand_json(input:&str)->ContractResult<Umath_Model_Operand>{let data=decode_Umath_Model_Operand(parse_json(input,"Umath::Model::Operand@default")?)?; let model:Umath_Model_Operand=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Operand_json(input:&str)->ContractResult<Umath_Model_Operand>{let data=decode_Umath_Model_Operand(parse_json(input,"Umath::Model::Operand@default")?)?; let model:Umath_Model_Operand=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Operand_json(model:&Umath_Model_Operand)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Operand(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/output",e))}
+pub fn write_Umath_Model_Operand_json(model:&Umath_Model_Operand)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Operand(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Operand@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Operand(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Operand@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4598,84 +4598,84 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Operand(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Operand@default")?;let mut wire=Map::new();
 for mut v in data.remove("accents").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Accents(v)?;
 }
 wire.insert("accents".into(),v);}
 for mut v in data.remove("binary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("binary_negated_operator".into(),v);}
 for mut v in data.remove("factor").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("factor".into(),v);}
 for mut v in data.remove("fonts").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Fonts(v)?;
 }
 wire.insert("fonts".into(),v);}
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("infty".into(),v);}
 for mut v in data.remove("negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("negated_operator".into(),v);}
 for mut v in data.remove("operand").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Operand(v)?;
 }
 wire.insert("operand".into(),v);}
 for mut v in data.remove("operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("operator".into(),v);}
 for mut v in data.remove("ordinary_negated_operator").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("ordinary_negated_operator".into(),v);}
 for mut v in data.remove("phantom").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Phantom(v)?;
 }
 wire.insert("phantom".into(),v);}
 for mut v in data.remove("rect").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Rect(v)?;
 }
 wire.insert("rect".into(),v);}
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
@@ -4686,9 +4686,9 @@ if empty(&v){continue;}
 wire.insert("text".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Other_json(input:&str)->ContractResult<Umath_Model_Other>{let data=decode_Umath_Model_Other(parse_json(input,"Umath::Model::Other@default")?)?; let model:Umath_Model_Other=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Other_json(input:&str)->ContractResult<Umath_Model_Other>{let data=decode_Umath_Model_Other(parse_json(input,"Umath::Model::Other@default")?)?; let model:Umath_Model_Other=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Other_json(model:&Umath_Model_Other)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Other(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/output",e))}
+pub fn write_Umath_Model_Other_json(model:&Umath_Model_Other)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Other(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Other@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Other(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Other@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4707,16 +4707,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Other(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Other@default")?;let mut wire=Map::new();
 for mut v in data.remove("symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SymbolNode(v)?;
 }
 wire.insert("symbol".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_OverlayAfter_json(input:&str)->ContractResult<Umath_Model_OverlayAfter>{let data=decode_Umath_Model_OverlayAfter(parse_json(input,"Umath::Model::OverlayAfter@default")?)?; let model:Umath_Model_OverlayAfter=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_OverlayAfter_json(input:&str)->ContractResult<Umath_Model_OverlayAfter>{let data=decode_Umath_Model_OverlayAfter(parse_json(input,"Umath::Model::OverlayAfter@default")?)?; let model:Umath_Model_OverlayAfter=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_OverlayAfter_json(model:&Umath_Model_OverlayAfter)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OverlayAfter(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/output",e))}
+pub fn write_Umath_Model_OverlayAfter_json(model:&Umath_Model_OverlayAfter)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OverlayAfter(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayAfter@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_OverlayAfter(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::OverlayAfter@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4735,16 +4735,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_OverlayAfter(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::OverlayAfter@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_overlays").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("diacritic_overlays".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_OverlayBefore_json(input:&str)->ContractResult<Umath_Model_OverlayBefore>{let data=decode_Umath_Model_OverlayBefore(parse_json(input,"Umath::Model::OverlayBefore@default")?)?; let model:Umath_Model_OverlayBefore=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_OverlayBefore_json(input:&str)->ContractResult<Umath_Model_OverlayBefore>{let data=decode_Umath_Model_OverlayBefore(parse_json(input,"Umath::Model::OverlayBefore@default")?)?; let model:Umath_Model_OverlayBefore=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_OverlayBefore_json(model:&Umath_Model_OverlayBefore)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OverlayBefore(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/output",e))}
+pub fn write_Umath_Model_OverlayBefore_json(model:&Umath_Model_OverlayBefore)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_OverlayBefore(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::OverlayBefore@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_OverlayBefore(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::OverlayBefore@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4763,16 +4763,16 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_OverlayBefore(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::OverlayBefore@default")?;let mut wire=Map::new();
 for mut v in data.remove("diacritic_overlays").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("diacritic_overlays".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Paren_json(input:&str)->ContractResult<Umath_Model_Paren>{let data=decode_Umath_Model_Paren(parse_json(input,"Umath::Model::Paren@default")?)?; let model:Umath_Model_Paren=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Paren_json(input:&str)->ContractResult<Umath_Model_Paren>{let data=decode_Umath_Model_Paren(parse_json(input,"Umath::Model::Paren@default")?)?; let model:Umath_Model_Paren=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Paren_json(model:&Umath_Model_Paren)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Paren(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/output",e))}
+pub fn write_Umath_Model_Paren_json(model:&Umath_Model_Paren)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Paren(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Paren@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Paren(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Paren@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4846,42 +4846,42 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Paren(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Paren@default")?;let mut wire=Map::new();
 for mut v in data.remove("close_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("close_paren".into(),v);}
 for mut v in data.remove("close_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_CloseParenMask(v)?;
 }
 wire.insert("close_paren_mask".into(),v);}
 for mut v in data.remove("open_paren").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Paren(v)?;
 }
 wire.insert("open_paren".into(),v);}
 for mut v in data.remove("open_paren_mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_OpenParenMask(v)?;
 }
 wire.insert("open_paren_mask".into(),v);}
 for mut v in data.remove("paren_close_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("paren_close_prefix".into(),v);}
 for mut v in data.remove("paren_open_prefix").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -4900,9 +4900,9 @@ if empty(&v){continue;}
 wire.insert("kind".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Phantom_json(input:&str)->ContractResult<Umath_Model_Phantom>{let data=decode_Umath_Model_Phantom(parse_json(input,"Umath::Model::Phantom@default")?)?; let model:Umath_Model_Phantom=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Phantom_json(input:&str)->ContractResult<Umath_Model_Phantom>{let data=decode_Umath_Model_Phantom(parse_json(input,"Umath::Model::Phantom@default")?)?; let model:Umath_Model_Phantom=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Phantom_json(model:&Umath_Model_Phantom)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Phantom(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/output",e))}
+pub fn write_Umath_Model_Phantom_json(model:&Umath_Model_Phantom)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Phantom(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Phantom@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Phantom(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Phantom@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4926,7 +4926,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Phantom(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Phantom@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -4937,9 +4937,9 @@ if empty(&v){continue;}
 wire.insert("phantom_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_PreOverrideSubsup_json(input:&str)->ContractResult<Umath_Model_PreOverrideSubsup>{let data=decode_Umath_Model_PreOverrideSubsup(parse_json(input,"Umath::Model::PreOverrideSubsup@default")?)?; let model:Umath_Model_PreOverrideSubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_PreOverrideSubsup_json(input:&str)->ContractResult<Umath_Model_PreOverrideSubsup>{let data=decode_Umath_Model_PreOverrideSubsup(parse_json(input,"Umath::Model::PreOverrideSubsup@default")?)?; let model:Umath_Model_PreOverrideSubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_PreOverrideSubsup_json(model:&Umath_Model_PreOverrideSubsup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_PreOverrideSubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/output",e))}
+pub fn write_Umath_Model_PreOverrideSubsup_json(model:&Umath_Model_PreOverrideSubsup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_PreOverrideSubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PreOverrideSubsup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_PreOverrideSubsup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::PreOverrideSubsup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -4985,14 +4985,14 @@ if empty(&v){continue;}
 wire.insert("over".into(),v);}
 for mut v in data.remove("pre_subscript").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("pre_subscript".into(),v);}
 for mut v in data.remove("pre_supscript").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5007,9 +5007,9 @@ if empty(&v){continue;}
 wire.insert("under".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_PrimeAccentSymbolsItem_json(input:&str)->ContractResult<Umath_Model_PrimeAccentSymbolsItem>{let data=decode_Umath_Model_PrimeAccentSymbolsItem(parse_json(input,"Umath::Model::PrimeAccentSymbolsItem@default")?)?; let model:Umath_Model_PrimeAccentSymbolsItem=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_PrimeAccentSymbolsItem_json(input:&str)->ContractResult<Umath_Model_PrimeAccentSymbolsItem>{let data=decode_Umath_Model_PrimeAccentSymbolsItem(parse_json(input,"Umath::Model::PrimeAccentSymbolsItem@default")?)?; let model:Umath_Model_PrimeAccentSymbolsItem=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_PrimeAccentSymbolsItem_json(model:&Umath_Model_PrimeAccentSymbolsItem)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_PrimeAccentSymbolsItem(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/output",e))}
+pub fn write_Umath_Model_PrimeAccentSymbolsItem_json(model:&Umath_Model_PrimeAccentSymbolsItem)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_PrimeAccentSymbolsItem(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::PrimeAccentSymbolsItem@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_PrimeAccentSymbolsItem(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::PrimeAccentSymbolsItem@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5043,7 +5043,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_PrimeAccentSymbolsItem(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::PrimeAccentSymbolsItem@default")?;let mut wire=Map::new();
 for mut v in data.remove("prefixed_prime").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5062,9 +5062,9 @@ if empty(&v){continue;}
 wire.insert("kind".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Rect_json(input:&str)->ContractResult<Umath_Model_Rect>{let data=decode_Umath_Model_Rect(parse_json(input,"Umath::Model::Rect@default")?)?; let model:Umath_Model_Rect=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Rect_json(input:&str)->ContractResult<Umath_Model_Rect>{let data=decode_Umath_Model_Rect(parse_json(input,"Umath::Model::Rect@default")?)?; let model:Umath_Model_Rect=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Rect_json(model:&Umath_Model_Rect)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Rect(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/output",e))}
+pub fn write_Umath_Model_Rect_json(model:&Umath_Model_Rect)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Rect(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Rect@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Rect(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Rect@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5088,7 +5088,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Rect(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Rect@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5099,9 +5099,9 @@ if empty(&v){continue;}
 wire.insert("rect_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_RightValue_json(input:&str)->ContractResult<Umath_Model_RightValue>{let data=decode_Umath_Model_RightValue(parse_json(input,"Umath::Model::RightValue@default")?)?; let model:Umath_Model_RightValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_RightValue_json(input:&str)->ContractResult<Umath_Model_RightValue>{let data=decode_Umath_Model_RightValue(parse_json(input,"Umath::Model::RightValue@default")?)?; let model:Umath_Model_RightValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_RightValue_json(model:&Umath_Model_RightValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RightValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/output",e))}
+pub fn write_Umath_Model_RightValue_json(model:&Umath_Model_RightValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RightValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RightValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_RightValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::RightValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5151,7 +5151,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RightValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RightValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("infty").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5167,7 +5167,7 @@ v=encode_Umath_Model_ListItem(v)?;
 wire.insert("list".into(),v);}
 for mut v in data.remove("negative").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -5178,16 +5178,16 @@ if empty(&v){continue;}
 wire.insert("number".into(),v);}
 for mut v in data.remove("positive").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("positive".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_RootFirstValue_json(input:&str)->ContractResult<Umath_Model_RootFirstValue>{let data=decode_Umath_Model_RootFirstValue(parse_json(input,"Umath::Model::RootFirstValue@default")?)?; let model:Umath_Model_RootFirstValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_RootFirstValue_json(input:&str)->ContractResult<Umath_Model_RootFirstValue>{let data=decode_Umath_Model_RootFirstValue(parse_json(input,"Umath::Model::RootFirstValue@default")?)?; let model:Umath_Model_RootFirstValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_RootFirstValue_json(model:&Umath_Model_RootFirstValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootFirstValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/output",e))}
+pub fn write_Umath_Model_RootFirstValue_json(model:&Umath_Model_RootFirstValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootFirstValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootFirstValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_RootFirstValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::RootFirstValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5214,23 +5214,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootFirstValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootFirstValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_RootNode_json(input:&str)->ContractResult<Umath_Model_RootNode>{let data=decode_Umath_Model_RootNode(parse_json(input,"Umath::Model::RootNode@default")?)?; let model:Umath_Model_RootNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_RootNode_json(input:&str)->ContractResult<Umath_Model_RootNode>{let data=decode_Umath_Model_RootNode(parse_json(input,"Umath::Model::RootNode@default")?)?; let model:Umath_Model_RootNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_RootNode_json(model:&Umath_Model_RootNode)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/output",e))}
+pub fn write_Umath_Model_RootNode_json(model:&Umath_Model_RootNode)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootNode@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_RootNode(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::RootNode@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5265,30 +5265,30 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("first_value".into(),v);}
 for mut v in data.remove("root_symbol").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("root_symbol".into(),v);}
 for mut v in data.remove("second_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SecondValue(v)?;
 }
 wire.insert("second_value".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_RootSecondValue_json(input:&str)->ContractResult<Umath_Model_RootSecondValue>{let data=decode_Umath_Model_RootSecondValue(parse_json(input,"Umath::Model::RootSecondValue@default")?)?; let model:Umath_Model_RootSecondValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_RootSecondValue_json(input:&str)->ContractResult<Umath_Model_RootSecondValue>{let data=decode_Umath_Model_RootSecondValue(parse_json(input,"Umath::Model::RootSecondValue@default")?)?; let model:Umath_Model_RootSecondValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_RootSecondValue_json(model:&Umath_Model_RootSecondValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootSecondValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/output",e))}
+pub fn write_Umath_Model_RootSecondValue_json(model:&Umath_Model_RootSecondValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_RootSecondValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::RootSecondValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_RootSecondValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::RootSecondValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5315,23 +5315,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_RootSecondValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::RootSecondValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SecondValue_json(input:&str)->ContractResult<Umath_Model_SecondValue>{let data=decode_Umath_Model_SecondValue(parse_json(input,"Umath::Model::SecondValue@default")?)?; let model:Umath_Model_SecondValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SecondValue_json(input:&str)->ContractResult<Umath_Model_SecondValue>{let data=decode_Umath_Model_SecondValue(parse_json(input,"Umath::Model::SecondValue@default")?)?; let model:Umath_Model_SecondValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SecondValue_json(model:&Umath_Model_SecondValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SecondValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/output",e))}
+pub fn write_Umath_Model_SecondValue_json(model:&Umath_Model_SecondValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SecondValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SecondValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SecondValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SecondValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5358,23 +5358,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SecondValue(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SecondValue@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("func_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_FuncExpr(v)?;
 }
 wire.insert("func_expr".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SlashedValue_json(input:&str)->ContractResult<Umath_Model_SlashedValue>{let data=decode_Umath_Model_SlashedValue(parse_json(input,"Umath::Model::SlashedValue@default")?)?; let model:Umath_Model_SlashedValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SlashedValue_json(input:&str)->ContractResult<Umath_Model_SlashedValue>{let data=decode_Umath_Model_SlashedValue(parse_json(input,"Umath::Model::SlashedValue@default")?)?; let model:Umath_Model_SlashedValue=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SlashedValue_json(model:&Umath_Model_SlashedValue)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SlashedValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/output",e))}
+pub fn write_Umath_Model_SlashedValue_json(model:&Umath_Model_SlashedValue)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SlashedValue(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SlashedValue@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SlashedValue(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SlashedValue@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5413,9 +5413,9 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SubExp_json(input:&str)->ContractResult<Umath_Model_SubExp>{let data=decode_Umath_Model_SubExp(parse_json(input,"Umath::Model::SubExp@default")?)?; let model:Umath_Model_SubExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SubExp_json(input:&str)->ContractResult<Umath_Model_SubExp>{let data=decode_Umath_Model_SubExp(parse_json(input,"Umath::Model::SubExp@default")?)?; let model:Umath_Model_SubExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SubExp_json(model:&Umath_Model_SubExp)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/output",e))}
+pub fn write_Umath_Model_SubExp_json(model:&Umath_Model_SubExp)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubExp@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SubExp(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SubExp@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5545,70 +5545,70 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -5627,30 +5627,30 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SubParen_json(input:&str)->ContractResult<Umath_Model_SubParen>{let data=decode_Umath_Model_SubParen(parse_json(input,"Umath::Model::SubParen@default")?)?; let model:Umath_Model_SubParen=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SubParen_json(input:&str)->ContractResult<Umath_Model_SubParen>{let data=decode_Umath_Model_SubParen(parse_json(input,"Umath::Model::SubParen@default")?)?; let model:Umath_Model_SubParen=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SubParen_json(model:&Umath_Model_SubParen)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubParen(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/output",e))}
+pub fn write_Umath_Model_SubParen_json(model:&Umath_Model_SubParen)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubParen(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubParen@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SubParen(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SubParen@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5716,14 +5716,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubParen(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubParen@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -5742,30 +5742,30 @@ if empty(&v){continue;}
 wire.insert("sub_operators".into(),v);}
 for mut v in data.remove("sub_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub_recursion".into(),v);}
 for mut v in data.remove("sub_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursion_expr".into(),v);}
 for mut v in data.remove("sub_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sub_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SubsupExp_json(input:&str)->ContractResult<Umath_Model_SubsupExp>{let data=decode_Umath_Model_SubsupExp(parse_json(input,"Umath::Model::SubsupExp@default")?)?; let model:Umath_Model_SubsupExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SubsupExp_json(input:&str)->ContractResult<Umath_Model_SubsupExp>{let data=decode_Umath_Model_SubsupExp(parse_json(input,"Umath::Model::SubsupExp@default")?)?; let model:Umath_Model_SubsupExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SubsupExp_json(model:&Umath_Model_SubsupExp)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubsupExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/output",e))}
+pub fn write_Umath_Model_SubsupExp_json(model:&Umath_Model_SubsupExp)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SubsupExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SubsupExp@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SubsupExp(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SubsupExp@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5816,44 +5816,44 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SubsupExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SubsupExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sub".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SupExp_json(input:&str)->ContractResult<Umath_Model_SupExp>{let data=decode_Umath_Model_SupExp(parse_json(input,"Umath::Model::SupExp@default")?)?; let model:Umath_Model_SupExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SupExp_json(input:&str)->ContractResult<Umath_Model_SupExp>{let data=decode_Umath_Model_SupExp(parse_json(input,"Umath::Model::SupExp@default")?)?; let model:Umath_Model_SupExp=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SupExp_json(model:&Umath_Model_SupExp)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SupExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/output",e))}
+pub fn write_Umath_Model_SupExp_json(model:&Umath_Model_SupExp)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SupExp(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupExp@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SupExp(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SupExp@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -5983,70 +5983,70 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SupExp(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SupExp@default")?;let mut wire=Map::new();
 for mut v in data.remove("base").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("base".into(),v);}
 for mut v in data.remove("exp_iteration").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ExpIteration(v)?;
 }
 wire.insert("exp_iteration".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mask").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Mask(v)?;
 }
 wire.insert("mask".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("mini_intermediate_exp".into(),v);}
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("nary_class").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("nary_class".into(),v);}
 for mut v in data.remove("sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6065,30 +6065,30 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SupParen_json(input:&str)->ContractResult<Umath_Model_SupParen>{let data=decode_Umath_Model_SupParen(parse_json(input,"Umath::Model::SupParen@default")?)?; let model:Umath_Model_SupParen=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SupParen_json(input:&str)->ContractResult<Umath_Model_SupParen>{let data=decode_Umath_Model_SupParen(parse_json(input,"Umath::Model::SupParen@default")?)?; let model:Umath_Model_SupParen=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SupParen_json(model:&Umath_Model_SupParen)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SupParen(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/output",e))}
+pub fn write_Umath_Model_SupParen_json(model:&Umath_Model_SupParen)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SupParen(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SupParen@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SupParen(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SupParen@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6154,14 +6154,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SupParen(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SupParen@default")?;let mut wire=Map::new();
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("expr".into(),v);}
 for mut v in data.remove("mini_intermediate_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
@@ -6180,30 +6180,30 @@ if empty(&v){continue;}
 wire.insert("sup_operators".into(),v);}
 for mut v in data.remove("sup_recursion").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("sup_recursion".into(),v);}
 for mut v in data.remove("sup_recursion_expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursion_expr".into(),v);}
 for mut v in data.remove("sup_recursions").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniExpression(v)?;
 }
 wire.insert("sup_recursions".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_SymbolNode_json(input:&str)->ContractResult<Umath_Model_SymbolNode>{let data=decode_Umath_Model_SymbolNode(parse_json(input,"Umath::Model::SymbolNode@default")?)?; let model:Umath_Model_SymbolNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_SymbolNode_json(input:&str)->ContractResult<Umath_Model_SymbolNode>{let data=decode_Umath_Model_SymbolNode(parse_json(input,"Umath::Model::SymbolNode@default")?)?; let model:Umath_Model_SymbolNode=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_SymbolNode_json(model:&Umath_Model_SymbolNode)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SymbolNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/output",e))}
+pub fn write_Umath_Model_SymbolNode_json(model:&Umath_Model_SymbolNode)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_SymbolNode(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::SymbolNode@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_SymbolNode(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::SymbolNode@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6237,7 +6237,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_SymbolNode(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::SymbolNode@default")?;let mut wire=Map::new();
 for mut v in data.remove("ldots").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
@@ -6256,9 +6256,9 @@ if empty(&v){continue;}
 wire.insert("kind".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Table_json(input:&str)->ContractResult<Umath_Model_Table>{let data=decode_Umath_Model_Table(parse_json(input,"Umath::Model::Table@default")?)?; let model:Umath_Model_Table=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Table_json(input:&str)->ContractResult<Umath_Model_Table>{let data=decode_Umath_Model_Table(parse_json(input,"Umath::Model::Table@default")?)?; let model:Umath_Model_Table=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Table_json(model:&Umath_Model_Table)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Table(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/output",e))}
+pub fn write_Umath_Model_Table_json(model:&Umath_Model_Table)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Table(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Table@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Table(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Table@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6287,7 +6287,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Table(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Table@default")?;let mut wire=Map::new();
 for mut v in data.remove("array").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_ArrayNode(v)?;
 }
@@ -6302,9 +6302,9 @@ if empty(&v){continue;}
 wire.insert("matrixs".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Td_json(input:&str)->ContractResult<Umath_Model_Td>{let data=decode_Umath_Model_Td(parse_json(input,"Umath::Model::Td@default")?)?; let model:Umath_Model_Td=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Td_json(input:&str)->ContractResult<Umath_Model_Td>{let data=decode_Umath_Model_Td(parse_json(input,"Umath::Model::Td@default")?)?; let model:Umath_Model_Td=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Td_json(model:&Umath_Model_Td)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Td(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/output",e))}
+pub fn write_Umath_Model_Td_json(model:&Umath_Model_Td)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Td(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Td@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Td(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Td@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6336,14 +6336,14 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Td(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Td@default")?;let mut wire=Map::new();
 for mut v in data.remove("exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
 wire.insert("exp".into(),v);}
 for mut v in data.remove("expr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6354,9 +6354,9 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Tds_json(input:&str)->ContractResult<Umath_Model_Tds>{let data=decode_Umath_Model_Tds(parse_json(input,"Umath::Model::Tds@default")?)?; let model:Umath_Model_Tds=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Tds_json(input:&str)->ContractResult<Umath_Model_Tds>{let data=decode_Umath_Model_Tds(parse_json(input,"Umath::Model::Tds@default")?)?; let model:Umath_Model_Tds=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Tds_json(model:&Umath_Model_Tds)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Tds(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/output",e))}
+pub fn write_Umath_Model_Tds_json(model:&Umath_Model_Tds)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Tds(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tds@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Tds(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Tds@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6383,23 +6383,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Tds(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Tds@default")?;let mut wire=Map::new();
 for mut v in data.remove("td").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Td(v)?;
 }
 wire.insert("td".into(),v);}
 for mut v in data.remove("tds").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tds(v)?;
 }
 wire.insert("tds".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Tr_json(input:&str)->ContractResult<Umath_Model_Tr>{let data=decode_Umath_Model_Tr(parse_json(input,"Umath::Model::Tr@default")?)?; let model:Umath_Model_Tr=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Tr_json(input:&str)->ContractResult<Umath_Model_Tr>{let data=decode_Umath_Model_Tr(parse_json(input,"Umath::Model::Tr@default")?)?; let model:Umath_Model_Tr=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Tr_json(model:&Umath_Model_Tr)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Tr(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/output",e))}
+pub fn write_Umath_Model_Tr_json(model:&Umath_Model_Tr)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Tr(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Tr@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Tr(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Tr@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6435,23 +6435,23 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 for mut v in data.remove("td").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Td(v)?;
 }
 wire.insert("td".into(),v);}
 for mut v in data.remove("tds").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tds(v)?;
 }
 wire.insert("tds".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Trs_json(input:&str)->ContractResult<Umath_Model_Trs>{let data=decode_Umath_Model_Trs(parse_json(input,"Umath::Model::Trs@default")?)?; let model:Umath_Model_Trs=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Trs_json(input:&str)->ContractResult<Umath_Model_Trs>{let data=decode_Umath_Model_Trs(parse_json(input,"Umath::Model::Trs@default")?)?; let model:Umath_Model_Trs=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Trs_json(model:&Umath_Model_Trs)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Trs(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/output",e))}
+pub fn write_Umath_Model_Trs_json(model:&Umath_Model_Trs)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Trs(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Trs@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Trs(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Trs@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6478,23 +6478,23 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_Trs(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::Trs@default")?;let mut wire=Map::new();
 for mut v in data.remove("tr").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Tr(v)?;
 }
 wire.insert("tr".into(),v);}
 for mut v in data.remove("trs").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Trs(v)?;
 }
 wire.insert("trs".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_UnaryFunction_json(input:&str)->ContractResult<Umath_Model_UnaryFunction>{let data=decode_Umath_Model_UnaryFunction(parse_json(input,"Umath::Model::UnaryFunction@default")?)?; let model:Umath_Model_UnaryFunction=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_UnaryFunction_json(input:&str)->ContractResult<Umath_Model_UnaryFunction>{let data=decode_Umath_Model_UnaryFunction(parse_json(input,"Umath::Model::UnaryFunction@default")?)?; let model:Umath_Model_UnaryFunction=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_UnaryFunction_json(model:&Umath_Model_UnaryFunction)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnaryFunction(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/output",e))}
+pub fn write_Umath_Model_UnaryFunction_json(model:&Umath_Model_UnaryFunction)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnaryFunction(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnaryFunction@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_UnaryFunction(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::UnaryFunction@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6531,7 +6531,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnaryFunction(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnaryFunction@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6546,16 +6546,16 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_symbols").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MathSymbol(v)?;
 }
 wire.insert("unary_symbols".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_UnarySubSup_json(input:&str)->ContractResult<Umath_Model_UnarySubSup>{let data=decode_Umath_Model_UnarySubSup(parse_json(input,"Umath::Model::UnarySubSup@default")?)?; let model:Umath_Model_UnarySubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_UnarySubSup_json(input:&str)->ContractResult<Umath_Model_UnarySubSup>{let data=decode_Umath_Model_UnarySubSup(parse_json(input,"Umath::Model::UnarySubSup@default")?)?; let model:Umath_Model_UnarySubSup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_UnarySubSup_json(model:&Umath_Model_UnarySubSup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnarySubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/output",e))}
+pub fn write_Umath_Model_UnarySubSup_json(model:&Umath_Model_UnarySubSup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnarySubSup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubSup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_UnarySubSup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::UnarySubSup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6614,51 +6614,51 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnarySubSup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnarySubSup@default")?;let mut wire=Map::new();
 for mut v in data.remove("mini_sub").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSub(v)?;
 }
 wire.insert("mini_sub".into(),v);}
 for mut v in data.remove("mini_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSubSup(v)?;
 }
 wire.insert("mini_sub_sup".into(),v);}
 for mut v in data.remove("mini_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MiniSup(v)?;
 }
 wire.insert("mini_sup".into(),v);}
 for mut v in data.remove("sub_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubExp(v)?;
 }
 wire.insert("sub_exp".into(),v);}
 for mut v in data.remove("subsup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SubsupExp(v)?;
 }
 wire.insert("subsup_exp".into(),v);}
 for mut v in data.remove("sup_exp").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_SupExp(v)?;
 }
 wire.insert("sup_exp".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_UnarySubsup_json(input:&str)->ContractResult<Umath_Model_UnarySubsup>{let data=decode_Umath_Model_UnarySubsup(parse_json(input,"Umath::Model::UnarySubsup@default")?)?; let model:Umath_Model_UnarySubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_UnarySubsup_json(input:&str)->ContractResult<Umath_Model_UnarySubsup>{let data=decode_Umath_Model_UnarySubsup(parse_json(input,"Umath::Model::UnarySubsup@default")?)?; let model:Umath_Model_UnarySubsup=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_UnarySubsup_json(model:&Umath_Model_UnarySubsup)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnarySubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/output",e))}
+pub fn write_Umath_Model_UnarySubsup_json(model:&Umath_Model_UnarySubsup)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnarySubsup(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnarySubsup@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_UnarySubsup(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::UnarySubsup@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6690,7 +6690,7 @@ Ok(Value::Object(data))}
 fn encode_Umath_Model_UnarySubsup(input:Value)->ContractResult<Value>{let mut data=object(input,"Umath::Model::UnarySubsup@default")?;let mut wire=Map::new();
 for mut v in data.remove("first_value").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_Expression(v)?;
 }
@@ -6701,16 +6701,16 @@ if empty(&v){continue;}
 wire.insert("unary_functions".into(),v);}
 for mut v in data.remove("unary_sub_sup").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_UnarySubSup(v)?;
 }
 wire.insert("unary_sub_sup".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_UnicodedFontClass_json(input:&str)->ContractResult<Umath_Model_UnicodedFontClass>{let data=decode_Umath_Model_UnicodedFontClass(parse_json(input,"Umath::Model::UnicodedFontClass@default")?)?; let model:Umath_Model_UnicodedFontClass=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_UnicodedFontClass_json(input:&str)->ContractResult<Umath_Model_UnicodedFontClass>{let data=decode_Umath_Model_UnicodedFontClass(parse_json(input,"Umath::Model::UnicodedFontClass@default")?)?; let model:Umath_Model_UnicodedFontClass=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_UnicodedFontClass_json(model:&Umath_Model_UnicodedFontClass)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnicodedFontClass(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/output",e))}
+pub fn write_Umath_Model_UnicodedFontClass_json(model:&Umath_Model_UnicodedFontClass)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_UnicodedFontClass(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::UnicodedFontClass@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_UnicodedFontClass(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::UnicodedFontClass@default")?; let mut data=Map::new();
 { let mut selected=None;
@@ -6738,16 +6738,16 @@ if empty(&v){continue;}
 wire.insert("literal".into(),v);}
 for mut v in data.remove("mitBbb").into_iter(){
 if v.is_null(){continue;}
-if !v.is_object() && empty(&v){continue;}
+if empty(&v){continue;}
 if !v.is_null() {
 v=encode_Umath_Model_MitBbb(v)?;
 }
 wire.insert("mitBbb".into(),v);}
 Ok(Value::Object(wire))}
 #[allow(non_snake_case)]
-pub fn read_Umath_Model_Whole_json(input:&str)->ContractResult<Umath_Model_Whole>{let data=decode_Umath_Model_Whole(parse_json(input,"Umath::Model::Whole@default")?)?; let model:Umath_Model_Whole=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/input",e))?; model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
+pub fn read_Umath_Model_Whole_json(input:&str)->ContractResult<Umath_Model_Whole>{let data=decode_Umath_Model_Whole(parse_json(input,"Umath::Model::Whole@default")?)?; let model:Umath_Model_Whole=serde_json::from_value(data).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/input",e))?; model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/input",e.reason))?;Ok(model)}
 #[allow(non_snake_case)]
-pub fn write_Umath_Model_Whole_json(model:&Umath_Model_Whole)->ContractResult<String>{model.validate().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Whole(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/output",e))}
+pub fn write_Umath_Model_Whole_json(model:&Umath_Model_Whole)->ContractResult<String>{model.validate_shape().map_err(|e|failure(ErrorReason::InvalidDocument,e.model_id,e.attribute,"/output",e.reason))?;let data=serde_json::to_value(model).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/output",e))?;serde_json::to_string(&encode_Umath_Model_Whole(data)?).map_err(|e|failure(ErrorReason::InvalidDocument,"Umath::Model::Whole@default", "", "/output",e))}
 #[allow(non_snake_case)]
 fn decode_Umath_Model_Whole(input:Value)->ContractResult<Value>{let mut wire=object(input,"Umath::Model::Whole@default")?; let mut data=Map::new();
 { let mut selected=None;
