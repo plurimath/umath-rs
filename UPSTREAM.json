@@ -38,8 +38,8 @@
   },
   "model_generator": {
     "repository": "lutaml/lutaml-rs",
-    "commit": "1f826b7dd0ba1545479df8a4ba715d67e2985b32",
-    "pull_request": "https://github.com/lutaml/lutaml-rs/pull/11",
+    "commit": "ae15521456a78ebadcba18f679c925d66046d541",
+    "pull_request": "https://github.com/lutaml/lutaml-rs/pull/14",
     "merge_policy": "owner approval required; draft only"
   },
   "compatibility_runtime": {

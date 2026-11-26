@@ -55,12 +55,18 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: lutaml/lutaml-rs
-          ref: 1f826b7dd0ba1545479df8a4ba715d67e2985b32
+          ref: ae15521456a78ebadcba18f679c925d66046d541
           path: .model-generator
           persist-credentials: false
       - name: Reproduce committed model codecs and manifest
         if: matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
         run: python .github/scripts/check-generated-models.py .model-generator
+      - name: Upload regenerated models
+        if: always() && matrix.os == 'ubuntu-latest' && matrix.rust == 'stable'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: regenerated-models
+          path: target/regenerated-models
       - name: Test the default raw parser surface
         run: cargo +${{ matrix.rust }} test --locked --all-targets
       - name: Test all features and targets
