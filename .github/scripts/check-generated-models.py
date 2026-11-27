@@ -42,7 +42,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='umath-regenerated-') as temporary:
         output = Path(temporary)
         subprocess.run([
-            'cargo', 'run', '--locked', '--manifest-path', str(generator / 'Cargo.toml'),
+            'cargo', 'run', '--locked', '--bin', 'lutaml-rs', '--manifest-path', str(generator / 'Cargo.toml'),
             '--', 'generate', '--input', str(bundle), '--output', str(output),
         ], check=True, cwd=ROOT)
         expected = {p.name for p in generated.iterdir() if p.is_file()}
