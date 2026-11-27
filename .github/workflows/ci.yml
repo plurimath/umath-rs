@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: lutaml/lutaml-rs
-          ref: ae15521456a78ebadcba18f679c925d66046d541
+          ref: f3677dd2673c4b2b8a2ffb21952184e51b1ec419
           path: .model-generator
           persist-credentials: false
       - name: Reproduce committed model codecs and manifest
