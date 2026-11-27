@@ -45,7 +45,6 @@ def main():
             'cargo', 'run', '--locked', '--bin', 'lutaml-rs', '--manifest-path', str(generator / 'Cargo.toml'),
             '--', 'generate', '--input', str(bundle), '--output', str(output),
         ], check=True, cwd=ROOT)
-        import shutil; shutil.copytree(output, ROOT / 'target' / 'regenerated-models', dirs_exist_ok=True)
         expected = {p.name for p in generated.iterdir() if p.is_file()}
         assert {p.name for p in output.iterdir()} == expected, 'generated file set'
         for name in sorted(expected):

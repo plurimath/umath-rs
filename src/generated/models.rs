@@ -223,6 +223,33 @@ impl ContentToken {
  _ => None,
  } }
 }
+#[derive(Clone, Debug, Default)]
+pub struct AppliedDefaults(Vec<String>);
+impl PartialEq for AppliedDefaults { fn eq(&self, _other: &Self) -> bool { true } }
+impl Eq for AppliedDefaults {}
+impl AppliedDefaults {
+ pub fn contains(&self, member: &str) -> bool { self.0.iter().any(|m| m == member) }
+ pub fn mark(&mut self, member: &str) { if !self.contains(member) { self.0.push(member.into()); } }
+ pub fn clear(&mut self, member: &str) { self.0.retain(|m| m != member); }
+ pub fn members(&self) -> &[String] { &self.0 }
+ fn hidden(&self) -> bool { self.0.is_empty() || !PROVENANCE_WIRE.with(|c| c.get()) }
+}
+impl Serialize for AppliedDefaults { fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { self.0.serialize(s) } }
+thread_local! { static PROVENANCE_WIRE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
+/// While alive, serializing a model also emits its `__lml_applied` list (used by the generated codecs only).
+pub struct ProvenanceWire(bool);
+impl ProvenanceWire { pub fn enter() -> Self { Self(PROVENANCE_WIRE.with(|c| c.replace(true))) } }
+impl std::ops::Drop for ProvenanceWire { fn drop(&mut self) { PROVENANCE_WIRE.with(|c| c.set(self.0)); } }
+/// Set when a model was read from an explicit empty object, so writing it again keeps `{}`.
+/// Like the applied-default list, it is serialized only while a `ProvenanceWire` is alive.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct EmptyMark(bool);
+impl EmptyMark {
+ pub fn is_set(&self) -> bool { self.0 }
+ fn hidden(&self) -> bool { !self.0 || !PROVENANCE_WIRE.with(|c| c.get()) }
+}
+impl Serialize for EmptyMark { fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { self.0.serialize(s) } }
+impl<'de> Deserialize<'de> for EmptyMark { fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> { Ok(Self(bool::deserialize(d)?)) } }
 #[allow(non_camel_case_types, non_snake_case)]
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -235,12 +262,15 @@ pub first_value: Presence<Box<Umath_Model_Expression>>,
 pub list: Presence<Vec<Box<Umath_Model_ListItem>>>,
 #[serde(rename = "prime_accent_symbols", default, skip_serializing_if = "Presence::is_absent")]
 pub prime_accent_symbols: Presence<Vec<Box<Umath_Model_PrimeAccentSymbolsItem>>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Accents { fn default()->Self { Self {
 empty: Presence::Absent,
 first_value: Presence::Absent,
 list: Presence::Absent,
 prime_accent_symbols: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Accents {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -278,11 +308,14 @@ pub base: Presence<Box<Umath_Model_Expression>>,
 pub sub: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "sup", default, skip_serializing_if = "Presence::is_absent")]
 pub sup: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_AccentsSubsup { fn default()->Self { Self {
 base: Presence::Absent,
 sub: Presence::Absent,
 sup: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_AccentsSubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -316,9 +349,12 @@ Ok(()) }
 pub struct Umath_Model_ArgArguments {
 #[serde(rename = "symbol", default, skip_serializing_if = "Presence::is_absent")]
 pub symbol: Presence<Box<Umath_Model_SymbolNode>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_ArgArguments { fn default()->Self { Self {
 symbol: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_ArgArguments {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -344,10 +380,13 @@ pub struct Umath_Model_ArrayNode {
 pub tr: Presence<Box<Umath_Model_Tr>>,
 #[serde(rename = "trs", default, skip_serializing_if = "Presence::is_absent")]
 pub trs: Presence<Box<Umath_Model_Trs>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_ArrayNode { fn default()->Self { Self {
 tr: Presence::Absent,
 trs: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_ArrayNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -384,6 +423,8 @@ pub diacritics: Presence<Box<Umath_Model_Diacritics>>,
 pub literal: Presence<String>,
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Atom { fn default()->Self { Self {
 alphanumeric: Presence::Absent,
@@ -391,6 +432,7 @@ char: Presence::Absent,
 diacritics: Presence::Absent,
 literal: Presence::Absent,
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Atom {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -426,10 +468,13 @@ pub struct Umath_Model_Atoms {
 pub atom: Presence<Box<Umath_Model_Atom>>,
 #[serde(rename = "atoms", default, skip_serializing_if = "Presence::is_absent")]
 pub atoms: Presence<Box<Umath_Model_Atoms>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Atoms { fn default()->Self { Self {
 atom: Presence::Absent,
 atoms: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Atoms {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -460,10 +505,13 @@ pub struct Umath_Model_Backcolor {
 pub backcolor_value: Presence<String>,
 #[serde(rename = "first_value", default, skip_serializing_if = "Presence::is_absent")]
 pub first_value: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Backcolor { fn default()->Self { Self {
 backcolor_value: Presence::Absent,
 first_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Backcolor {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -487,9 +535,12 @@ Ok(()) }
 pub struct Umath_Model_BelowAfter {
 #[serde(rename = "diacritic_belows", default, skip_serializing_if = "Presence::is_absent")]
 pub diacritic_belows: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_BelowAfter { fn default()->Self { Self {
 diacritic_belows: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_BelowAfter {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -513,9 +564,12 @@ Ok(()) }
 pub struct Umath_Model_BelowBefore {
 #[serde(rename = "diacritic_belows", default, skip_serializing_if = "Presence::is_absent")]
 pub diacritic_belows: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_BelowBefore { fn default()->Self { Self {
 diacritic_belows: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_BelowBefore {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -539,9 +593,12 @@ Ok(()) }
 pub struct Umath_Model_Char {
 #[serde(rename = "unicode_symbols", default, skip_serializing_if = "Presence::is_absent")]
 pub unicode_symbols: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Char { fn default()->Self { Self {
 unicode_symbols: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Char {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -565,9 +622,12 @@ Ok(()) }
 pub struct Umath_Model_CloseParenMask {
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_CloseParenMask { fn default()->Self { Self {
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_CloseParenMask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -587,11 +647,14 @@ pub close_paren: Presence<Box<Umath_Model_Paren>>,
 pub close_paren_mask: Presence<Box<Umath_Model_CloseParenMask>>,
 #[serde(rename = "paren_close_prefix", default, skip_serializing_if = "Presence::is_absent")]
 pub paren_close_prefix: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Closer { fn default()->Self { Self {
 close_paren: Presence::Absent,
 close_paren_mask: Presence::Absent,
 paren_close_prefix: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Closer {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -627,10 +690,13 @@ pub struct Umath_Model_Color {
 pub color_value: Presence<String>,
 #[serde(rename = "first_value", default, skip_serializing_if = "Presence::is_absent")]
 pub first_value: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Color { fn default()->Self { Self {
 color_value: Presence::Absent,
 first_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Color {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -658,11 +724,14 @@ pub decimal: Presence<String>,
 pub fractional: Presence<Box<Umath_Model_Fractional>>,
 #[serde(rename = "whole", default, skip_serializing_if = "Presence::is_absent")]
 pub whole: Presence<Box<Umath_Model_Whole>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_DecimalNumber { fn default()->Self { Self {
 decimal: Presence::Absent,
 fractional: Presence::Absent,
 whole: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_DecimalNumber {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -693,10 +762,13 @@ pub struct Umath_Model_Diacritics {
 pub char: Presence<Box<Umath_Model_Char>>,
 #[serde(rename = "diacritics", default, skip_serializing_if = "Presence::is_absent")]
 pub diacritics: Presence<Box<Umath_Model_Diacritics>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Diacritics { fn default()->Self { Self {
 char: Presence::Absent,
 diacritics: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Diacritics {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -733,6 +805,8 @@ pub first_value: Presence<Box<Umath_Model_Expression>>,
 pub overlay_after: Presence<Box<Umath_Model_OverlayAfter>>,
 #[serde(rename = "overlay_before", default, skip_serializing_if = "Presence::is_absent")]
 pub overlay_before: Presence<Box<Umath_Model_OverlayBefore>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_DiacriticsAccents { fn default()->Self { Self {
 below_after: Presence::Absent,
@@ -740,6 +814,7 @@ below_before: Presence::Absent,
 first_value: Presence::Absent,
 overlay_after: Presence::Absent,
 overlay_before: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_DiacriticsAccents {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -783,9 +858,12 @@ Ok(()) }
 pub struct Umath_Model_Digit {
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Digit { fn default()->Self { Self {
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Digit {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -843,6 +921,8 @@ pub mini_sup: Presence<Box<Umath_Model_MiniSup>>,
 pub sub_recursion: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "sup_recursion", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_ExpIteration { fn default()->Self { Self {
 exp_iteration: Presence::Absent,
@@ -851,6 +931,7 @@ mini_sub_sup: Presence::Absent,
 mini_sup: Presence::Absent,
 sub_recursion: Presence::Absent,
 sup_recursion: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_ExpIteration {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1129,6 +1210,8 @@ pub under: Presence<String>,
 pub unicode_fractions: Presence<String>,
 #[serde(rename = "unicode_symbols", default, skip_serializing_if = "Presence::is_absent")]
 pub unicode_symbols: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Expression { fn default()->Self { Self {
 accents: Presence::Absent,
@@ -1247,6 +1330,7 @@ unary_subsup: Presence::Absent,
 under: Presence::Absent,
 unicode_fractions: Presence::Absent,
 unicode_symbols: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Expression {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1745,6 +1829,8 @@ pub symbol: Presence<Box<Umath_Model_SymbolNode>>,
 pub text: Presence<String>,
 #[serde(rename = "unicoded_font_class", default, skip_serializing_if = "Presence::is_absent")]
 pub unicoded_font_class: Presence<Box<Umath_Model_UnicodedFontClass>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Fonts { fn default()->Self { Self {
 font_class: Presence::Absent,
@@ -1753,6 +1839,7 @@ number: Presence::Absent,
 symbol: Presence::Absent,
 text: Presence::Absent,
 unicoded_font_class: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Fonts {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1797,6 +1884,8 @@ pub mini_numerator: Presence<Box<Umath_Model_MiniNumerator>>,
 pub no_display_style: Presence<String>,
 #[serde(rename = "numerator", default, skip_serializing_if = "Presence::is_absent")]
 pub numerator: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Frac { fn default()->Self { Self {
 atop: Presence::Absent,
@@ -1808,6 +1897,7 @@ mini_denominator: Presence::Absent,
 mini_numerator: Presence::Absent,
 no_display_style: Presence::Absent,
 numerator: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Frac {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1846,9 +1936,12 @@ Ok(()) }
 pub struct Umath_Model_Fractional {
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Fractional { fn default()->Self { Self {
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Fractional {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1866,10 +1959,13 @@ pub struct Umath_Model_FuncExpr {
 pub expr: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "func_expr", default, skip_serializing_if = "Presence::is_absent")]
 pub func_expr: Presence<Box<Umath_Model_FuncExpr>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_FuncExpr { fn default()->Self { Self {
 expr: Presence::Absent,
 func_expr: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_FuncExpr {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1902,11 +1998,14 @@ pub first_value: Presence<Box<Umath_Model_Expression>>,
 pub hbracket_class: Presence<String>,
 #[serde(rename = "scripted_first_value", default, skip_serializing_if = "Presence::is_absent")]
 pub scripted_first_value: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Hbrack { fn default()->Self { Self {
 first_value: Presence::Absent,
 hbracket_class: Presence::Absent,
 scripted_first_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Hbrack {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1939,11 +2038,14 @@ pub closer: Presence<Box<Umath_Model_Closer>>,
 pub opener: Presence<Box<Umath_Model_Opener>>,
 #[serde(rename = "operand", default, skip_serializing_if = "Presence::is_absent")]
 pub operand: Presence<Box<Umath_Model_Operand>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_IntExp { fn default()->Self { Self {
 closer: Presence::Absent,
 opener: Presence::Absent,
 operand: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_IntExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -1977,9 +2079,12 @@ Ok(()) }
 pub struct Umath_Model_IntentArguments {
 #[serde(rename = "text", default, skip_serializing_if = "Presence::is_absent")]
 pub text: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_IntentArguments { fn default()->Self { Self {
 text: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_IntentArguments {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2003,6 +2108,8 @@ pub negative: Presence<Box<Umath_Model_MathSymbol>>,
 pub number: Presence<String>,
 #[serde(rename = "positive", default, skip_serializing_if = "Presence::is_absent")]
 pub positive: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_LeftValue { fn default()->Self { Self {
 infty: Presence::Absent,
@@ -2010,6 +2117,7 @@ list: Presence::Absent,
 negative: Presence::Absent,
 number: Presence::Absent,
 positive: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_LeftValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2052,11 +2160,14 @@ pub accent_symbols: Presence<Box<Umath_Model_MathSymbol>>,
 pub number: Presence<String>,
 #[serde(rename = "symbol", default, skip_serializing_if = "Presence::is_absent")]
 pub symbol: Presence<Box<Umath_Model_SymbolNode>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_ListItem { fn default()->Self { Self {
 accent_symbols: Presence::Absent,
 number: Presence::Absent,
 symbol: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_ListItem {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2093,6 +2204,8 @@ pub digit: Presence<Box<Umath_Model_Digit>>,
 pub hex_number: Presence<String>,
 #[serde(rename = "octal_number", default, skip_serializing_if = "Presence::is_absent")]
 pub octal_number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Mask { fn default()->Self { Self {
 binary_number: Presence::Absent,
@@ -2100,6 +2213,7 @@ decimal_number: Presence::Absent,
 digit: Presence::Absent,
 hex_number: Presence::Absent,
 octal_number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Mask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2149,11 +2263,14 @@ pub spelling: Presence<String>,
 pub value: Presence<String>,
 #[serde(rename = "kind", default, skip_serializing_if = "Presence::is_absent")]
 pub kind: Presence<Umath_Model_MathSymbol_kind_Enum>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MathSymbol { fn default()->Self { Self {
 spelling: Presence::Absent,
 value: Presence::Absent,
 kind: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MathSymbol {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2179,6 +2296,8 @@ pub sup_alpha: Presence<String>,
 pub sup_digits: Presence<String>,
 #[serde(rename = "sup_operators", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_operators: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniBase { fn default()->Self { Self {
 sub_alpha: Presence::Absent,
@@ -2187,6 +2306,7 @@ sub_operators: Presence::Absent,
 sup_alpha: Presence::Absent,
 sup_digits: Presence::Absent,
 sup_operators: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniBase {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2216,6 +2336,8 @@ pub sub_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sub_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sub_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sub_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniDenominator { fn default()->Self { Self {
 expr: Presence::Absent,
@@ -2226,6 +2348,7 @@ sub_operators: Presence::Absent,
 sub_recursion: Presence::Absent,
 sub_recursion_expr: Presence::Absent,
 sub_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniDenominator {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2305,6 +2428,8 @@ pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sup_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sup_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniExpression { fn default()->Self { Self {
 expr: Presence::Absent,
@@ -2326,6 +2451,7 @@ sup_operators: Presence::Absent,
 sup_recursion: Presence::Absent,
 sup_recursion_expr: Presence::Absent,
 sup_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniExpression {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2403,6 +2529,8 @@ pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sup_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sup_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniNumerator { fn default()->Self { Self {
 expr: Presence::Absent,
@@ -2413,6 +2541,7 @@ sup_operators: Presence::Absent,
 sup_recursion: Presence::Absent,
 sup_recursion_expr: Presence::Absent,
 sup_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniNumerator {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2480,6 +2609,8 @@ pub sup_alpha: Presence<String>,
 pub sup_digits: Presence<String>,
 #[serde(rename = "sup_operators", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_operators: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniSub { fn default()->Self { Self {
 base: Presence::Absent,
@@ -2495,6 +2626,7 @@ sub_recursions: Presence::Absent,
 sup_alpha: Presence::Absent,
 sup_digits: Presence::Absent,
 sup_operators: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniSub {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2552,11 +2684,14 @@ pub base: Presence<Box<Umath_Model_Expression>>,
 pub sub: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "sup", default, skip_serializing_if = "Presence::is_absent")]
 pub sup: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniSubSup { fn default()->Self { Self {
 base: Presence::Absent,
 sub: Presence::Absent,
 sup: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniSubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2614,6 +2749,8 @@ pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sup_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sup_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MiniSup { fn default()->Self { Self {
 base: Presence::Absent,
@@ -2629,6 +2766,7 @@ sup_operators: Presence::Absent,
 sup_recursion: Presence::Absent,
 sup_recursion_expr: Presence::Absent,
 sup_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MiniSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2682,9 +2820,12 @@ Ok(()) }
 pub struct Umath_Model_MitBbb {
 #[serde(rename = "present", default, skip_serializing_if = "Presence::is_absent")]
 pub present: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_MitBbb { fn default()->Self { Self {
 present: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_MitBbb {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2700,9 +2841,12 @@ Ok(()) }
 pub struct Umath_Model_Monospace {
 #[serde(rename = "monospace_value", default, skip_serializing_if = "Presence::is_absent")]
 pub monospace_value: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Monospace { fn default()->Self { Self {
 monospace_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Monospace {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2730,11 +2874,14 @@ pub nary_class: Presence<Box<Umath_Model_MathSymbol>>,
 pub nary_sub_sup: Presence<Box<Umath_Model_NarySubSup>>,
 #[serde(rename = "naryand", default, skip_serializing_if = "Presence::is_absent")]
 pub naryand: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Nary { fn default()->Self { Self {
 nary_class: Presence::Absent,
 nary_sub_sup: Presence::Absent,
 naryand: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Nary {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2772,11 +2919,14 @@ pub sub_exp: Presence<Box<Umath_Model_SubExp>>,
 pub subsup_exp: Presence<Box<Umath_Model_SubsupExp>>,
 #[serde(rename = "sup_exp", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_exp: Presence<Box<Umath_Model_SupExp>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_NarySubSup { fn default()->Self { Self {
 sub_exp: Presence::Absent,
 subsup_exp: Presence::Absent,
 sup_exp: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_NarySubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2810,9 +2960,12 @@ Ok(()) }
 pub struct Umath_Model_OpenParenMask {
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_OpenParenMask { fn default()->Self { Self {
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_OpenParenMask {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2832,11 +2985,14 @@ pub open_paren: Presence<Box<Umath_Model_Paren>>,
 pub open_paren_mask: Presence<Box<Umath_Model_OpenParenMask>>,
 #[serde(rename = "paren_open_prefix", default, skip_serializing_if = "Presence::is_absent")]
 pub paren_open_prefix: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Opener { fn default()->Self { Self {
 open_paren: Presence::Absent,
 open_paren_mask: Presence::Absent,
 paren_open_prefix: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Opener {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2894,6 +3050,8 @@ pub rect: Presence<Box<Umath_Model_Rect>>,
 pub symbol: Presence<Box<Umath_Model_SymbolNode>>,
 #[serde(rename = "text", default, skip_serializing_if = "Presence::is_absent")]
 pub text: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Operand { fn default()->Self { Self {
 accents: Presence::Absent,
@@ -2909,6 +3067,7 @@ phantom: Presence::Absent,
 rect: Presence::Absent,
 symbol: Presence::Absent,
 text: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Operand {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -2987,9 +3146,12 @@ Ok(()) }
 pub struct Umath_Model_Other {
 #[serde(rename = "symbol", default, skip_serializing_if = "Presence::is_absent")]
 pub symbol: Presence<Box<Umath_Model_SymbolNode>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Other { fn default()->Self { Self {
 symbol: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Other {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3013,9 +3175,12 @@ Ok(()) }
 pub struct Umath_Model_OverlayAfter {
 #[serde(rename = "diacritic_overlays", default, skip_serializing_if = "Presence::is_absent")]
 pub diacritic_overlays: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_OverlayAfter { fn default()->Self { Self {
 diacritic_overlays: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_OverlayAfter {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3039,9 +3204,12 @@ Ok(()) }
 pub struct Umath_Model_OverlayBefore {
 #[serde(rename = "diacritic_overlays", default, skip_serializing_if = "Presence::is_absent")]
 pub diacritic_overlays: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_OverlayBefore { fn default()->Self { Self {
 diacritic_overlays: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_OverlayBefore {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3098,6 +3266,8 @@ pub spelling: Presence<String>,
 pub value: Presence<String>,
 #[serde(rename = "kind", default, skip_serializing_if = "Presence::is_absent")]
 pub kind: Presence<Umath_Model_Paren_kind_Enum>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Paren { fn default()->Self { Self {
 close_paren: Presence::Absent,
@@ -3109,6 +3279,7 @@ paren_open_prefix: Presence::Absent,
 spelling: Presence::Absent,
 value: Presence::Absent,
 kind: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Paren {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3159,10 +3330,13 @@ pub struct Umath_Model_Phantom {
 pub first_value: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "phantom_value", default, skip_serializing_if = "Presence::is_absent")]
 pub phantom_value: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Phantom { fn default()->Self { Self {
 first_value: Presence::Absent,
 phantom_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Phantom {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3194,6 +3368,8 @@ pub pre_supscript: Presence<Box<Umath_Model_Expression>>,
 pub size_overrides: Presence<String>,
 #[serde(rename = "under", default, skip_serializing_if = "Presence::is_absent")]
 pub under: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_PreOverrideSubsup { fn default()->Self { Self {
 over: Presence::Absent,
@@ -3201,6 +3377,7 @@ pre_subscript: Presence::Absent,
 pre_supscript: Presence::Absent,
 size_overrides: Presence::Absent,
 under: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_PreOverrideSubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3252,12 +3429,15 @@ pub spelling: Presence<String>,
 pub value: Presence<String>,
 #[serde(rename = "kind", default, skip_serializing_if = "Presence::is_absent")]
 pub kind: Presence<Umath_Model_PrimeAccentSymbolsItem_kind_Enum>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_PrimeAccentSymbolsItem { fn default()->Self { Self {
 prefixed_prime: Presence::Absent,
 spelling: Presence::Absent,
 value: Presence::Absent,
 kind: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_PrimeAccentSymbolsItem {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3283,10 +3463,13 @@ pub struct Umath_Model_Rect {
 pub first_value: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "rect_value", default, skip_serializing_if = "Presence::is_absent")]
 pub rect_value: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Rect { fn default()->Self { Self {
 first_value: Presence::Absent,
 rect_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Rect {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3318,6 +3501,8 @@ pub negative: Presence<Box<Umath_Model_MathSymbol>>,
 pub number: Presence<String>,
 #[serde(rename = "positive", default, skip_serializing_if = "Presence::is_absent")]
 pub positive: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_RightValue { fn default()->Self { Self {
 infty: Presence::Absent,
@@ -3325,6 +3510,7 @@ list: Presence::Absent,
 negative: Presence::Absent,
 number: Presence::Absent,
 positive: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_RightValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3365,10 +3551,13 @@ pub struct Umath_Model_RootFirstValue {
 pub expr: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "func_expr", default, skip_serializing_if = "Presence::is_absent")]
 pub func_expr: Presence<Box<Umath_Model_FuncExpr>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_RootFirstValue { fn default()->Self { Self {
 expr: Presence::Absent,
 func_expr: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_RootFirstValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3401,11 +3590,14 @@ pub first_value: Presence<Box<Umath_Model_Expression>>,
 pub root_symbol: Presence<Box<Umath_Model_MathSymbol>>,
 #[serde(rename = "second_value", default, skip_serializing_if = "Presence::is_absent")]
 pub second_value: Presence<Box<Umath_Model_SecondValue>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_RootNode { fn default()->Self { Self {
 first_value: Presence::Absent,
 root_symbol: Presence::Absent,
 second_value: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_RootNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3441,10 +3633,13 @@ pub struct Umath_Model_RootSecondValue {
 pub expr: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "func_expr", default, skip_serializing_if = "Presence::is_absent")]
 pub func_expr: Presence<Box<Umath_Model_FuncExpr>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_RootSecondValue { fn default()->Self { Self {
 expr: Presence::Absent,
 func_expr: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_RootSecondValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3475,10 +3670,13 @@ pub struct Umath_Model_SecondValue {
 pub expr: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "func_expr", default, skip_serializing_if = "Presence::is_absent")]
 pub func_expr: Presence<Box<Umath_Model_FuncExpr>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SecondValue { fn default()->Self { Self {
 expr: Presence::Absent,
 func_expr: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SecondValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3509,10 +3707,13 @@ pub struct Umath_Model_SlashedValue {
 pub list: Presence<Vec<Box<Umath_Model_ListItem>>>,
 #[serde(rename = "literal", default, skip_serializing_if = "Presence::is_absent")]
 pub literal: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SlashedValue { fn default()->Self { Self {
 list: Presence::Absent,
 literal: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SlashedValue {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3566,6 +3767,8 @@ pub sub_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sub_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sub_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sub_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SubExp { fn default()->Self { Self {
 base: Presence::Absent,
@@ -3584,6 +3787,7 @@ sub_operators: Presence::Absent,
 sub_recursion: Presence::Absent,
 sub_recursion_expr: Presence::Absent,
 sub_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SubExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3681,6 +3885,8 @@ pub sub_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sub_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sub_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sub_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SubParen { fn default()->Self { Self {
 expr: Presence::Absent,
@@ -3691,6 +3897,7 @@ sub_operators: Presence::Absent,
 sub_recursion: Presence::Absent,
 sub_recursion_expr: Presence::Absent,
 sub_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SubParen {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3742,6 +3949,8 @@ pub nary_class: Presence<Box<Umath_Model_MathSymbol>>,
 pub sub: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "sup", default, skip_serializing_if = "Presence::is_absent")]
 pub sup: Presence<Box<Umath_Model_Expression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SubsupExp { fn default()->Self { Self {
 base: Presence::Absent,
@@ -3749,6 +3958,7 @@ mask: Presence::Absent,
 nary_class: Presence::Absent,
 sub: Presence::Absent,
 sup: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SubsupExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3822,6 +4032,8 @@ pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sup_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sup_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SupExp { fn default()->Self { Self {
 base: Presence::Absent,
@@ -3840,6 +4052,7 @@ sup_operators: Presence::Absent,
 sup_recursion: Presence::Absent,
 sup_recursion_expr: Presence::Absent,
 sup_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SupExp {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -3937,6 +4150,8 @@ pub sup_recursion: Presence<Box<Umath_Model_Expression>>,
 pub sup_recursion_expr: Presence<Box<Umath_Model_MiniExpression>>,
 #[serde(rename = "sup_recursions", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_recursions: Presence<Box<Umath_Model_MiniExpression>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SupParen { fn default()->Self { Self {
 expr: Presence::Absent,
@@ -3947,6 +4162,7 @@ sup_operators: Presence::Absent,
 sup_recursion: Presence::Absent,
 sup_recursion_expr: Presence::Absent,
 sup_recursions: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SupParen {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4013,12 +4229,15 @@ pub spelling: Presence<String>,
 pub value: Presence<String>,
 #[serde(rename = "kind", default, skip_serializing_if = "Presence::is_absent")]
 pub kind: Presence<Umath_Model_SymbolNode_kind_Enum>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_SymbolNode { fn default()->Self { Self {
 ldots: Presence::Absent,
 spelling: Presence::Absent,
 value: Presence::Absent,
 kind: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_SymbolNode {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4046,11 +4265,14 @@ pub array: Presence<Box<Umath_Model_ArrayNode>>,
 pub identity_matrix_number: Presence<String>,
 #[serde(rename = "matrixs", default, skip_serializing_if = "Presence::is_absent")]
 pub matrixs: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Table { fn default()->Self { Self {
 array: Presence::Absent,
 identity_matrix_number: Presence::Absent,
 matrixs: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Table {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4078,11 +4300,14 @@ pub exp: Presence<Box<Umath_Model_Expression>>,
 pub expr: Presence<Box<Umath_Model_Expression>>,
 #[serde(rename = "literal", default, skip_serializing_if = "Presence::is_absent")]
 pub literal: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Td { fn default()->Self { Self {
 exp: Presence::Absent,
 expr: Presence::Absent,
 literal: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Td {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4113,10 +4338,13 @@ pub struct Umath_Model_Tds {
 pub td: Presence<Box<Umath_Model_Td>>,
 #[serde(rename = "tds", default, skip_serializing_if = "Presence::is_absent")]
 pub tds: Presence<Box<Umath_Model_Tds>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Tds { fn default()->Self { Self {
 td: Presence::Absent,
 tds: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Tds {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4149,11 +4377,14 @@ pub literal: Presence<String>,
 pub td: Presence<Box<Umath_Model_Td>>,
 #[serde(rename = "tds", default, skip_serializing_if = "Presence::is_absent")]
 pub tds: Presence<Box<Umath_Model_Tds>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Tr { fn default()->Self { Self {
 literal: Presence::Absent,
 td: Presence::Absent,
 tds: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Tr {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4184,10 +4415,13 @@ pub struct Umath_Model_Trs {
 pub tr: Presence<Box<Umath_Model_Tr>>,
 #[serde(rename = "trs", default, skip_serializing_if = "Presence::is_absent")]
 pub trs: Presence<Box<Umath_Model_Trs>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Trs { fn default()->Self { Self {
 tr: Presence::Absent,
 trs: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Trs {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4222,12 +4456,15 @@ pub unary_arg_functions: Presence<String>,
 pub unary_functions: Presence<String>,
 #[serde(rename = "unary_symbols", default, skip_serializing_if = "Presence::is_absent")]
 pub unary_symbols: Presence<Box<Umath_Model_MathSymbol>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_UnaryFunction { fn default()->Self { Self {
 first_value: Presence::Absent,
 unary_arg_functions: Presence::Absent,
 unary_functions: Presence::Absent,
 unary_symbols: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_UnaryFunction {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4266,6 +4503,8 @@ pub sub_exp: Presence<Box<Umath_Model_SubExp>>,
 pub subsup_exp: Presence<Box<Umath_Model_SubsupExp>>,
 #[serde(rename = "sup_exp", default, skip_serializing_if = "Presence::is_absent")]
 pub sup_exp: Presence<Box<Umath_Model_SupExp>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_UnarySubSup { fn default()->Self { Self {
 mini_sub: Presence::Absent,
@@ -4274,6 +4513,7 @@ mini_sup: Presence::Absent,
 sub_exp: Presence::Absent,
 subsup_exp: Presence::Absent,
 sup_exp: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_UnarySubSup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4326,11 +4566,14 @@ pub first_value: Presence<Box<Umath_Model_Expression>>,
 pub unary_functions: Presence<String>,
 #[serde(rename = "unary_sub_sup", default, skip_serializing_if = "Presence::is_absent")]
 pub unary_sub_sup: Presence<Box<Umath_Model_UnarySubSup>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_UnarySubsup { fn default()->Self { Self {
 first_value: Presence::Absent,
 unary_functions: Presence::Absent,
 unary_sub_sup: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_UnarySubsup {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4361,10 +4604,13 @@ pub struct Umath_Model_UnicodedFontClass {
 pub literal: Presence<String>,
 #[serde(rename = "mitBbb", default, skip_serializing_if = "Presence::is_absent")]
 pub mitBbb: Presence<Box<Umath_Model_MitBbb>>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_UnicodedFontClass { fn default()->Self { Self {
 literal: Presence::Absent,
 mitBbb: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_UnicodedFontClass {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
@@ -4388,9 +4634,12 @@ Ok(()) }
 pub struct Umath_Model_Whole {
 #[serde(rename = "number", default, skip_serializing_if = "Presence::is_absent")]
 pub number: Presence<String>,
+#[serde(rename = "__lml_empty", default, skip_serializing_if = "EmptyMark::hidden")]
+pub __lml_empty: EmptyMark,
 }
 impl Default for Umath_Model_Whole { fn default()->Self { Self {
 number: Presence::Absent,
+__lml_empty: EmptyMark::default(),
 } } }
 impl Umath_Model_Whole {
 pub fn apply_defaults(&mut self)->Result<(),ValidationError>{
